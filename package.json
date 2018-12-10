@@ -1,0 +1,30 @@
+{
+  "name": "react-native-cn-richtext-editor",
+  "version": "0.0.1",
+  "author": "Narbe HS",
+  "description": "react-native richtext ediotr",
+  "scripts": {},
+  "dependencies": {
+    "immutability-helper": "^2.8.1",
+    "lodash": "^4.17.11",
+    "react": "16.6.1",
+    "react-native": "0.57.5",
+    "shortid": "^2.2.14",
+    "xmldoc": "^1.1.2"
+  },
+  "keywords": [
+    "react",
+    "react-native",
+    "rich-text",
+    "ediotr"
+  ],
+  "devDependencies": {
+    "babel-jest": "23.6.0",
+    "jest": "23.6.0",
+    "metro-react-native-babel-preset": "0.49.2",
+    "react-test-renderer": "16.6.1"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
