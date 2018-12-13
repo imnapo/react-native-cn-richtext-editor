@@ -1,3 +1,7 @@
-exports.printMsg = function() {
-    console.log("This is a message from the demo package");
-  }
+import CNRichTextEditor from './src/CNRichTextEditor';
+import CNToolbar from './src/CNToolbar';
+import { convertToObject, convertToHtmlString, getInitialObject} from './src/Convertors';
+
+export {CNRichTextEditor as default};
+export {CNRichTextEditor, CNToolbar};
+export {convertToHtmlString, convertToObject, getInitialObject};
