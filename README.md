@@ -2,6 +2,7 @@
 
 Richtext editor for react native
 
+<img src="./images/demo-img.jpg" width="50%">
 
 ## Installation
 
