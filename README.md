@@ -11,6 +11,11 @@ Richtext editor for react native
 ```
 npm i react-native-cn-richtext-editor
 ```
+#### Install using yarn:
+
+```
+yarn add react-native-cn-richtext-editor
+```
 ### Usage
 
 Here is an  overview of the components usage.
@@ -66,12 +71,13 @@ onValueChanged = (value) => {
 render() {
     return (
         <KeyboardAvoidingView
-        behavior={Platform.OS ? "padding" : null} 
+        behavior={Platform.OS == 'ios' ? "padding" : null} 
         enabled
         keyboardVerticalOffset={0}
         style={{
             flex: 1,
-            backgroundColor:'#fff',
+            paddingTop: Platform.OS == 'ios' ? 20 : 0,
+            backgroundColor:'#eee',
             flexDirection: 'column', 
             justifyContent: 'flex-end'
         }}>
@@ -83,6 +89,7 @@ render() {
                         onSelectedStyleChanged={this.onSelectedStyleChanged}
                         value={this.state.value}
                         onValueChanged={this.onValueChanged}
+                        style={{ backgroundColor : '#fff', padding : 10}}
                     />                      
                 </View>
         </TouchableWithoutFeedback>
