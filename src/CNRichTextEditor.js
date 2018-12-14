@@ -5,10 +5,9 @@ import { TextInput, View, Image
  } from 'react-native';
 import _ from 'lodash';
 import update from 'immutability-helper';
-import { getInitialObject } from "./inputFunctions";
+import { getInitialObject } from "./Convertors";
 import CNTextInput from "./CNTextInput";
 
-var moment = require('moment');
 const shortid = require('shortid');
 
 class CNRichTextEditor extends Component {

@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Keyboard
 , TouchableWithoutFeedback
 , KeyboardAvoidingView, Platform } from 'react-native';
-;
-import _ from 'lodash';
+
 import  CNRichTextEditor , { CNToolbar, getInitialObject  } from "react-native-cn-richtext-editor";
 
 const IS_IOS = Platform.OS === 'ios';
@@ -72,9 +71,10 @@ render() {
         keyboardVerticalOffset={IS_IOS ? 0 : 0}
         style={{
             flex: 1,
-            backgroundColor:'#fff',
+            paddingTop: IS_IOS ? 20 : 0,
+            backgroundColor:'#eee',
             flexDirection: 'column', 
-            justifyContent: 'flex-end'
+            justifyContent: 'flex-end',
         }}
     >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} >             
@@ -84,6 +84,7 @@ render() {
                         onSelectedTagChanged={this.onSelectedTagChanged}
                         onSelectedStyleChanged={this.onSelectedStyleChanged}
                         value={this.state.value}
+                        style={{ backgroundColor : '#fff', padding : 10}}
                         //foreColor=''
                         onValueChanged={this.onValueChanged}
                         //onRemoveImage={this.onRemoveImage}
@@ -108,12 +109,11 @@ render() {
 var styles = StyleSheet.create({
     main: {
         flex: 1,
-        paddingTop: 0,
+        marginTop: 10,
         paddingLeft: 30,
         paddingRight: 30,
         paddingBottom: 1,
         alignItems: 'stretch',
-
     },
 });
 
