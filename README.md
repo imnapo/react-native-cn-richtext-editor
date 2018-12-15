@@ -121,7 +121,7 @@ var styles = StyleSheet.create({
 });
 
 ```
-## Props & Methods
+## Props
 
 ### CNRichTextEditor
 
@@ -133,11 +133,22 @@ var styles = StyleSheet.create({
 
 ### CNToolbar
 
-| Name | Description |
-| ------ | ----------- |
-| selectedTag   | selected tag of RichTextEditor. |
-| selectedStyles | selected style of RichTextEditor |
-| onStyleKeyPress    | this event will be triggered when user press one of toolbar keys. |
+| Name | Required | Description |
+| ------ | ------ | ----------- |
+| selectedTag   | Yes | selected tag of RichTextEditor. |
+| selectedStyles | Yes | selected style of RichTextEditor |
+| onStyleKeyPress    |  Yes | this event will be triggered when user press one of toolbar keys. |
+|  size  | No  | font size of toolbar buttons  |
+| bold  |  No | child component of bold button. you can use it to set an icon for bold button ( see expo-demo app) |
+|  italic | No  | child component of italic button   |
+| underline  | No  | child component of underline button  |
+| lineThrough  | No  | child component of lineThrough button  |
+| body  | No  | child component of body button |
+| title  | No  | child component of title button   |
+| ul  | No  | child component of ul button |
+| ol  | No  | child component of ol button |
+| image  | No  | child component of image button  |
+
 
 ### Functions
 | Name | Param | Returns | Description |
@@ -145,4 +156,12 @@ var styles = StyleSheet.create({
 | getInitialObject | - | javascript object  | create a initial value for RichTextEditor. |
 | convertToHtmlString | array | string  | this function converts value of RichTextEditor to html string (use it to keep value as html in db) |
 | convertToObject | string | array | converts html back to array for RichTextEditor value (use this function only for html string created by convertToHtmlString function)  |
+
+## Expo Demo App
+Checkout the
+[expo-demo App](https://expo.io/@imnapo/expo-demo)
+on Expo which uses react-native-cn-richtext-editor components.
+If you are looking to test and run expo-demo App locally, click
+[here](https://github.com/imnapo/react-native-cn-richtext-editor/tree/master/expo-demo) to
+view the implementation & run it locally.
 
