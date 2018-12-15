@@ -297,12 +297,14 @@ class CNTextInput extends Component {
             }
             else
             {
+              
                
                 textDiff *= -1;
                 this.textLength -= textDiff;
 
                  if(foundItemNo >= textDiff) {
-                    
+                   // console.log(foundIndex, textDiff, foundItemNo);
+                    //console.log(content);
                     const txt = content[foundIndex].text;
 
                     content[foundIndex].len -= textDiff;
@@ -448,9 +450,11 @@ class CNTextInput extends Component {
                 }
             }
            
-            
+           
             for (let i = 0; i < removeIndexes.length; i++) {
-                let remIndex = removeIndexes.findIndex(x=>x.id == removeIndexes[i]);
+                let remIndex = content.findIndex(x=> x.id == removeIndexes[i]);
+
+               
                 if(remIndex < 0)
                     continue;
 
@@ -463,10 +467,14 @@ class CNTextInput extends Component {
                     content[0].len = 0;
                     content[0].readOnly = false;
                 }
+                else if(remIndex - 1 >= 0 && content[remIndex - 1].readOnly == true) {
+                    // console.log(content);
+                    
+                }
                 else {
 
-                    content = content.filter(item => item.id != id);
-                    //content.splice(removeIndexes[i], 1);     
+                    content = content.filter(item => item.id != removeIndexes[i]);
+                       
                 }
                
             }
@@ -489,6 +497,8 @@ class CNTextInput extends Component {
          
        
         this.upComingStype = upComing;
+        
+        // console.log(content);
         
         
         this.props.onContentChanged(content);
