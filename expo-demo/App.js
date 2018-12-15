@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Keyboard
 , TouchableWithoutFeedback
 , KeyboardAvoidingView, Platform } from 'react-native';
-
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import  CNRichTextEditor , { CNToolbar, getInitialObject  } from "react-native-cn-richtext-editor";
 
 const IS_IOS = Platform.OS === 'ios';
@@ -88,7 +88,7 @@ render() {
                         //foreColor=''
                         onValueChanged={this.onValueChanged}
                         //onRemoveImage={this.onRemoveImage}
-                    />                      
+                    />                        
                 </View>
         </TouchableWithoutFeedback>
 
@@ -97,6 +97,17 @@ render() {
         }}>
 
             <CNToolbar
+                size={28}
+                bold={<MaterialCommunityIcons name="format-bold" />}
+                italic={<MaterialCommunityIcons name="format-italic" />}
+                underline={<MaterialCommunityIcons name="format-underline" />}
+                lineThrough={<MaterialCommunityIcons name="format-strikethrough-variant" />}
+                body={<MaterialCommunityIcons name="format-text" />}
+                title={<MaterialCommunityIcons name="format-header-1" />}
+                heading={<MaterialCommunityIcons name="format-header-3" />}
+                ul={<MaterialCommunityIcons name="format-list-bulleted" />}
+                ol={<MaterialCommunityIcons name="format-list-numbers" />}
+                image={<MaterialCommunityIcons name="image" />}
                 selectedTag={this.state.selectedTag}
                 selectedStyles={this.state.selectedStyles}
                 onStyleKeyPress={this.onStyleKeyPress} />
