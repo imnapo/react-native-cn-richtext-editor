@@ -52,7 +52,7 @@ class CNTextInput extends Component {
             avoidUpdateText: false,
         };
     }
-
+ 
     componentDidMount() {
         
         if(this.props.items) {
@@ -144,12 +144,13 @@ class CNTextInput extends Component {
 
     onSelectionChange = (event) => {
 
+        //console.log(event.nativeEvent.selection);
+       
         
         if (this.justToolAdded) {
             this.justToolAdded = false;
         }
         else {
-            
             const selection = event.nativeEvent.selection;
             const upComingStype = this.upComingStype;
             this.beforePrevSelection = this.prevSelection;
@@ -183,6 +184,10 @@ class CNTextInput extends Component {
                 this.justToolAdded = true;
             }
             this.avoidSelectionChangeOnFocus = false;
+            if(this.avoidAndroidJump == true) {
+                this.avoidSelectionChangeOnFocus = true; 
+            }
+            this.avoidAndroidJump = false;
 
             if(selection.end >= selection.start) {
                
@@ -258,16 +263,43 @@ class CNTextInput extends Component {
         let foundItemNo = result.itemNo;
        
         let startWithReadonly = false;
-        if(content[foundIndex].readOnly === true) {
+
+        // console.log('upcomming', this.upComingStype);
+
+        if(content[foundIndex].readOnly === true  && textDiff >= 0) {
+            // console.log('1');
+            
             if(content[foundIndex].text.length === foundItemNo) {
-                foundIndex +=1;
-                foundItemNo == 0; 
+                if(content.length > foundIndex + 1 
+                    && !(content[foundIndex + 1].readOnly === true)) {
+                    foundIndex +=1;
+                    foundItemNo == 0; 
+                }
+                else {  
+                    if(this.upComingStype
+                        && this.upComingStype.sel.end === cursorPosition)
+                        {
+    
+                        }
+                        else {
+                            this.upComingStype = {
+                                text: '', len: 0, 
+                                sel: {start: cursorPosition, end: cursorPosition},
+                                stype: content[foundIndex].stype,
+                                tag: content[foundIndex].tag, 
+                                styleList : content[foundIndex].styleList
+                            }
+                        }
+                }
+
+               
             }
             else {
                 startWithReadonly = true;
                
             }
         }
+
         if(this.upComingStype !== null && startWithReadonly === false 
             && this.upComingStype.sel.end === cursorPosition && textDiff >= 0)
         {
@@ -277,110 +309,105 @@ class CNTextInput extends Component {
             const {findIndx, itemNo} = this.findContentIndex(content, cursorPosition);
             foundIndex = findIndx;
             foundItemNo = itemNo;           
-
         }
+
         let upComing = null;
        
-            if(textDiff >= 0)
-            {
-                this.textLength += textDiff;
-                //if(startWithReadonly === false) {
-                    const addedText =
-                    text.substring(cursorPosition, cursorPosition + textDiff)
-                          
-                    content[foundIndex].len += textDiff;
-                    content[foundIndex].text = content[foundIndex].text.substring(0, foundItemNo) + addedText + content[foundIndex].text.substring(foundItemNo);
-    
-               // }
+        if(textDiff >= 0)
+        {
+            this.textLength += textDiff;
+            //if(startWithReadonly === false) {
+                const addedText =
+                text.substring(cursorPosition, cursorPosition + textDiff)
+                        
+                content[foundIndex].len += textDiff;
+                content[foundIndex].text = content[foundIndex].text.substring(0, foundItemNo) + addedText + content[foundIndex].text.substring(foundItemNo);
+
+            // }
+            
+            
+        }
+        else
+        {        
+            textDiff *= -1;
+            this.textLength -= textDiff;
+
+                if(foundItemNo >= textDiff) {
+                const txt = content[foundIndex].text;
+
+                content[foundIndex].len -= textDiff;
+                content[foundIndex].text = txt.substring(0, foundItemNo - textDiff) + txt.substring(foundItemNo, txt.length);
                 
-                
-            }
-            else
-            {
-              
-               
-                textDiff *= -1;
-                this.textLength -= textDiff;
+                if(content[foundIndex].NewLine === true) {
+                    newLineIndexs.push(foundIndex);
+                } 
+                if(content[foundIndex].readOnly === true) {
+                    removeIndexes.push(content[foundIndex].id);
+                }    
 
-                 if(foundItemNo >= textDiff) {
-                   // console.log(foundIndex, textDiff, foundItemNo);
-                    //console.log(content);
-                    const txt = content[foundIndex].text;
-
-                    content[foundIndex].len -= textDiff;
-                    content[foundIndex].text = txt.substring(0, foundItemNo - textDiff) + txt.substring(foundItemNo, txt.length);
-                    
-                    if(content[foundIndex].NewLine === true) {
-                        newLineIndexs.push(foundIndex);
-                    } 
-                    if(content[foundIndex].readOnly === true) {
-                        // removeIndexes.push(foundIndex);
-                        removeIndexes.push(content[foundIndex].id);
-                    }    
-
-                    if(content[foundIndex].len === 0 && content.length > 1)
-                    {
-                        upComing = {
-                            len: 0,
-                            text: '',
-                            stype: content[foundIndex].stype,
-                            styleList: content[foundIndex].styleList,
-                            tag:  content[foundIndex].tag,
-                            sel: { 
-                                start: cursorPosition - 1, 
-                                end : cursorPosition - 1
-                            }
+                if(content[foundIndex].len === 0 && content.length > 1)
+                {
+                    upComing = {
+                        len: 0,
+                        text: '',
+                        stype: content[foundIndex].stype,
+                        styleList: content[foundIndex].styleList,
+                        tag:  content[foundIndex].tag,
+                        sel: { 
+                            start: cursorPosition - 1, 
+                            end : cursorPosition - 1
                         }
-                        // removeIndexes.push(foundIndex);
-                        removeIndexes.push(content[foundIndex].id);
+                    }
+                    // removeIndexes.push(foundIndex);
+                    removeIndexes.push(content[foundIndex].id);
 
-                        //content.splice(foundIndex, 1);
-                    } else if(foundItemNo === 1) {
-                        upComing = {
-                            len: 0,
-                            text: '',
-                            stype: content[foundIndex].stype,
-                            styleList: content[foundIndex].styleList,
-                            tag:  content[foundIndex].tag,
-                            sel: { 
-                                start: cursorPosition - 1, 
-                                end : cursorPosition - 1
-                            }
+                    //content.splice(foundIndex, 1);
+                } else if(foundItemNo === 1) {
+                    upComing = {
+                        len: 0,
+                        text: '',
+                        stype: content[foundIndex].stype,
+                        styleList: content[foundIndex].styleList,
+                        tag:  content[foundIndex].tag,
+                        sel: { 
+                            start: cursorPosition - 1, 
+                            end : cursorPosition - 1
                         }
                     }
                 }
-                else {
-                    let rem = textDiff - (content[foundIndex].len - foundItemNo);
-                    content[foundIndex].len = foundItemNo;
-                    content[foundIndex].text = content[foundIndex].text.substring(0,foundItemNo);
-                    
-                    for (var i = foundIndex + 1; i < content.length; i++) {
-                        if(content[i].NewLine === true) {
-                            newLineIndexs.push(i);
-                        }
-                        
-                        if(content[i].len >=rem)
-                        {
-                            content[i].len -= rem;
-                            content[i].text = content[i].text.substring(0, content[i].len - rem);
-                            break;
-                        }
-                        else {
-                            rem -= content[i].len;
-                            content[i].len = 0;
-                            content[i].text = '';
-                        }
-                    }
-
-                    for(var i = content.length - 1; i > foundIndex; i--) {
-                        if(content[i].len === 0)
-                            {
-                                removeIndexes.push(content[i].id);
-                                //content.splice(i, 1);
-                            }                            
-                    }                  
-                }                           
             }
+            else {
+                let rem = textDiff - (content[foundIndex].len - foundItemNo);
+                content[foundIndex].len = foundItemNo;
+                content[foundIndex].text = content[foundIndex].text.substring(0,foundItemNo);
+                
+                for (var i = foundIndex + 1; i < content.length; i++) {
+                    if(content[i].NewLine === true) {
+                        newLineIndexs.push(i);
+                    }
+                    
+                    if(content[i].len >=rem)
+                    {
+                        content[i].len -= rem;
+                        content[i].text = content[i].text.substring(0, content[i].len - rem);
+                        break;
+                    }
+                    else {
+                        rem -= content[i].len;
+                        content[i].len = 0;
+                        content[i].text = '';
+                    }
+                }
+
+                for(var i = content.length - 1; i > foundIndex; i--) {
+                    if(content[i].len === 0)
+                        {
+                            removeIndexes.push(content[i].id);
+                            //content.splice(i, 1);
+                        }                            
+                }                  
+            }                           
+        }
 
 
          
@@ -393,7 +420,12 @@ class CNTextInput extends Component {
                 let newLineIndex = content[foundIndex].text.substring(1).indexOf('\n');
                 if(newLineIndex >= 0) {
                     content = this.updateNewLine(content, foundIndex , newLineIndex + 1);
+                    if(IS_IOS === false)
+                    {
+                        this.avoidAndroidJump = true;
+                    }
                     
+
                 }
                 else if(content[foundIndex].text.substring(0, 1) == '\n' && content[foundIndex].NewLine != true)
                 {
@@ -408,7 +440,8 @@ class CNTextInput extends Component {
         else {
             //removeIndexes = removeIndexes.sort((a, b) => b - a);
             newLineIndexs = newLineIndexs.sort((a, b) => b - a);
-                
+            // console.log(newLineIndexs, newLineIndexs);
+            
             for (let i = 0; i < newLineIndexs.length; i++) {
                 const index = newLineIndexs[i];
                 let newLineIndex = content[index].text.indexOf('\n');
@@ -423,16 +456,18 @@ class CNTextInput extends Component {
                     else {
                         if(removeIndexes.indexOf(content[index].id)>= 0) {
                            
-                            
+                             
                             let tagg = content[index].tag;
                             if(tagg == 'ul' || tagg === 'ol') {
+
                                 content = this.changeToTagIn(content, 'body', 0);
+
                             }
                             if(content.length > 1) {
                                 content[index + 1].NewLine = true;
                             }
                             else {
-
+ 
                             }
                            
                         }
@@ -462,15 +497,15 @@ class CNTextInput extends Component {
                     this.textLength -= content[i].len;
                 }
 
-                if(remIndex == 0 && content.length == 1) {
+                if(remIndex == 0 && (content.length == 1 || (content.length > 1 && content[1].NewLine == true && content[0].len == 0))) {
                     content[0].text = '';
                     content[0].len = 0;
                     content[0].readOnly = false;
                 }
-                else if(remIndex - 1 >= 0 && content[remIndex - 1].readOnly == true) {
-                    // console.log(content);
+                // else if(remIndex - 1 >= 0 && content[remIndex - 1].readOnly == true) {
+                //      console.log(content);
                     
-                }
+                // }
                 else {
 
                     content = content.filter(item => item.id != removeIndexes[i]);
@@ -498,7 +533,6 @@ class CNTextInput extends Component {
        
         this.upComingStype = upComing;
         
-        // console.log(content);
         
         
         this.props.onContentChanged(content);
@@ -589,14 +623,14 @@ class CNTextInput extends Component {
                     tag: isPrevList ? prevTag : 'body',
                     NewLine: true
                 };
-    
+     
                 newContent = update(newContent, { [index]: {$set : beforeContent}});
                 newContent = update(newContent, { $splice: [[index + 1, 0, afterContent ]] });
 
                 newContent = this.changeToTagIn(newContent, isPrevList ? prevTag : 'body', index + 1);
                 
             } 
-        // console.log('newline---->',newContent);
+      
         
         return newContent;
     }
@@ -1025,9 +1059,22 @@ class CNTextInput extends Component {
                         content[i].readOnly = false;
                     }
                     else {
+                        
+                           
                         this.textLength -= content[i].len;
-                        content = update(content, { $splice: [[i, 1 ]] });
-                        content[0].NewLine = true;
+                        if(content.length > 1 && !(content[1].NewLine === true)) {
+                            content = update(content, { $splice: [[i, 1 ]] });
+                            content[0].NewLine = true;
+                        } 
+                        else {
+                             content[0].NewLine = true;
+                             content[0].readOnly = false;
+                             content[0].len = 0;
+                             content[0].text = '';
+                        }
+                        
+                       
+                        
                     }
                    
                 }
@@ -1124,7 +1171,6 @@ class CNTextInput extends Component {
     }
 
     onFocus = () => {
-               
                
         if(this.props.onFocus)
             this.props.onFocus();
@@ -1248,7 +1294,7 @@ class CNTextInput extends Component {
 
     focus(selection = null){
         
-        
+
         this.textInput.focus();
 
         if(selection != null && selection.start && selection.end)

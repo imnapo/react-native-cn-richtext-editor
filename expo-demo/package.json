@@ -10,7 +10,7 @@
     "expo": "^31.0.2",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
-    "react-native-cn-richtext-editor": "^1.0.12"
+    "react-native-cn-richtext-editor": "^1.0.13"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0"

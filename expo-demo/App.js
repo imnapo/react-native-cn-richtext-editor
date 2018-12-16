@@ -8,7 +8,7 @@ import  CNRichTextEditor , { CNToolbar, getInitialObject  } from "react-native-c
 const IS_IOS = Platform.OS === 'ios';
 
 class App extends Component {
-
+ 
     constructor(props) {
         super(props);
 
@@ -66,7 +66,7 @@ insertImage(url) {
 render() {
     return (
         <KeyboardAvoidingView
-        behavior={IS_IOS ? "padding" : null} 
+        behavior="padding" 
         enabled
         keyboardVerticalOffset={IS_IOS ? 0 : 0}
         style={{

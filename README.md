@@ -72,7 +72,7 @@ onValueChanged = (value) => {
 render() {
     return (
         <KeyboardAvoidingView
-        behavior={Platform.OS == 'ios' ? "padding" : null} 
+        behavior="padding" 
         enabled
         keyboardVerticalOffset={0}
         style={{
