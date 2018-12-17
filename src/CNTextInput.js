@@ -315,6 +315,7 @@ class CNTextInput extends Component {
        
         if(textDiff >= 0)
         {
+            
             this.textLength += textDiff;
             //if(startWithReadonly === false) {
                 const addedText =
@@ -330,7 +331,10 @@ class CNTextInput extends Component {
         else
         {        
             textDiff *= -1;
+
             this.textLength -= textDiff;
+
+        
 
                 if(foundItemNo >= textDiff) {
                 const txt = content[foundIndex].text;
@@ -440,7 +444,6 @@ class CNTextInput extends Component {
         else {
             //removeIndexes = removeIndexes.sort((a, b) => b - a);
             newLineIndexs = newLineIndexs.sort((a, b) => b - a);
-            // console.log(newLineIndexs, newLineIndexs);
             
             for (let i = 0; i < newLineIndexs.length; i++) {
                 const index = newLineIndexs[i];
@@ -480,7 +483,9 @@ class CNTextInput extends Component {
                     if( index > 0 ) {
                         
                         beforeTag =content[index - 1].tag;
+
                         content = this.changeToTagIn(content, content[index - 1].tag, index);
+     
                     }
                 }
             }
@@ -494,7 +499,7 @@ class CNTextInput extends Component {
                     continue;
 
                 if(content[remIndex].len > 0) {
-                    this.textLength -= content[i].len;
+                    this.textLength -= content[remIndex].len;
                 }
 
                 if(remIndex == 0 && (content.length == 1 || (content.length > 1 && content[1].NewLine == true && content[0].len == 0))) {
@@ -533,8 +538,7 @@ class CNTextInput extends Component {
        
         this.upComingStype = upComing;
         
-        
-        
+           
         this.props.onContentChanged(content);
         if(this.props.onSelectedStyleChanged) {
             
@@ -931,6 +935,7 @@ class CNTextInput extends Component {
     }
 
     changeToTagIn(items, tag, index) {
+        
         const needBold = tag === 'heading' || tag === 'title';
          let content = items;
 
@@ -980,6 +985,7 @@ class CNTextInput extends Component {
                     
 
                     if(content[i].readOnly === true) {
+
                         this.textLength -= content[i].len;
                         if(i === 0) {
                             content[i].text = '\u2022 ';
