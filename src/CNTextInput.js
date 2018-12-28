@@ -45,6 +45,8 @@ class CNTextInput extends Component {
         this.turnOnJustToolOnFocus = false;
         this.textLength=0;
         this.upComingStype = null;
+        this.androidSelectionJump = 0;
+
         this.justToolAdded = false;
         this.state = {
             selectedTag : 'body',
@@ -143,15 +145,20 @@ class CNTextInput extends Component {
     }
 
     onSelectionChange = (event) => {
-
-        //console.log(event.nativeEvent.selection);
-       
         
         if (this.justToolAdded) {
             this.justToolAdded = false;
         }
         else {
             const selection = event.nativeEvent.selection;
+
+            if(this.androidSelectionJump !== 0) {
+
+                selection.start += this.androidSelectionJump;
+                selection.end += this.androidSelectionJump;
+                this.androidSelectionJump = 0;
+
+            }
             const upComingStype = this.upComingStype;
             this.beforePrevSelection = this.prevSelection;
             this.prevSelection = this.state.selection;
@@ -184,10 +191,12 @@ class CNTextInput extends Component {
                 this.justToolAdded = true;
             }
             this.avoidSelectionChangeOnFocus = false;
-            if(this.avoidAndroidJump == true) {
-                this.avoidSelectionChangeOnFocus = true; 
-            }
-            this.avoidAndroidJump = false;
+            // if(this.avoidAndroidJump == true) {
+                
+            //     this.avoidSelectionChangeOnFocus = true; 
+            // }
+            this.avoidAndroidJump = false;  
+           
 
             if(selection.end >= selection.start) {
                
@@ -254,20 +263,21 @@ class CNTextInput extends Component {
         else {
             cursorPosition = this.state.selection.end;
         }
-       
+       //console.log('pos', cursorPosition);
+         
         let content = items;
- 
+      
+        
         const result = this.findContentIndex(content, cursorPosition);
         
         let foundIndex = result.findIndx;
         let foundItemNo = result.itemNo;
-       
+         
         let startWithReadonly = false;
 
-        // console.log('upcomming', this.upComingStype);
-
+       
         if(content[foundIndex].readOnly === true  && textDiff >= 0) {
-            // console.log('1');
+            
             
             if(content[foundIndex].text.length === foundItemNo) {
                 if(content.length > foundIndex + 1 
@@ -303,12 +313,15 @@ class CNTextInput extends Component {
         if(this.upComingStype !== null && startWithReadonly === false 
             && this.upComingStype.sel.end === cursorPosition && textDiff >= 0)
         {
+           
+            
             content = this.updateContent(content, {id: shortid.generate(), text: '', 
             len: 0, stype: this.upComingStype.stype, tag: this.upComingStype.tag, styleList: this.upComingStype.styleList }, foundIndex + 1, foundItemNo);
 
             const {findIndx, itemNo} = this.findContentIndex(content, cursorPosition);
             foundIndex = findIndx;
-            foundItemNo = itemNo;           
+            foundItemNo = itemNo;  
+                  
         }
 
         let upComing = null;
@@ -333,12 +346,10 @@ class CNTextInput extends Component {
             textDiff *= -1;
 
             this.textLength -= textDiff;
-
-        
-
+              
                 if(foundItemNo >= textDiff) {
                 const txt = content[foundIndex].text;
-
+ 
                 content[foundIndex].len -= textDiff;
                 content[foundIndex].text = txt.substring(0, foundItemNo - textDiff) + txt.substring(foundItemNo, txt.length);
                 
@@ -348,7 +359,8 @@ class CNTextInput extends Component {
                 if(content[foundIndex].readOnly === true) {
                     removeIndexes.push(content[foundIndex].id);
                 }    
-
+         
+                
                 if(content[foundIndex].len === 0 && content.length > 1)
                 {
                     upComing = {
@@ -362,6 +374,7 @@ class CNTextInput extends Component {
                             end : cursorPosition - 1
                         }
                     }
+                                     
                     // removeIndexes.push(foundIndex);
                     removeIndexes.push(content[foundIndex].id);
 
@@ -411,11 +424,7 @@ class CNTextInput extends Component {
                         }                            
                 }                  
             }                           
-        }
-
-
-         
-           
+        }         
             
         
         if(isAddContent == true) {
@@ -423,11 +432,13 @@ class CNTextInput extends Component {
            // if(startWithReadonly === false) {
                 let newLineIndex = content[foundIndex].text.substring(1).indexOf('\n');
                 if(newLineIndex >= 0) {
+                   
+                    
                     content = this.updateNewLine(content, foundIndex , newLineIndex + 1);
-                    if(IS_IOS === false)
-                    {
-                        this.avoidAndroidJump = true;
-                    }
+                    // if(IS_IOS === false)
+                    // {
+                    //     this.avoidAndroidJump = true;
+                    // }
                     
 
                 }
@@ -442,7 +453,7 @@ class CNTextInput extends Component {
             
         }
         else {
-            //removeIndexes = removeIndexes.sort((a, b) => b - a);
+            //removeIndexes = removeIndexes.sort((a, b) => b - a); 
             newLineIndexs = newLineIndexs.sort((a, b) => b - a);
             
             for (let i = 0; i < newLineIndexs.length; i++) {
@@ -454,7 +465,7 @@ class CNTextInput extends Component {
                     if( index > 0 ) {
                         content[index].NewLine = false;
                         beforeTag =content[index - 1].tag;
-                        content = this.changeToTagIn(content, content[index - 1].tag, index);
+                        content = this.changeToTagIn(content, content[index - 1].tag, index, false);
                     }
                     else {
                         if(removeIndexes.indexOf(content[index].id)>= 0) {
@@ -463,7 +474,7 @@ class CNTextInput extends Component {
                             let tagg = content[index].tag;
                             if(tagg == 'ul' || tagg === 'ol') {
 
-                                content = this.changeToTagIn(content, 'body', 0);
+                                content = this.changeToTagIn(content, 'body', 0, false);
 
                             }
                             if(content.length > 1) {
@@ -484,12 +495,14 @@ class CNTextInput extends Component {
                         
                         beforeTag =content[index - 1].tag;
 
-                        content = this.changeToTagIn(content, content[index - 1].tag, index);
+                        content = this.changeToTagIn(content, content[index - 1].tag, index, false);
      
                     }
                 }
             }
-           
+         
+          //console.log('removeIndexes', removeIndexes);
+          
            
             for (let i = 0; i < removeIndexes.length; i++) {
                 let remIndex = content.findIndex(x=> x.id == removeIndexes[i]);
@@ -499,7 +512,15 @@ class CNTextInput extends Component {
                     continue;
 
                 if(content[remIndex].len > 0) {
+                    if(IS_IOS !== true) {
+                         
+                        this.androidSelectionJump -= (content[remIndex].len);
+                        //this.avoidAndroidJump = true;
+
+                    }
+
                     this.textLength -= content[remIndex].len;
+                    
                 }
 
                 if(remIndex == 0 && (content.length == 1 || (content.length > 1 && content[1].NewLine == true && content[0].len == 0))) {
@@ -538,7 +559,8 @@ class CNTextInput extends Component {
        
         this.upComingStype = upComing;
         
-           
+        // console.log('content',content);
+        
         this.props.onContentChanged(content);
         if(this.props.onSelectedStyleChanged) {
             
@@ -555,29 +577,31 @@ class CNTextInput extends Component {
     updateNewLine(content, index, itemNo) {
         let newContent = content;
 
-        
+         
         let prevTag = newContent[index].tag;
         let isPrevList = false;
         // if(index > 0) {
         //     prevTag = newContent[index - 1].tag;
         // }
-
+        //console.log('aaa', index, itemNo);
+        
         if(prevTag === 'ol' || prevTag == 'ul') {
             isPrevList = true;
+            if(IS_IOS === false)
+            {
+                //this.avoidAndroidJump = true;
+            }
         }
 
             const foundElement = newContent[index];
 
             if(itemNo === 0) {
                 newContent[index].NewLine = true;
-                newContent = this.changeToTagIn(newContent, isPrevList ? prevTag : 'body', index);
+                newContent = this.changeToTagIn(newContent, isPrevList ? prevTag : 'body', index, true);
 
             }
             else if(itemNo === foundElement.len - 1) {
-               
-                
-               
-                
+                                                    
                 newContent[index].len = foundElement.len - 1;
                 newContent[index].text = foundElement.text.substring(0, foundElement.text.length - 1);
                 
@@ -586,7 +610,7 @@ class CNTextInput extends Component {
                     newContent[index + 1].len += 1;
                     newContent[index + 1].NewLine = true;
                     newContent[index + 1].text = '\n' + newContent[index + 1].text;
-                    newContent = this.changeToTagIn(newContent, isPrevList ? prevTag : 'body', index + 1);
+                    newContent = this.changeToTagIn(newContent, isPrevList ? prevTag : 'body', index + 1, true);
                     
     
                 }
@@ -603,7 +627,7 @@ class CNTextInput extends Component {
                     beforeContent.styleList = StyleSheet.flatten(this.convertStyleList(update(beforeContent.stype, { $push: [beforeContent.tag] })));
                     newContent = update(newContent, { $splice: [[index + 1, 0, beforeContent ]] });
                     if(isPrevList === true)
-                    newContent = this.changeToTagIn(newContent, prevTag , index + 1);
+                    newContent = this.changeToTagIn(newContent, prevTag , index + 1, true);
                 }
             }   
             else {
@@ -631,7 +655,7 @@ class CNTextInput extends Component {
                 newContent = update(newContent, { [index]: {$set : beforeContent}});
                 newContent = update(newContent, { $splice: [[index + 1, 0, afterContent ]] });
 
-                newContent = this.changeToTagIn(newContent, isPrevList ? prevTag : 'body', index + 1);
+                newContent = this.changeToTagIn(newContent, isPrevList ? prevTag : 'body', index + 1,true);
                 
             } 
       
@@ -919,10 +943,9 @@ class CNTextInput extends Component {
         const { items } = this.props;
         const { selection } = this.state;
 
-       
         let res = this.findContentIndex(items, selection.end);
         let content = this.changeToTagIn(items, tagType, res.findIndx);
-                
+        
         if(this.props.onContentChanged)
             {
                 this.props.onContentChanged(content);
@@ -934,7 +957,8 @@ class CNTextInput extends Component {
             }
     }
 
-    changeToTagIn(items, tag, index) {
+    changeToTagIn(items, tag, index, fromTextChange = false) {
+         
         
         const needBold = tag === 'heading' || tag === 'title';
          let content = items;
@@ -972,7 +996,9 @@ class CNTextInput extends Component {
                 content[i].stype.indexOf('bold') == -1) {
                 content[i].stype = update(content[i].stype, { $push: ['bold'] })
             } 
-            else if(needBold === false && content[i].stype.indexOf('bold') != -1)  {
+            else if(needBold === false && 
+                (content[i].tag === 'heading' || content[i].tag === 'title') && 
+                content[i].stype.indexOf('bold') != -1)  {
                 content[i].stype = content[i].stype.filter(typ => typ != 'bold')
             }
            
@@ -981,9 +1007,7 @@ class CNTextInput extends Component {
     
             if(content[i].NewLine === true) {
                 if(tag === 'ul') {
-                    
-                    
-
+                                      
                     if(content[i].readOnly === true) {
 
                         this.textLength -= content[i].len;
@@ -996,27 +1020,47 @@ class CNTextInput extends Component {
                             content[i].len = 3;
                         }
                         this.textLength += content[i].len;
+
+                        if(fromTextChange === true && IS_IOS !== true) {                                                      
+                            this.androidSelectionJump += content[i].len;
+                        }
                     }
                     else {
-                        if(i !== 0) {
-                            content[i].text = content[i].text.substring(1);
-                            content[i].len = content[i].len - 1;
-                        }
-                        content[i].NewLine = false;
+                        //if(i !== 0) {
+                            if(content[i].len > (i === 0 ? 0 : 1)) {
+                                content[i].text = content[i].text.substring((i === 0 ? 0 : 1));
+                                content[i].len = content[i].len - (i === 0 ? 0 : 1);
+                                content[i].NewLine = false;
+                                listContent = {
+                                    id: shortid.generate(),
+                                    len: i === 0 ? 2 : 3,
+                                    stype:[],
+                                    text: i === 0 ? '\u2022 ' : '\n\u2022 ',
+                                    tag: 'ul',
+                                    NewLine: true,
+                                    readOnly: true
+                                };
+                                content = update(content, { $splice: [[i, 0, listContent ]] });
+                                
+                            }
+                            else {
+                                content[i].text = i === 0 ? '\u2022 ' : '\n\u2022 ';
+                                content[i].len =  i === 0 ? 2 : 3;
+                                content[i].readOnly = true;
+                                content[i].stype = [];
+                            }
+                            this.textLength += 2;
+                            if(fromTextChange === true && IS_IOS !== true) {
+                                this.androidSelectionJump += 2;
+                            }
+
+                        //}
+                        
                         
 
-                        listContent = {
-                            id: shortid.generate(),
-                            len: i === 0 ? 2 : 3,
-                            stype:[],
-                            text: i === 0 ? '\u2022 ' : '\n\u2022 ',
-                            tag: 'ul',
-                            NewLine: true,
-                            readOnly: true
-                        };
+                        
 
-                        content = update(content, { $splice: [[i, 0, listContent ]] });
-                        this.textLength += 2;
+                        
                     }
                 }
                 else if(tag === 'ol') {
@@ -1029,31 +1073,45 @@ class CNTextInput extends Component {
                             content[i].len = 3;
                         }
                         else {
-                            content[i].text = '\n1- ';
+                            content[i].text = '\n1- '; 
                             content[i].len = 4;
                         }
                         this.textLength += content[i].len;
+                        if(fromTextChange === true && IS_IOS !== true) {                                                      
+                            this.androidSelectionJump += content[i].len;
+                        }
                     }
                     else {
                         
-                        if(i !== 0) {
-                            content[i].text = content[i].text.substring(1);
-                            content[i].len = content[i].len - 1;
+                        if(content[i].len > (i === 0 ? 0 : 1)) {
+                            content[i].text = content[i].text.substring((i === 0 ? 0 : 1));
+                                content[i].len = content[i].len - (i === 0 ? 0 : 1);
+                                content[i].NewLine = false;
+                                listContent = {
+                                    id: shortid.generate(),
+                                    len: i === 0 ? 3 : 4,
+                                    stype:[],
+                                    text: i === 0 ? '1- ' : '\n1- ',
+                                    tag: 'ol',
+                                    NewLine: true,
+                                    readOnly: true
+                                };
+                                content = update(content, { $splice: [[i, 0, listContent ]] });
                         }
-                        content[i].NewLine = false;
+                        else {
+                            content[i].text = i === 0 ? '1- ' : '\n1- ';
+                            content[i].len =  i === 0 ? 3 : 4;
+                            content[i].readOnly = true;
+                            content[i].stype = [];
+                        }
+                        
                         
 
-                        listContent = {
-                            id: shortid.generate(),
-                            len: i === 0 ? 3 : 4,
-                            stype:[],
-                            text: i === 0 ? '1- ' : '\n1- ',
-                            tag: 'ol',
-                            NewLine: true,
-                            readOnly: true
-                        };
-                        content = update(content, { $splice: [[i, 0, listContent ]] });
+                        
                         this.textLength += 3;
+                        if(fromTextChange === true && IS_IOS !== true) {                                                      
+                            this.androidSelectionJump += 3;
+                        }
                     }
 
                 }
@@ -1183,6 +1241,8 @@ class CNTextInput extends Component {
     }
 
     avoidSelectionChangeOnFocus() {
+        
+        
         this.avoidSelectionChangeOnFocus=true;
     }
 
@@ -1305,6 +1365,7 @@ class CNTextInput extends Component {
 
         if(selection != null && selection.start && selection.end)
         {
+            
             this.justToolAdded = true;
             this.setState({
                 selection: selection

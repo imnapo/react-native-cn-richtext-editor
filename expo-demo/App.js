@@ -155,7 +155,7 @@ class App extends Component {
             keyboardVerticalOffset={IS_IOS ? 0 : 0}
             style={{
                 flex: 1,
-                paddingTop: IS_IOS ? 20 : 0,
+                paddingTop: 20,
                 backgroundColor:'#eee',
                 flexDirection: 'column', 
                 justifyContent: 'flex-end', 
