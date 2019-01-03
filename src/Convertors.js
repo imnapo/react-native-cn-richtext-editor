@@ -4,8 +4,10 @@ const shortid = require('shortid');
 import update from 'immutability-helper';
 import { StyleSheet } from 'react-native';
 
-export function convertToHtmlString(contents) {
+export function convertToHtmlString(contents, styleList = null) {
+    let availableStyles = styleList == null ? defaultStyles : styleList;
 
+    //let keys = Object.keys(availableStyles);
     //console.log('contents', contents);
 
     // console.log('==================================');
@@ -30,6 +32,15 @@ export function convertToHtmlString(contents) {
         let isItalic = item.stype.indexOf('italic') > -1;
         let isUnderLine = item.stype.indexOf('underline') > -1;
         let isOverline = item.stype.indexOf('lineThrough') > -1;
+        let isBlue = item.stype.indexOf('blue') > -1;
+        let isRed = item.stype.indexOf('red') > -1;
+        let isGreen = item.stype.indexOf('green') > -1;
+        let isBlueMarker = item.stype.indexOf('blue_hl') > -1;
+        let isGreenMarker = item.stype.indexOf('green_hl') > -1;
+        let isPinkMarker = item.stype.indexOf('pink_hl') > -1;
+        let isPurpleMarker = item.stype.indexOf('purple_hl') > -1;
+        let isYellowMarker = item.stype.indexOf('yellow_hl') > -1;
+        let isOrangeMarker = item.stype.indexOf('orange_hl') > -1;
         let tag = "";
         
         
@@ -59,7 +70,16 @@ export function convertToHtmlString(contents) {
         styles += isItalic ? 'font-style: italic;': '';
         styles += isOverline ? 'text-decoration: line-through;': '';
         styles += isUnderLine ? 'text-decoration: underline;': '';
-
+        styles += isBlue ? `color: ${availableStyles['blue'].color};`: '';
+        styles += isRed ? `color: ${availableStyles['red'].color};`: '';
+        styles += isGreen ? `color: ${availableStyles['green'].color};`: '';
+        styles += isBlueMarker ? `background-color: ${availableStyles['blue_hl'].backgroundColor};`: '';
+        styles += isGreenMarker ? `background-color: ${availableStyles['green_hl'].backgroundColor};`: '';
+        styles += isPinkMarker ? `background-color: ${availableStyles['pink_hl'].backgroundColor};`: '';
+        styles += isPurpleMarker ? `background-color: ${availableStyles['purple_hl'].backgroundColor};`: '';
+        styles += isYellowMarker ? `background-color: ${availableStyles['yellow_hl'].backgroundColor};`: '';
+        styles += isOrangeMarker ? `background-color: ${availableStyles['orange_hl'].backgroundColor};`: '';
+        
         if(item.NewLine == true || j == 0) {
           element = myDoc.createElement(tag);
 
@@ -277,11 +297,23 @@ export function convertToHtmlString(contents) {
     
   }
 
-  function xmlNodeToItem(child, tag, newLine) {
+  function xmlNodeToItem(child, tag, newLine, styleList = null) {
+    let availableStyles = styleList === null ? defaultStyles : styleList;
     let isBold = false;
     let isItalic = false;
     let isUnderLine = false;
     let isOverline = false;
+    let isGreen = false;
+    let isBlue = false;
+    let isRed = false;
+
+    let isBlueMarker = false;
+    let isOrangeMarker = false;
+    let isPinkMarker = false;
+    let isPurpleMarker = false;
+    let isGreenMarker = false;
+    let isYellowMarker = false;
+
     let text = "";
     if(child.nodeName === 'span') {
       if(child.hasAttribute('style') === true) {
@@ -290,6 +322,15 @@ export function convertToHtmlString(contents) {
         isItalic = styles.indexOf('font-style: italic;') > -1;
         isOverline = styles.indexOf('text-decoration: line-through;') > -1;
         isUnderLine = styles.indexOf('text-decoration: underline;') > -1;
+        isBlue = styles.indexOf(`color: ${availableStyles['blue'].color};`) > -1;
+        isRed = styles.indexOf(`color: ${availableStyles['red'].color};`) > -1;
+        isGreen = styles.indexOf(`color: ${availableStyles['green'].color};`) > -1;
+        isBlueMarker = styles.indexOf(`background-color: ${availableStyles['blue_hl'].backgroundColor};`) > -1;
+        isGreenMarker = styles.indexOf(`background-color: ${availableStyles['green_hl'].backgroundColor};`) > -1;
+        isPinkMarker = styles.indexOf(`background-color: ${availableStyles['pink_hl'].backgroundColor};`) > -1;
+        isPurpleMarker = styles.indexOf(`background-color: ${availableStyles['purple_hl'].backgroundColor};`) > -1;
+        isYellowMarker = styles.indexOf(`background-color: ${availableStyles['yellow_hl'].backgroundColor};`) > -1;
+        isOrangeMarker = styles.indexOf(`background-color: ${availableStyles['orange_hl'].backgroundColor};`) > -1;
       }
       try {
         text = child.childNodes[0].nodeValue;
@@ -318,13 +359,46 @@ export function convertToHtmlString(contents) {
     if(isOverline) {
       stype.push('lineThrough');
     }
+    if(isBlue) {
+      stype.push('blue');
+    }
+    if(isGreen) {
+      stype.push('green');
+    }
+    if(isRed) {
+      stype.push('red');
+    }
+
+    if(isBlueMarker) {
+      stype.push('blue_hl');
+    }
+
+    if(isOrangeMarker) {
+      stype.push('orange_hl');
+    }
+
+    if(isYellowMarker) {
+      stype.push('yellow_hl');
+    }
+
+    if(isGreenMarker) {
+      stype.push('green_hl');
+    }
+
+    if(isPinkMarker) {
+      stype.push('pink_hl');
+    }
+
+    if(isPurpleMarker) {
+      stype.push('purple_hl');
+    }
 
     return {
       id: shortid.generate(),
       text: newLine === true ? '\n' + text : text,
       len: newLine === true ? text.length + 1 : text.length,
       stype: stype,
-      styleList: StyleSheet.flatten(convertStyleList(update(stype, { $push: [tag] }))),
+      styleList: StyleSheet.flatten(convertStyleList(update(stype, { $push: [tag] }), styleList)),
       tag:tag,
       NewLine: newLine
      };
@@ -350,11 +424,11 @@ export function convertToHtmlString(contents) {
   }
 
 
-  export function convertStyleList(stylesArr) {
+  function convertStyleList(stylesArr, styleList = null) {
         
     let styls = [];
     (stylesArr).forEach(element => {
-        let styleObj = txtToStyle(element);
+        let styleObj = txtToStyle(element, styleList);
         if(styleObj !== null)
         styls.push(styleObj);
     });
@@ -363,57 +437,67 @@ export function convertToHtmlString(contents) {
     return styls;
 }
 
- function txtToStyle(styleName) {
-     
-    switch(styleName)
-    {
-      case 'heading':
-      return styles.heading;
-      case 'body':
-      return styles.body;
-      case 'ul':
-      return styles.ul;
-      case 'ol':
-      return styles.ol;
-      case 'title':
-      return styles.title;
-          case 'bold':           
-            return styles.bold;
-          case 'italic':
-            return styles.italic;
-          case 'underline':
-            return styles.underline;
-          case 'lineThrough':
-            return styles.lineThrough;
-          default :
-            return null;
+ function txtToStyle(styleName, styleList= null) {
 
-    }
+  const styles = styleList == null ? defaultStyles : styleList;
+        
+  return styles[styleName];
 }
 
-const styles = StyleSheet.create(
+
+export const defaultStyles = StyleSheet.create(
   {
-  bold : {
-      fontWeight: 'bold'
-  },
-  italic : {
-      fontStyle: 'italic'
-  },
-  underline: {textDecorationLine: 'underline'},
-  lineThrough: {textDecorationLine: 'line-through'},
-  heading: {
-      fontSize: 25
-  },
-  body: {
-      fontSize: 20
-  },
-  title: {
-      fontSize: 30
-  },
-  ul: {
-      fontSize: 20
-  },
-  ol: {
-      fontSize: 20
-  },
-});
+    bold : {
+        fontWeight: 'bold'
+    },
+    italic : {
+        fontStyle: 'italic'
+    },
+    underline: {textDecorationLine: 'underline'},
+    lineThrough: {textDecorationLine: 'line-through'},
+    heading: {
+        fontSize: 25
+    },
+    body: {
+        fontSize: 20
+    },
+    title: {
+        fontSize: 30
+    },
+    ul: {
+        fontSize: 20
+    },
+    ol: {
+        fontSize: 20
+    },
+    red: {
+      color: '#d23431'
+    },
+    green : {
+      color: '#4a924d'
+    },
+    blue: {
+      color: '#0560ab'
+    },
+    black: {
+      color: '#33363d'
+    },
+    blue_hl: {
+      backgroundColor: '#34f3f4'
+    },
+    green_hl: {
+      backgroundColor: '#2df149'
+    },
+    pink_hl: {
+      backgroundColor: '#f53ba7'
+    },
+    yellow_hl: {
+      backgroundColor: '#f6e408'
+    },
+    orange_hl: {
+      backgroundColor: '#f07725'
+    },
+    purple_hl: {
+      backgroundColor: '#c925f2'
+    }
+  });

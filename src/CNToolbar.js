@@ -23,7 +23,7 @@ class CNToolbar extends Component {
 
          //console.log('render', this.props.text);
         const { selectedStyles, selectedTag, bold, italic,
-            underline,lineThrough,title, heading, ul, ol, body, image } = this.props;
+            underline,lineThrough,title, heading, ul, ol, body, image, foreColor, highlight } = this.props;
        
         let size = this.props.size ? this.props.size : defaultSize;
         let color = this.props.color ? this.props.color : defaultColor;
@@ -238,7 +238,7 @@ class CNToolbar extends Component {
             </View>
             <View style={styles.separator}>
             </View>
-            <View style={[styles.iconSetContainer, { flexGrow : 1}]}>
+            <View style={[styles.iconSetContainer, { flexGrow : 2}]}>
                 <TouchableHighlight
                         underlayColor={ 'transparent' }
                         onPress={() => {
@@ -262,6 +262,54 @@ class CNToolbar extends Component {
                         
                             </View>
                     </TouchableHighlight>
+                <TouchableWithoutFeedback
+                    
+                    onPress={() => {
+                        this.onStyleKeyPress('foreColor');
+                        }}>
+                        <View style={[styles.iconContainer
+                        , {
+                            backgroundColor: selectedStyles.indexOf('foreColor') >= 0 ? selectedBgColor: bgColor
+                        }]}>
+                        {foreColor ? 
+                        React.cloneElement(foreColor, { size : size, color:selectedStyles.indexOf('foreColor') >= 0 ? selectedColor: color})
+                        : <Text
+                        style={{
+                            color: selectedStyles.indexOf('foreColor') >= 0 ? selectedColor: color,
+                            fontWeight: 'bold',
+                            fontSize: size,
+                            paddingLeft: 5,
+                            paddingRight: 5
+                        }}>Color</Text> 
+                        }
+                            
+                        </View>
+                           
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback
+                    
+                    onPress={() => {
+                        this.onStyleKeyPress('highlight');
+                        }}>
+                        <View style={[styles.iconContainer
+                        , {
+                            backgroundColor: selectedStyles.indexOf('highlight') >= 0 ? selectedBgColor: bgColor
+                        }]}>
+                        {highlight ? 
+                        React.cloneElement(highlight, { size : size, color:selectedStyles.indexOf('highlight') >= 0 ? selectedColor: color})
+                        : <Text
+                        style={{
+                            color: selectedStyles.indexOf('highlight') >= 0 ? selectedColor: color,
+                            fontWeight: 'bold',
+                            fontSize: size,
+                            paddingLeft: 5,
+                            paddingRight: 5
+                        }}>highlight</Text> 
+                        }
+                            
+                        </View>
+                           
+                </TouchableWithoutFeedback>
             </View>
               </View>
         );

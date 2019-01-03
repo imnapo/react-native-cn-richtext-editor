@@ -7,32 +7,6 @@ import CNStyledText from "./CNStyledText";
 
 const IS_IOS = Platform.OS == 'ios';
 
-const styles = StyleSheet.create(
-    {
-    bold : {
-        fontWeight: 'bold'
-    },
-    italic : {
-        fontStyle: 'italic'
-    },
-    underline: {textDecorationLine: 'underline'},
-    lineThrough: {textDecorationLine: 'line-through'},
-    heading: {
-        fontSize: 25
-    },
-    body: {
-        fontSize: 20
-    },
-    title: {
-        fontSize: 30
-    },
-    ul: {
-        fontSize: 20
-    },
-    ol: {
-        fontSize: 20
-    },
-  });
 
 class CNTextInput extends Component {
 
@@ -685,9 +659,7 @@ class CNTextInput extends Component {
 
     }
 
-    applyStyle(toolType){
-         
-        
+    applyStyle(toolType){   
         
             const { selection: {start, end}} = this.state;
             const { items } = this.props;
@@ -1190,32 +1162,11 @@ class CNTextInput extends Component {
         return styls;
     }
   
-    txtToStyle(styleName) {
-         
-        switch(styleName)
-        {
-          case 'heading':
-          return styles.heading;
-          case 'body':
-          return styles.body;
-          case 'ul':
-          return styles.ul;
-          case 'ol':
-          return styles.ol;
-          case 'title':
-          return styles.title;
-              case 'bold':           
-                return styles.bold;
-              case 'italic':
-                return styles.italic;
-              case 'underline':
-                return styles.underline;
-              case 'lineThrough':
-                return styles.lineThrough;
-              default :
-                return null;
-  
-        }
+    txtToStyle = (styleName) => {
+         const styles = this.props.styleList;
+        
+         return styles[styleName];
+
     }
 
     forceSelectedStyles() {
@@ -1261,6 +1212,8 @@ class CNTextInput extends Component {
          const {items, foreColor, style} = this.props;
          const { selection } = this.state;
          let color = foreColor ?  foreColor : '#000';
+         
+         
         return (
             <TextInput
             underlineColorAndroid='rgba(0,0,0,0)'

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Keyboard
-, TouchableWithoutFeedback, Text
+, TouchableWithoutFeedback, Text, Dimensions
 , KeyboardAvoidingView, Platform } from 'react-native';
 import { Permissions, ImagePicker } from 'expo';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import  CNRichTextEditor , { CNToolbar, getInitialObject  } from "react-native-cn-richtext-editor";
+import  CNRichTextEditor , { CNToolbar, getInitialObject , defaultStyles } from "react-native-cn-richtext-editor";
 
 import {
     Menu,
@@ -18,14 +18,20 @@ import {
 const { SlideInMenu } = renderers;
 
 const IS_IOS = Platform.OS === 'ios';
+const { width, height } = Dimensions.get('window');
 
 class App extends Component {
  
     constructor(props) {
         super(props);
+        
 
         this.state = {
             selectedTag : 'body',
+            selectedColor : 'default',
+            selectedHighlight: 'default',
+            colors : ['red', 'green', 'blue'],
+            highlights:['yellow_hl','pink_hl', 'orange_hl', 'green_hl','purple_hl','blue_hl'],
             selectedStyles : [],
             value: [getInitialObject]
         };
@@ -38,7 +44,6 @@ class App extends Component {
 
     onStyleKeyPress = (toolType) => {
 
-
         if (toolType == 'image') {
             return;
         }
@@ -48,7 +53,6 @@ class App extends Component {
 
     }
 
-    
     onSelectedTagChanged = (tag) => {
 
         this.setState({
@@ -56,11 +60,18 @@ class App extends Component {
         })
     }
 
-    onSelectedStyleChanged = (styles) => {
-    
+    onSelectedStyleChanged = (styles) => { 
+        const colors = this.state.colors;  
+        const highlights = this.state.highlights;  
+        let sel = styles.filter(x=> colors.indexOf(x) >= 0);
+
+        let hl = styles.filter(x=> highlights.indexOf(x) >= 0);
         this.setState({
-            selectedStyles: styles
+            selectedStyles: styles,
+            selectedColor : (sel.length > 0) ? sel[sel.length - 1] : 'default',
+            selectedHighlight : (hl.length > 0) ? hl[hl.length - 1] : 'default',
         })
+       
     }
 
     onValueChanged = (value) => {
@@ -114,13 +125,43 @@ class App extends Component {
         else if(value == 2) {
             this.useLibraryHandler();         
         }
+        
+    }
+
+    onColorSelectorClicked = (value) => {
+        
+        if(value === 'default') {
+            this.editor.applyToolbar(this.state.selectedColor);
+        }
+        else {
+            this.editor.applyToolbar(value);
+           
+        }
+
+        this.setState({
+            selectedColor: value
+        });
+    }
+
+    onHighlightSelectorClicked = (value) => {
+        if(value === 'default') {
+            this.editor.applyToolbar(this.state.selectedHighlight);
+        }
+        else {
+            this.editor.applyToolbar(value);
+           
+        }
+
+        this.setState({
+            selectedHighlight: value
+        });
     }
 
     renderImageSelector() {
         return (
             <Menu renderer={SlideInMenu} onSelect={this.onImageSelectorClicked}>
             <MenuTrigger>
-                <MaterialCommunityIcons name="image" size={28} />
+                <MaterialCommunityIcons name="image" size={28} color="#737373" />
             </MenuTrigger>
             <MenuOptions>
                 <MenuOption value={1}>
@@ -146,7 +187,109 @@ class App extends Component {
     
     }
 
-  
+    renderColorMenuOptions = () => {
+
+        let lst = [];
+
+        if(defaultStyles[this.state.selectedColor]) {
+             lst = this.state.colors.filter(x => x !== this.state.selectedColor);
+             lst.push('default');
+            lst.push(this.state.selectedColor);
+        }
+        else {
+            lst = this.state.colors.filter(x=> true);
+            lst.push('default');
+        }
+
+        return (
+            
+            lst.map( (item) => {
+                let color = defaultStyles[item] ? defaultStyles[item].color : 'black';
+                return (
+                    <MenuOption value={item} key={item}>
+                        <MaterialCommunityIcons name="format-color-text" color={color}
+                        size={28} />
+                    </MenuOption>
+                );
+            })
+            
+        );
+    }
+
+    renderHighlightMenuOptions = () => {
+        let lst = [];
+
+        if(defaultStyles[this.state.selectedHighlight]) {
+             lst = this.state.highlights.filter(x => x !== this.state.selectedHighlight);
+             lst.push('default');
+            lst.push(this.state.selectedHighlight);
+        }
+        else {
+            lst = this.state.highlights.filter(x=> true);
+            lst.push('default');
+        }
+        
+        
+
+        return (
+            
+            lst.map( (item) => {
+                let bgColor = defaultStyles[item] ? defaultStyles[item].backgroundColor : 'black';
+                return (
+                    <MenuOption value={item} key={item}>
+                        <MaterialCommunityIcons name="marker" color={bgColor}
+                        size={26} />
+                    </MenuOption>
+                );
+            })
+            
+        );
+    }
+
+    renderColorSelector() {
+       
+        let selectedColor = '#737373';
+        if(defaultStyles[this.state.selectedColor])
+        {
+            selectedColor = defaultStyles[this.state.selectedColor].color;
+        }
+        
+
+        return (
+            <Menu renderer={SlideInMenu} onSelect={this.onColorSelectorClicked}>
+            <MenuTrigger>
+                <MaterialCommunityIcons name="format-color-text" color={selectedColor}
+                        size={28} style={{
+                            top:2
+                        }} />             
+            </MenuTrigger>
+            <MenuOptions customStyles={optionsStyles}>
+                {this.renderColorMenuOptions()}
+            </MenuOptions>
+            </Menu>
+        );
+    }
+
+    renderHighlight() {
+        let selectedColor = '#737373';
+        if(defaultStyles[this.state.selectedHighlight])
+        { 
+            selectedColor = defaultStyles[this.state.selectedHighlight].backgroundColor;
+        }
+        return (
+            <Menu renderer={SlideInMenu} onSelect={this.onHighlightSelectorClicked}>
+            <MenuTrigger>
+                <MaterialCommunityIcons name="marker" color={selectedColor}
+                        size={24} style={{                          
+                        }} />             
+            </MenuTrigger>
+            <MenuOptions customStyles={highlightOptionsStyles}>
+                {this.renderHighlightMenuOptions()}
+            </MenuOptions>
+            </Menu>
+        );
+    }
+
     render() {
         return (
             <KeyboardAvoidingView 
@@ -171,6 +314,7 @@ class App extends Component {
                             onSelectedStyleChanged={this.onSelectedStyleChanged}
                             value={this.state.value}
                             style={{ backgroundColor : '#fff', padding : 10}}
+                            styleList={defaultStyles}
                             //foreColor=''
                             onValueChanged={this.onValueChanged}
                             //onRemoveImage={this.onRemoveImage}
@@ -195,6 +339,8 @@ class App extends Component {
                     ol={<MaterialCommunityIcons name="format-list-numbers" />}
                     // image={<MaterialCommunityIcons name="image" />}
                     image={this.renderImageSelector()}
+                    foreColor={this.renderColorSelector()}
+                    highlight={this.renderHighlight()}
                     selectedTag={this.state.selectedTag}
                     selectedStyles={this.state.selectedStyles}
                     onStyleKeyPress={this.onStyleKeyPress} />
@@ -228,5 +374,56 @@ var styles = StyleSheet.create({
         borderColor: '#eee'
     }
 });
+
+const optionsStyles = {
+    optionsContainer: {
+      backgroundColor: 'yellow',
+      padding: 0,   
+      width: 40,
+      marginLeft: width - 40 - 30,
+      alignItems: 'flex-end',
+    },
+    optionsWrapper: {
+      //width: 40,
+      backgroundColor: 'white',
+    },
+    optionWrapper: {
+       //backgroundColor: 'yellow',
+      margin: 2,
+    },
+    optionTouchable: {
+      underlayColor: 'gold',
+      activeOpacity: 70,
+    },
+    // optionText: {
+    //   color: 'brown',
+    // },
+  };
+
+const highlightOptionsStyles = {
+optionsContainer: {
+    backgroundColor: 'transparent',
+    padding: 0,   
+    width: 40,
+    marginLeft: width - 40,
+
+    alignItems: 'flex-end',
+},
+optionsWrapper: {
+    //width: 40,
+    backgroundColor: 'white',
+},
+optionWrapper: {
+    //backgroundColor: 'yellow',
+    margin: 2,
+},
+optionTouchable: {
+    underlayColor: 'gold',
+    activeOpacity: 70,
+},
+// optionText: {
+//   color: 'brown',
+// },
+};
 
 export default App;

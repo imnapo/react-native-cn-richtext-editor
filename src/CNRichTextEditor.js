@@ -5,7 +5,7 @@ import { TextInput, View, Image
  } from 'react-native';
 import _ from 'lodash';
 import update from 'immutability-helper';
-import { getInitialObject } from "./Convertors";
+import { getInitialObject, defaultStyles } from "./Convertors";
 import CNTextInput from "./CNTextInput";
 
 const shortid = require('shortid');
@@ -179,7 +179,6 @@ class CNRichTextEditor extends Component {
     //       imageHighLightedInex: index
     //   })
   }
-
 
   onFocus = (index) => {
       //console.log('focus', index, this.state.focusInputIndex);
@@ -435,7 +434,7 @@ class CNRichTextEditor extends Component {
   }
 
   renderInput(input, index, isLast) {
-        
+        const styles = this.props.styleList ? this.props.styleList : defaultStyles;
       return (
           <CNTextInput 
             key={input.id} 
@@ -447,6 +446,7 @@ class CNRichTextEditor extends Component {
             onConnectToPrevClicked={()=> this.onConnectToPrevClicked(index)}
             onFocus={()=> this.onFocus(index)}
             foreColor={this.props.foreColor}
+            styleList={styles}
             style={isLast === true ?
                 {
                     borderWidth: 0,
@@ -514,20 +514,19 @@ class CNRichTextEditor extends Component {
 
     if(toolType === 'body' || toolType === 'title' || toolType === 'heading' || toolType === 'ul' || toolType === 'ol')
     {
-       
-        
+            
     this.textInputs[focusInputIndex].applyTag(toolType);
 
 
     }
     else if (toolType == 'image') {
-
         //convertToHtmlStringconvertToHtmlString(this.state.contents);
 
         this.setState({ showAddImageModal: true });
         return;
     }
-    else if(toolType === 'bold' || toolType === 'italic' || toolType === 'underline' || toolType === 'lineThrough')
+    else 
+    //if(toolType === 'bold' || toolType === 'italic' || toolType === 'underline' || toolType === 'lineThrough')
     this.textInputs[focusInputIndex].applyStyle(toolType);
   }
 
