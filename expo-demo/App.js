@@ -4,7 +4,7 @@ import { View, StyleSheet, Keyboard
 , KeyboardAvoidingView, Platform } from 'react-native';
 import { Permissions, ImagePicker } from 'expo';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import  CNRichTextEditor , { CNToolbar, getInitialObject , defaultStyles } from "react-native-cn-richtext-editor";
+import  CNRichTextEditor , { CNToolbar, getInitialObject , getDefaultStyles } from "react-native-cn-richtext-editor";
 
 import {
     Menu,
@@ -19,6 +19,7 @@ const { SlideInMenu } = renderers;
 
 const IS_IOS = Platform.OS === 'ios';
 const { width, height } = Dimensions.get('window');
+const defaultStyles = getDefaultStyles();
 
 class App extends Component {
  

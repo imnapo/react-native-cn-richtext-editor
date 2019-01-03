@@ -444,8 +444,12 @@ export function convertToHtmlString(contents, styleList = null) {
   return styles[styleName];
 }
 
+export function getDefaultStyles(){
+  return defaultStyles;
+}
 
-export const defaultStyles = StyleSheet.create(
+
+ const defaultStyles = StyleSheet.create(
   {
     bold : {
         fontWeight: 'bold'
