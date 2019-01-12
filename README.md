@@ -101,7 +101,21 @@ render() {
             <CNToolbar
                 selectedTag={this.state.selectedTag}
                 selectedStyles={this.state.selectedStyles}
-                onStyleKeyPress={this.onStyleKeyPress} />
+                onStyleKeyPress={this.onStyleKeyPress} 
+                size={28}
+                bold={<MaterialCommunityIcons name="format-bold" />}
+                italic={<MaterialCommunityIcons name="format-italic" />}
+                underline={<MaterialCommunityIcons name="format-underline" />}
+                lineThrough={<MaterialCommunityIcons name="format-strikethrough-variant" />}
+                body={<MaterialCommunityIcons name="format-text" />}
+                title={<MaterialCommunityIcons name="format-header-1" />}
+                heading={<MaterialCommunityIcons name="format-header-3" />}
+                ul={<MaterialCommunityIcons name="format-list-bulleted" />}
+                ol={<MaterialCommunityIcons name="format-list-numbers" />}
+                image={this.renderImageSelector()}
+                foreColor={this.renderColorSelector()}
+                highlight={this.renderHighlight()}
+                />
         </View>
     </KeyboardAvoidingView>
     );

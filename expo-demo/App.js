@@ -15,6 +15,7 @@ import {
     MenuProvider,
     renderers
   } from 'react-native-popup-menu';
+
 const { SlideInMenu } = renderers;
 
 const IS_IOS = Platform.OS === 'ios';
@@ -338,7 +339,6 @@ class App extends Component {
                     heading={<MaterialCommunityIcons name="format-header-3" />}
                     ul={<MaterialCommunityIcons name="format-list-bulleted" />}
                     ol={<MaterialCommunityIcons name="format-list-numbers" />}
-                    // image={<MaterialCommunityIcons name="image" />}
                     image={this.renderImageSelector()}
                     foreColor={this.renderColorSelector()}
                     highlight={this.renderHighlight()}
