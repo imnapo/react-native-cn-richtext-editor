@@ -292,9 +292,9 @@ class CNToolbar extends Component {
         return (
             <View style={styles.toolbarContainer}>
             {styleButtons === false ? this.renderStyleButtons(size, color, bgColor, selectedColor, selectedBgColor) : null}
-            {styleButtons === false ? <View style={styles.separator}></View>: null }
+            {(styleButtons === false && tagButtons === false) ? <View style={styles.separator}></View>: null }
             {tagButtons === false ? this.renderTagButtons(size, color, bgColor, selectedColor, selectedBgColor) : null}
-            {tagButtons === false ? <View style={styles.separator}></View>: null }
+            {(tagButtons === false && extraButtons === false) ? <View style={styles.separator}></View>: null }
             {extraButtons === false ? this.renderExtras(size, color, bgColor, selectedColor, selectedBgColor) : null}
               </View>
         );
