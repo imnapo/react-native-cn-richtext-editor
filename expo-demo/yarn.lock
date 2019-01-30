@@ -3723,10 +3723,10 @@ react-native-branch@2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-2.2.5.tgz#4074dd63b4973e6397d9ce50e97b57c77a518e9d"
 
-react-native-cn-richtext-editor@^1.0.20:
-  version "1.0.20"
-  resolved "https://registry.yarnpkg.com/react-native-cn-richtext-editor/-/react-native-cn-richtext-editor-1.0.20.tgz#6f32a9368e8e7a9534e39c6cbacbb928fa79b365"
-  integrity sha512-q6xsVxId5m0KuV1Q+5eORoY+xNzL8zpqVeHcCVi9QIIwJwNzMiQVms/IBYz9dSfJbEoLO3xIMDT58PLMtuKZPw==
+react-native-cn-richtext-editor@^1.0.22:
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/react-native-cn-richtext-editor/-/react-native-cn-richtext-editor-1.0.22.tgz#426a7eab4c2e4865483211944d1699374edd8288"
+  integrity sha512-J7HhzJ4g3xkNYyURUzWPL0X5YgagKNVRY97AGv7/XJnA1dzU53qxAqdVTOl4+xj0E0dAZzCFj3bQrEKmpNR9fg==
   dependencies:
     immutability-helper "^2.8.1"
     lodash "^4.17.11"
