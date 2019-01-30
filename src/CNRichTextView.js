@@ -10,10 +10,12 @@ class CNRichTextView extends Component {
         super(props);
         this.state = {
             contents: [],
-            isScrolled: false
+            isScrolled: false,
+            layoutWidth: 400
         };
 
         this.flip = this.flip.bind(this);
+
     }
 
     componentDidMount() {
@@ -65,22 +67,23 @@ class CNRichTextView extends Component {
     }
 
     renderImage(image, index) {
-
+        const { width, height } = image.size;
+        const { layoutWidth } = this.state;
+        let myHeight = height * (layoutWidth / width); 
+        let myWidth = layoutWidth
+        
         return (
             <View key={`image${index}`}
                 style={{
-
                     flexDirection: 'row',
                     alignItems: 'flex-start',
-
-
                 }}
             >
                 <View>
                     <Image
 
                         style={{
-                            width: image.size.width, height: image.size.height
+                            width: myWidth, height: myHeight
                             , opacity: this.state.imageHighLightedInex === index ? .8 : 1
                         }}
                         source={{ uri: image.url }}
@@ -91,11 +94,28 @@ class CNRichTextView extends Component {
         );
     }
 
+    onLayout = (event) => {
+        const {
+          x,
+          y,
+          width,
+          height
+        } = event.nativeEvent.layout;
+
+        this.setState({
+            layoutWidth : width - 2
+        })
+      }
+
     render() {
-        const { contents, style } = this.state;
+        const { contents } = this.state;
+        const { style } = this.props;
+
         let styles = style ? style : {};
         return (
-            <View style={styles}
+            <View
+            onLayout={this.onLayout}
+            style={[styles]}
                 onStartShouldSetResponder={(evt) => {
                     this.setState({ isScrolled: false });
                     setTimeout(this.flip, 100);
