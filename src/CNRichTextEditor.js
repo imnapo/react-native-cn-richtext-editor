@@ -445,6 +445,7 @@ class CNRichTextEditor extends Component {
             onContentChanged={(items) => this.onContentChanged(items, index)} 
             onConnectToPrevClicked={()=> this.onConnectToPrevClicked(index)}
             onFocus={()=> this.onFocus(index)}
+            returnKeyType = {this.props.returnKeyType}
             foreColor={this.props.foreColor}
             styleList={styles}
             style={isLast === true ?
