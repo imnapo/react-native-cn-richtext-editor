@@ -1209,7 +1209,7 @@ class CNTextInput extends Component {
     }
 
     render() {
-         const {items, foreColor, style} = this.props;
+         const {items, foreColor, style, returnKeyType} = this.props;
          const { selection } = this.state;
          let color = foreColor ?  foreColor : '#000';
          
@@ -1232,7 +1232,7 @@ class CNTextInput extends Component {
                 paddingRight: 2
             }]} 
             scrollEnabled={false}
-            returnKeyType="done"
+            returnKeyType={returnKeyType ? returnKeyType : "next"}
             keyboardType="default"
             ref={component => this.textInput = component}
             onChangeText={this.handleChangeText}        
