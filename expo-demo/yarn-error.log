@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: EACCES: permission denied, mkdir '/Users/christkhodabakhshi/projects/react-native-cn-richtext-editor/expo-demo/node_modules/@babel/core/node_modules/debug'
+  Error: EACCES: permission denied, unlink '/Users/christkhodabakhshi/projects/react-native-cn-richtext-editor/expo-demo/node_modules/.yarn-integrity'
 
 npm manifest: 
   {
@@ -29,7 +29,7 @@ npm manifest:
       "expo": "^31.0.2",
       "react": "16.5.0",
       "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
-      "react-native-cn-richtext-editor": "^1.0.21",
+      "react-native-cn-richtext-editor": "^1.0.24",
       "react-native-popup-menu": "^0.14.2"
     },
     "devDependencies": {
@@ -2457,8 +2457,9 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.2.3.tgz#d140fa8f614659bd6541233097ddaac25cdd991c"
   
   immutability-helper@^2.8.1:
-    version "2.9.0"
-    resolved "https://registry.yarnpkg.com/immutability-helper/-/immutability-helper-2.9.0.tgz#04a1c646300cd3a68aa5dc1daa7758da2ca75292"
+    version "2.9.1"
+    resolved "https://registry.yarnpkg.com/immutability-helper/-/immutability-helper-2.9.1.tgz#71c423ba387e67b6c6ceba0650572f2a2a6727df"
+    integrity sha512-r/RmRG8xO06s/k+PIaif2r5rGc3j4Yhc01jSBfwPCXDLYZwp/yxralI37Df1mwmuzcCsen/E/ITKcTEvc1PQmQ==
     dependencies:
       invariant "^2.2.0"
   
@@ -3300,8 +3301,9 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/nan/-/nan-2.11.1.tgz#90e22bccb8ca57ea4cd37cc83d3819b52eea6766"
   
   nanoid@^2.0.0:
-    version "2.0.0"
-    resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-2.0.0.tgz#e1ab4a4b024a38d15531ba34a712a201540de639"
+    version "2.0.1"
+    resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-2.0.1.tgz#deb55cac196e3f138071911dabbc3726eb048864"
+    integrity sha512-k1u2uemjIGsn25zmujKnotgniC/gxQ9sdegdezeDiKdkDW56THUMqlz3urndKCXJxA6yPzSZbXx/QCMe/pxqsA==
   
   nanomatch@^1.2.9:
     version "1.2.13"
@@ -3767,10 +3769,10 @@ Lockfile:
     version "2.2.5"
     resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-2.2.5.tgz#4074dd63b4973e6397d9ce50e97b57c77a518e9d"
   
-  react-native-cn-richtext-editor@^1.0.20:
-    version "1.0.20"
-    resolved "https://registry.yarnpkg.com/react-native-cn-richtext-editor/-/react-native-cn-richtext-editor-1.0.20.tgz#6f32a9368e8e7a9534e39c6cbacbb928fa79b365"
-    integrity sha512-q6xsVxId5m0KuV1Q+5eORoY+xNzL8zpqVeHcCVi9QIIwJwNzMiQVms/IBYz9dSfJbEoLO3xIMDT58PLMtuKZPw==
+  react-native-cn-richtext-editor@^1.0.23:
+    version "1.0.23"
+    resolved "https://registry.yarnpkg.com/react-native-cn-richtext-editor/-/react-native-cn-richtext-editor-1.0.23.tgz#1cf478632ed75aec9455eba6fd1d1cad1b9a318a"
+    integrity sha512-BPskMeKO+QICB4tdPZL5T4reAGcOAf9SmCdUJedfq3gojBDUMym52FnLsiztJiM00CsgP7vftm6D0WUI1T9PZg==
     dependencies:
       immutability-helper "^2.8.1"
       lodash "^4.17.11"
@@ -4214,6 +4216,7 @@ Lockfile:
   shortid@^2.2.14:
     version "2.2.14"
     resolved "https://registry.yarnpkg.com/shortid/-/shortid-2.2.14.tgz#80db6aafcbc3e3a46850b3c88d39e051b84c8d18"
+    integrity sha512-4UnZgr9gDdA1kaKj/38IiudfC3KHKhDc1zi/HSxd9FQDR0VLwH3/y79tZJLsVYPsJgIjeHjqIWaWVRJUj9qZOQ==
     dependencies:
       nanoid "^2.0.0"
   
@@ -4714,6 +4717,7 @@ Lockfile:
   xmldoc@^1.1.2:
     version "1.1.2"
     resolved "https://registry.yarnpkg.com/xmldoc/-/xmldoc-1.1.2.tgz#6666e029fe25470d599cd30e23ff0d1ed50466d7"
+    integrity sha512-ruPC/fyPNck2BD1dpz0AZZyrEwMOrWTO5lDdIXS91rs3wtm4j+T8Rp2o+zoOYkkAxJTZRPOSnOGei1egoRmKMQ==
     dependencies:
       sax "^1.2.1"
   
