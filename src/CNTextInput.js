@@ -203,7 +203,7 @@ class CNTextInput extends Component {
 
     handleChangeText = (text) => {
             
-        const { selection} = this.state;
+        const { selection } = this.state;
         const { items } = this.props;
         
         //index of items that newLine should be applied or remove
@@ -215,12 +215,14 @@ class CNTextInput extends Component {
         const txtLen = myText.length;
         // get lenght of text last called by handletextchange
         const prevLen = this.textLength;
-
+        
         //const prevDiff = this.prevSelection.end - this.prevSelection.start;
         let textDiff = txtLen - prevLen;
         let isAddContent = textDiff >= 0;
         let cursorPosition = 0;
         if(IS_IOS) {
+            // console.log('prev vs sel =>', this.prevSelection, selection, this.beforePrevSelection);
+            
             if(Math.abs(this.prevSelection.end - selection.end) == Math.abs(textDiff))
             {
                 cursorPosition = this.prevSelection.end;
@@ -230,8 +232,19 @@ class CNTextInput extends Component {
                 cursorPosition = this.beforePrevSelection.end;
             } 
            else {
-               console.log('potential errrorrrrrr');
-               cursorPosition = this.prevSelection.end;
+               var diff = Math.abs(textDiff) - Math.abs(this.prevSelection.end - selection.end) - Math.abs(this.beforePrevSelection.end - this.prevSelection.end)
+
+               if(this.beforePrevSelection.end + diff <= prevLen)
+               {
+                cursorPosition = this.beforePrevSelection.end + diff;
+                console.log('diff found', diff, cursorPosition);
+
+               }
+               else {
+                console.log('potential errrorrrrrr');
+                cursorPosition = this.beforePrevSelection.end;
+               }
+               
            }
         }
         else {
@@ -303,30 +316,33 @@ class CNTextInput extends Component {
         if(textDiff >= 0)
         {
             
+            
             this.textLength += textDiff;
             //if(startWithReadonly === false) {
                 const addedText =
                 text.substring(cursorPosition, cursorPosition + textDiff)
                         
+
                 content[foundIndex].len += textDiff;
                 content[foundIndex].text = content[foundIndex].text.substring(0, foundItemNo) + addedText + content[foundIndex].text.substring(foundItemNo);
 
+                
             // }
             
             
         }
         else
-        {        
+        {     
             textDiff *= -1;
-
             this.textLength -= textDiff;
               
                 if(foundItemNo >= textDiff) {
                 const txt = content[foundIndex].text;
- 
+                   
+                     
                 content[foundIndex].len -= textDiff;
                 content[foundIndex].text = txt.substring(0, foundItemNo - textDiff) + txt.substring(foundItemNo, txt.length);
-                
+                 
                 if(content[foundIndex].NewLine === true) {
                     newLineIndexs.push(foundIndex);
                 } 
@@ -346,13 +362,11 @@ class CNTextInput extends Component {
                         sel: { 
                             start: cursorPosition - 1, 
                             end : cursorPosition - 1
-                        }
+                        } 
                     }
                                      
-                    // removeIndexes.push(foundIndex);
                     removeIndexes.push(content[foundIndex].id);
 
-                    //content.splice(foundIndex, 1);
                 } else if(foundItemNo === 1) {
                     upComing = {
                         len: 0,
@@ -368,33 +382,36 @@ class CNTextInput extends Component {
                 }
             }
             else {
-                let rem = textDiff - (content[foundIndex].len - foundItemNo);
-                content[foundIndex].len = foundItemNo;
-                content[foundIndex].text = content[foundIndex].text.substring(0,foundItemNo);
+                let rem = textDiff - (foundItemNo);
                 
-                for (var i = foundIndex + 1; i < content.length; i++) {
-                    if(content[i].NewLine === true) {
-                        newLineIndexs.push(i);
-                    }
-                    
-                    if(content[i].len >=rem)
-                    {
-                        content[i].len -= rem;
-                        content[i].text = content[i].text.substring(0, content[i].len - rem);
-                        break;
-                    }
-                    else {
-                        rem -= content[i].len;
-                        content[i].len = 0;
-                        content[i].text = '';
-                    }
-                }
+                content[foundIndex].len = content[foundIndex].len - foundItemNo;
+                content[foundIndex].text = content[foundIndex].text.substring(foundItemNo);
 
-                for(var i = content.length - 1; i > foundIndex; i--) {
+                if(rem > 0) {
+                    for (var i = foundIndex - 1; i >= 0; i--) {
+                        if(content[i].NewLine === true) {
+                            newLineIndexs.push(i);
+                        }
+                        
+            
+                        if(content[i].len >=rem)
+                        {
+                            content[i].text = content[i].text.substring(0, content[i].len - rem);
+                            content[i].len -= rem;
+                            break;
+                        }
+                        else {
+                            rem -= content[i].len;
+                            content[i].len = 0;
+                            content[i].text = '';
+                        }
+                    }    
+                }   
+               
+                for(var i = content.length - 1; i >= foundIndex; i--) {
                     if(content[i].len === 0)
                         {
                             removeIndexes.push(content[i].id);
-                            //content.splice(i, 1);
                         }                            
                 }                  
             }                           
@@ -409,6 +426,9 @@ class CNTextInput extends Component {
                    
                     
                     content = this.updateNewLine(content, foundIndex , newLineIndex + 1);
+
+
+                    
                     // if(IS_IOS === false)
                     // {
                     //     this.avoidAndroidJump = true;
@@ -418,8 +438,6 @@ class CNTextInput extends Component {
                 }
                 else if(content[foundIndex].text.substring(0, 1) == '\n' && content[foundIndex].NewLine != true)
                 {
-                    
-                    
                     content = this.updateNewLine(content, foundIndex , 0);
                 }
            // }
@@ -475,12 +493,13 @@ class CNTextInput extends Component {
                 }
             }
          
-          //console.log('removeIndexes', removeIndexes);
+        //   console.log('removeIndexes', removeIndexes);
           
            
             for (let i = 0; i < removeIndexes.length; i++) {
                 let remIndex = content.findIndex(x=> x.id == removeIndexes[i]);
 
+              
                
                 if(remIndex < 0)
                     continue;
@@ -533,7 +552,7 @@ class CNTextInput extends Component {
        
         this.upComingStype = upComing;
         
-        // console.log('content',content);
+       
         
         this.props.onContentChanged(content);
         if(this.props.onSelectedStyleChanged) {
@@ -568,25 +587,24 @@ class CNTextInput extends Component {
         }
 
             const foundElement = newContent[index];
-
+            
             if(itemNo === 0) {
                 newContent[index].NewLine = true;
                 newContent = this.changeToTagIn(newContent, isPrevList ? prevTag : 'body', index, true);
 
             }
             else if(itemNo === foundElement.len - 1) {
-                                                    
+                                             
                 newContent[index].len = foundElement.len - 1;
                 newContent[index].text = foundElement.text.substring(0, foundElement.text.length - 1);
                 
                 newContent[index].NewLine = newContent[index].text.indexOf('\n') === 0 || index === 0;
-                if(newContent.length > index + 1) {
+                if(newContent.length > index + 1 && newContent[index + 1].NewLine !== true) {
+                   
                     newContent[index + 1].len += 1;
                     newContent[index + 1].NewLine = true;
                     newContent[index + 1].text = '\n' + newContent[index + 1].text;
                     newContent = this.changeToTagIn(newContent, isPrevList ? prevTag : 'body', index + 1, true);
-                    
-    
                 }
                 else {
                     beforeContent = {
@@ -599,6 +617,7 @@ class CNTextInput extends Component {
                         NewLine: true
                     };
                     beforeContent.styleList = StyleSheet.flatten(this.convertStyleList(update(beforeContent.stype, { $push: [beforeContent.tag] })));
+                   
                     newContent = update(newContent, { $splice: [[index + 1, 0, beforeContent ]] });
                     if(isPrevList === true)
                     newContent = this.changeToTagIn(newContent, prevTag , index + 1, true);
@@ -930,6 +949,7 @@ class CNTextInput extends Component {
     }
 
     changeToTagIn(items, tag, index, fromTextChange = false) {
+        
          
         
         const needBold = tag === 'heading' || tag === 'title';
