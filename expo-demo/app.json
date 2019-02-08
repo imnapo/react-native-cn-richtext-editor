@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "expo-demo",
-    "description":"Demo Application for react-native-cn-richtext-editor",
+    "description": "Demo Application for react-native-cn-richtext-editor",
     "slug": "expo-demo",
     "privacy": "public",
     "sdkVersion": "31.0.0",
