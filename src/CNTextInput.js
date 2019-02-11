@@ -221,7 +221,6 @@ class CNTextInput extends Component {
         let isAddContent = textDiff >= 0;
         let cursorPosition = 0;
         if(IS_IOS) {
-            // console.log('prev vs sel =>', this.prevSelection, selection, this.beforePrevSelection);
             
             if(Math.abs(this.prevSelection.end - selection.end) == Math.abs(textDiff))
             {
@@ -237,11 +236,10 @@ class CNTextInput extends Component {
                if(this.beforePrevSelection.end + diff <= prevLen)
                {
                 cursorPosition = this.beforePrevSelection.end + diff;
-                console.log('diff found', diff, cursorPosition);
 
                }
                else {
-                console.log('potential errrorrrrrr');
+                console.log('error may occure');
                 cursorPosition = this.beforePrevSelection.end;
                }
                
@@ -250,7 +248,6 @@ class CNTextInput extends Component {
         else {
             cursorPosition = this.state.selection.end;
         }
-       //console.log('pos', cursorPosition);
          
         let content = items;
       
@@ -264,11 +261,10 @@ class CNTextInput extends Component {
 
        
         if(content[foundIndex].readOnly === true  && textDiff >= 0) {
-            
-            
+                        
             if(content[foundIndex].text.length === foundItemNo) {
                 if(content.length > foundIndex + 1 
-                    && !(content[foundIndex + 1].readOnly === true)) {
+                    && !(content[foundIndex + 1].readOnly === true) && !(content[foundIndex + 1].NewLine === true)) {
                     foundIndex +=1;
                     foundItemNo == 0; 
                 }
@@ -300,8 +296,7 @@ class CNTextInput extends Component {
         if(this.upComingStype !== null && startWithReadonly === false 
             && this.upComingStype.sel.end === cursorPosition && textDiff >= 0)
         {
-           
-            
+                       
             content = this.updateContent(content, {id: shortid.generate(), text: '', 
             len: 0, stype: this.upComingStype.stype, tag: this.upComingStype.tag, styleList: this.upComingStype.styleList }, foundIndex + 1, foundItemNo);
 
@@ -315,7 +310,6 @@ class CNTextInput extends Component {
        
         if(textDiff >= 0)
         {
-            
             
             this.textLength += textDiff;
             //if(startWithReadonly === false) {
@@ -492,9 +486,7 @@ class CNTextInput extends Component {
                     }
                 }
             }
-         
-        //   console.log('removeIndexes', removeIndexes);
-          
+                   
            
             for (let i = 0; i < removeIndexes.length; i++) {
                 let remIndex = content.findIndex(x=> x.id == removeIndexes[i]);
@@ -522,7 +514,6 @@ class CNTextInput extends Component {
                     content[0].readOnly = false;
                 }
                 // else if(remIndex - 1 >= 0 && content[remIndex - 1].readOnly == true) {
-                //      console.log(content);
                     
                 // }
                 else {
@@ -547,12 +538,10 @@ class CNTextInput extends Component {
             styles = upComing.stype;
             tagg = upComing.tag;
         }
-        //this.textLength = text.length;
          
        
         this.upComingStype = upComing;
         
-       
         
         this.props.onContentChanged(content);
         if(this.props.onSelectedStyleChanged) {
@@ -573,10 +562,7 @@ class CNTextInput extends Component {
          
         let prevTag = newContent[index].tag;
         let isPrevList = false;
-        // if(index > 0) {
-        //     prevTag = newContent[index - 1].tag;
-        // }
-        //console.log('aaa', index, itemNo);
+      
         
         if(prevTag === 'ol' || prevTag == 'ul') {
             isPrevList = true;
