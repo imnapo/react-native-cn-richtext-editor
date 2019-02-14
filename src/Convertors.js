@@ -8,9 +8,6 @@ export function convertToHtmlString(contents, styleList = null) {
     let availableStyles = styleList == null ? defaultStyles : styleList;
 
     //let keys = Object.keys(availableStyles);
-    //console.log('contents', contents);
-
-    // console.log('==================================');
     var myDoc = new DOMParser().parseFromString(
       '<div></div>', 'text/xml'
     );
@@ -151,7 +148,6 @@ export function convertToHtmlString(contents, styleList = null) {
   }
 
   export function convertToObject(htmlString) {
-    // console.log('htmlString', htmlString);
     
     var doc = new DOMParser().parseFromString(htmlString, 'text/xml');
     let contents = [];
@@ -239,7 +235,7 @@ export function convertToHtmlString(contents, styleList = null) {
         }
 
         let firstLine = (i == 0) || (i > 0 && item.content.length > 0 && item.content[item.content.length - 1].tag == 'image');
-
+        
         
       if(tag == 'ul' || tag == 'ol') {
         
@@ -266,7 +262,7 @@ export function convertToHtmlString(contents, styleList = null) {
             
             item.content.push(
               xmlNodeToItem(child, tag,false)
-            );        
+            );           
           }
         }
       }
@@ -276,13 +272,13 @@ export function convertToHtmlString(contents, styleList = null) {
           let child = element.childNodes[j];
           let childItem = xmlNodeToItem(child,tag, firstLine == false && j == 0);
           if(firstLine) {
-            childItem.NewLine = true;
+            childItem.NewLine = j==0;
           }
           item.content.push(
             childItem
           );        
         }
-      }
+      } 
       
     }
     }

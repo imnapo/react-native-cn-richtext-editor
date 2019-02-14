@@ -674,28 +674,39 @@ class CNTextInput extends Component {
             const content = items;
             let indx = 0;
             let upComingAdded = false;
-
+            
             for (var i = 0; i < content.length; i++) {
-                const {id, len, stype,tag, NewLine, text, styleList, readOnly} = content[i];
-
+                const {id, len, stype,tag, text, styleList} = content[i];
+                const NewLine = content[i].NewLine ? content[i].NewLine : false;
+                const readOnly = content[i].readOnly ? content[i].readOnly : false;
+                
                 let indexOfToolType = stype.indexOf(toolType);
                 let newStype =(indexOfToolType != -1) ? 
                 update(stype, {$splice: [[indexOfToolType, 1]]})
                 : update(stype, { $push: [toolType] });
 
-        
-
+                 
                 let newStyles = StyleSheet.flatten(this.convertStyleList(update(newStype, { $push: [tag] })));
               
                 let from = indx;
                 indx += len;
                 let to = indx;
                 
-                
-                    if((start >= from && start < to) && (end >= from && end < to))
-                    {     
-                     
-                                           
+                    if(readOnly) {
+                        newCollection.push({
+                            id: id,
+                            text: text,
+                            len: to - from,
+                            tag:tag,
+                            stype: stype,
+                            styleList: styleList,
+                            NewLine: NewLine,
+                            readOnly: readOnly
+                        });
+                    }
+                    else if((start >= from && start < to) && (end >= from && end < to))
+                    {                          
+                                             
                         if(start !== end) {
     
                             if(start !== from)
@@ -769,7 +780,7 @@ class CNTextInput extends Component {
                     }
                     else if(start >= from && start < to)
                     {
-               
+                       
                         if(start !== from)
                         {
                             newCollection.push({
@@ -827,7 +838,7 @@ class CNTextInput extends Component {
                             
                             newCollection.push({
                                 id: shortid.generate(),
-                                text: text.substring(from, end - from),
+                                text: text.substring(0, end - from),
                                 len: end - from,
                                 tag: tag,
                                 NewLine: NewLine,
@@ -854,7 +865,6 @@ class CNTextInput extends Component {
                         }
                     }
                     else if(from === to && start === from && end === to) {
-                        
                         newCollection.push({
                             id: id,
                             text: text,
@@ -877,7 +887,23 @@ class CNTextInput extends Component {
                             upComingAdded = true;
                         }
                     }
+                    else if ((from >= start && from <= end) && (to >= start && to <= end)) {
+                        
+                            newCollection.push({
+                                id: id,
+                                text: text,
+                                len: to - from,
+                                tag:tag,
+                                stype: newStype,
+                                styleList: newStyles,
+                                NewLine: NewLine,
+                                readOnly: readOnly
+    
+                            });
+    
+                    }
                     else {
+                        
                             newCollection.push({
                                 id: id,
                                 text: text,
@@ -890,22 +916,20 @@ class CNTextInput extends Component {
     
                             });
     
-                    }                                    
+                    }   
+                     
+                   
             }
-                
-                  
                
                 const res = this.findContentIndex(newCollection, this.state.selection.end);
                 
                 let styles = [];
                 if(this.upComingStype != null) {
                     styles = this.upComingStype.stype;
-                                        
                 } 
                 else {
                     styles = newCollection[res.findIndx].stype;;
                 } 
-                    
                               
                 this.justToolAdded = start !== end;
                 this.props.onContentChanged(newCollection);
@@ -935,9 +959,7 @@ class CNTextInput extends Component {
     }
 
     changeToTagIn(items, tag, index, fromTextChange = false) {
-        
-         
-        
+                
         const needBold = tag === 'heading' || tag === 'title';
          let content = items;
 
@@ -946,7 +968,8 @@ class CNTextInput extends Component {
                 break;
             }
             else {
-                content[i].tag = tag;
+                
+                
                 if(needBold === true && content[i].stype.indexOf('bold') == -1) {
                     content[i].stype = update(content[i].stype, { $push: ['bold'] })
                     
@@ -956,8 +979,8 @@ class CNTextInput extends Component {
                     content[i].stype.indexOf('bold') != -1)  {
                     content[i].stype = content[i].stype.filter(typ => typ != 'bold')
                 }
-                content[i].styleList = StyleSheet.flatten(this.convertStyleList(update(content[i].stype, { $push: [content[i].tag] })));
-                
+                content[i].tag = tag;
+                content[i].styleList = StyleSheet.flatten(this.convertStyleList(update(content[i].stype, { $push: [content[i].tag] })));                
             }   
         }
         let shouldReorderList = false;
@@ -967,10 +990,9 @@ class CNTextInput extends Component {
                 shouldReorderList = true;
             }
 
-            content[i].tag = tag;
     
             if(needBold === true && 
-                (content[i].tag === 'heading' || content[i].tag === 'title') &&
+                // (content[i].tag === 'heading' || content[i].tag === 'title') &&
                 content[i].stype.indexOf('bold') == -1) {
                 content[i].stype = update(content[i].stype, { $push: ['bold'] })
             } 
@@ -980,7 +1002,7 @@ class CNTextInput extends Component {
                 content[i].stype = content[i].stype.filter(typ => typ != 'bold')
             }
            
-            
+            content[i].tag = tag;
             content[i].styleList = StyleSheet.flatten(this.convertStyleList(update(content[i].stype, { $push: [content[i].tag] })));
     
             if(content[i].NewLine === true) {
