@@ -19,157 +19,194 @@ yarn add react-native-cn-richtext-editor
 ```
 ### Usage
 
-Here is an  overview of the components usage.
+Here is a simple overview of our components usage.
 
 ```
 import React, { Component } from 'react';
 import { View, StyleSheet, Keyboard
-, TouchableWithoutFeedback
-, KeyboardAvoidingView, Platform } from 'react-native';
-import  CNRichTextEditor , { CNToolbar, getInitialObject  } from "react-native-cn-richtext-editor";
+, TouchableWithoutFeedback, Text
+, KeyboardAvoidingView } from 'react-native';
 
-export default class App extends Component {
+import  CNRichTextEditor , { CNToolbar, getInitialObject , getDefaultStyles } from "react-native-cn-richtext-editor";
 
+const defaultStyles = getDefaultStyles();
+
+class App extends Component {
+ 
     constructor(props) {
         super(props);
-
+        
         this.state = {
             selectedTag : 'body',
             selectedStyles : [],
             value: [getInitialObject()]
         };
 
-        this.editor = null;  
+        this.editor = null;
     }
 
     onStyleKeyPress = (toolType) => {
-        if (toolType !== 'image') {            
-            this.editor.applyToolbar(toolType);
-        }
-        else {
-        // Handling image ...
-        }
+        this.editor.applyToolbar(toolType);
     }
-    
-  onSelectedTagChanged = (tag) => {
-    this.setState({
-        selectedTag: tag
-    })
-  }
 
-  onSelectedStyleChanged = (styles) => {  
-    this.setState({
-        selectedStyles: styles
-    })
-}
+    onSelectedTagChanged = (tag) => {
+        this.setState({
+            selectedTag: tag
+        })
+    }
 
-onValueChanged = (value) => {
-    this.setState({
-        value: value
-    });
-}
+    onSelectedStyleChanged = (styles) => { 
+        this.setState({
+            selectedStyles: styles,
+        })
+    }
 
-render() {
-    return (
-        <KeyboardAvoidingView
-        behavior="padding" 
-        enabled
-        keyboardVerticalOffset={0}
-        style={{
-            flex: 1,
-            paddingTop: Platform.OS == 'ios' ? 20 : 0,
-            backgroundColor:'#eee',
-            flexDirection: 'column', 
-            justifyContent: 'flex-end'
-        }}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} >             
-                <View style={styles.main}>
-                    <CNRichTextEditor                   
-                        ref={input => this.editor = input}
-                        onSelectedTagChanged={this.onSelectedTagChanged}
-                        onSelectedStyleChanged={this.onSelectedStyleChanged}
-                        value={this.state.value}
-                        onValueChanged={this.onValueChanged}
-                        style={{ backgroundColor : '#fff', padding : 10}}
-                    />                      
+    onValueChanged = (value) => {
+        this.setState({
+            value: value
+        });
+    }
+
+
+    render() {
+        return (
+            <KeyboardAvoidingView 
+            behavior="padding" 
+            enabled
+            keyboardVerticalOffset={0}
+            style={{
+                flex: 1,
+                paddingTop: 20,
+                backgroundColor:'#eee',
+                flexDirection: 'column', 
+                justifyContent: 'flex-end', 
+            }}
+            >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} >             
+                    <View style={styles.main}>
+                        <CNRichTextEditor                   
+                            ref={input => this.editor = input}
+                            onSelectedTagChanged={this.onSelectedTagChanged}
+                            onSelectedStyleChanged={this.onSelectedStyleChanged}
+                            value={this.state.value}
+                            style={{ backgroundColor : '#fff'}}
+                            styleList={defaultStyles}
+                            onValueChanged={this.onValueChanged}
+                        />                        
+                    </View>
+                </TouchableWithoutFeedback>
+
+                <View style={{
+                    minHeight: 35
+                }}>
+
+                    <CNToolbar
+                        size={28}
+                        bold={<Text style={[styles.toolbarButton, styles.boldButton]}>B</Text>}
+                        italic={<Text style={[styles.toolbarButton, styles.italicButton]}>I</Text>}
+                        underline={<Text style={[styles.toolbarButton, styles.underlineButton]}>U</Text>}
+                        lineThrough={<Text style={[styles.toolbarButton, styles.lineThroughButton]}>S</Text>}
+                        body={<Text style={styles.toolbarButton}>T</Text>}
+                        title={<Text style={styles.toolbarButton}>h1</Text>}
+                        heading={<Text style={styles.toolbarButton}>h3</Text>}
+                        ul={<Text style={styles.toolbarButton}>ul</Text>}
+                        ol={<Text style={styles.toolbarButton}>ol</Text>}
+                        
+                        selectedTag={this.state.selectedTag}
+                        selectedStyles={this.state.selectedStyles}
+                        onStyleKeyPress={this.onStyleKeyPress} />
                 </View>
-        </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+        );
+    }
 
-        <View style={{
-            minHeight: 35
-        }}>
-            <CNToolbar
-                selectedTag={this.state.selectedTag}
-                selectedStyles={this.state.selectedStyles}
-                onStyleKeyPress={this.onStyleKeyPress} 
-                size={28}
-                bold={<MaterialCommunityIcons name="format-bold" />}
-                italic={<MaterialCommunityIcons name="format-italic" />}
-                underline={<MaterialCommunityIcons name="format-underline" />}
-                lineThrough={<MaterialCommunityIcons name="format-strikethrough-variant" />}
-                body={<MaterialCommunityIcons name="format-text" />}
-                title={<MaterialCommunityIcons name="format-header-1" />}
-                heading={<MaterialCommunityIcons name="format-header-3" />}
-                ul={<MaterialCommunityIcons name="format-list-bulleted" />}
-                ol={<MaterialCommunityIcons name="format-list-numbers" />}
-                image={this.renderImageSelector()}
-                foreColor={this.renderColorSelector()}
-                highlight={this.renderHighlight()}
-                />
-        </View>
-    </KeyboardAvoidingView>
-    );
-}
 }
 
 var styles = StyleSheet.create({
     main: {
         flex: 1,
-        paddingTop: 0,
+        marginTop: 10,
         paddingLeft: 30,
         paddingRight: 30,
         paddingBottom: 1,
         alignItems: 'stretch',
-
+    },
+    toolbarButton: {
+        fontSize: 20,
+        width: 28,
+        height: 28,
+        textAlign: 'center'
+    },
+    italicButton: {
+        fontStyle: 'italic'
+    },
+    boldButton: {
+        fontWeight: 'bold'
+    },
+    underlineButton: {
+        textDecorationLine: 'underline'
+    },
+    lineThroughButton: {
+        textDecorationLine: 'line-through'
     },
 });
 
+
+export default App;
+
 ```
+
+## More Advanced TextEditor
+You need to put more effort :) to use more advanced features of CNRichTextEditor such as:
+- Image Uploading
+- Highlighting Text
+- Change Text Color
+
+Actually we did not implement 'Toolbar buttons and menus' and 'Image Uploading Process' because it totally depends on using expo or pure react-native and also what other packages you prefer to use.
+
+To see an example of how to implement more advanced feature of this editor please check this [Link](https://github.com/imnapo/react-native-cn-richtext-editor/blob/master/expo-demo/App.js).
+
+Also be noticed that this example is writen with expo and required 'react-native-popup-menu' package.
 ## Props
 
 ### CNRichTextEditor
 
-| Name | Description |
-| ------ | ----------- |
-| onSelectedTagChanged   | this prop triggers when selected tag of editor is changed. |
-| onSelectedStyleChanged | this prop triggers when selected style of editor is changed. |
-| value    | javascript array object which keeps value of textinput |
+| Name | Description | Required |
+| ------ | ----------- | ---- |
+| onSelectedTagChanged   | this event triggers when selected tag of editor is changed. | No |
+| onSelectedStyleChanged | this event triggers when selected style of editor is changed. | No |
+| onValueChanged | this event triggers when value of editor is changed. | No |
+| value    | an array object which keeps value of the editor | Yes |
+| styleList  | an object consist of styles name and values (use getDefaultStyles function) | Yes |
 
 ### CNToolbar
 
 | Name | Required | Description |
 | ------ | ------ | ----------- |
-| selectedTag   | Yes | selected tag of RichTextEditor. |
-| selectedStyles | Yes | selected style of RichTextEditor |
-| onStyleKeyPress    |  Yes | this event will be triggered when user press one of toolbar keys. |
+| selectedTag   | Yes | selected tag of the editor |
+| selectedStyles | Yes | selected style of the editor |
+| onStyleKeyPress    |  Yes | this event triggers when user press one of toolbar keys |
 |  size  | No  | font size of toolbar buttons  |
-| bold  |  No | child component of bold button. you can use it to set an icon for bold button ( see expo-demo app) |
-|  italic | No  | child component of italic button   |
-| underline  | No  | child component of underline button  |
-| lineThrough  | No  | child component of lineThrough button  |
-| body  | No  | child component of body button |
-| title  | No  | child component of title button   |
-| ul  | No  | child component of ul button |
-| ol  | No  | child component of ol button |
-| image  | No  | child component of image button  |
+| bold  |  No | a component which renders as bold button |
+|  italic | No  | a component which renders as italic button   |
+| underline  | No  | a component which renders as underline button  |
+| lineThrough  | No  | a component which renders as lineThrough button  |
+| body  | No  | a component which renders as body button |
+| title  | No  | a component which renders as title button   |
+| ul  | No  | a component which renders as ul button |
+| ol  | No  | a component which renders as ol button |
+| image  | No  | a component which renders as image button |
+| highlight  | No  | a component which renders as highlight button |
+| foreColor  | No  | a component which renders as foreColor button |
 
 
 ### Functions
 | Name | Param | Returns | Description |
 | ------ | ------ | ------ |----------- |
-| getInitialObject | - | javascript object  | create a initial value for RichTextEditor. |
-| convertToHtmlString | array | string  | this function converts value of RichTextEditor to html string (use it to keep value as html in db) |
+| getInitialObject | - | javascript object  | create a initial value for the editor. |
+| convertToHtmlString | array | string  | this function converts value of editor to html string (use it to keep value as html in db) |
 | convertToObject | string | array | converts html back to array for RichTextEditor value (use this function only for html string created by convertToHtmlString function)  |
+| getDefaultStyles | - | javascript object  | creates required styles for the editor. |
 
 ## Expo Demo App
 Checkout the
@@ -178,4 +215,7 @@ on Expo which uses react-native-cn-richtext-editor components.
 If you are looking to test and run expo-demo App locally, click
 [here](https://github.com/imnapo/react-native-cn-richtext-editor/tree/master/expo-demo) to
 view the implementation & run it locally.
+
+## License
+ISC
 
