@@ -41,7 +41,7 @@ class App extends Component {
         this.state.value = [getInitialObject()];
 
         this.editor = null;
-      
+
     }
 
     onStyleKeyPress = (toolType) => {
@@ -305,49 +305,47 @@ class App extends Component {
                 flexDirection: 'column', 
                 justifyContent: 'flex-end', 
             }}
-        >
-                <MenuProvider style={{flex: 1}}>
-
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss} >             
+            >
+            <MenuProvider style={{flex: 1}}>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} >             
                     <View style={styles.main}>
                         <CNRichTextEditor                   
                             ref={input => this.editor = input}
                             onSelectedTagChanged={this.onSelectedTagChanged}
                             onSelectedStyleChanged={this.onSelectedStyleChanged}
                             value={this.state.value}
-                            style={{ backgroundColor : '#fff', padding : 10}}
+                            style={{ backgroundColor : '#fff'}}
                             styleList={defaultStyles}
                             //foreColor=''
                             onValueChanged={this.onValueChanged}
                             //onRemoveImage={this.onRemoveImage}
                         />                        
                     </View>
-            </TouchableWithoutFeedback>
+                </TouchableWithoutFeedback>
 
-            <View style={{
-                minHeight: 35
-            }}>
+                <View style={{
+                    minHeight: 35
+                }}>
 
-                <CNToolbar
-                    size={28}
-                    bold={<MaterialCommunityIcons name="format-bold" />}
-                    italic={<MaterialCommunityIcons name="format-italic" />}
-                    underline={<MaterialCommunityIcons name="format-underline" />}
-                    lineThrough={<MaterialCommunityIcons name="format-strikethrough-variant" />}
-                    body={<MaterialCommunityIcons name="format-text" />}
-                    title={<MaterialCommunityIcons name="format-header-1" />}
-                    heading={<MaterialCommunityIcons name="format-header-3" />}
-                    ul={<MaterialCommunityIcons name="format-list-bulleted" />}
-                    ol={<MaterialCommunityIcons name="format-list-numbers" />}
-                    image={this.renderImageSelector()}
-                    foreColor={this.renderColorSelector()}
-                    highlight={this.renderHighlight()}
-                    selectedTag={this.state.selectedTag}
-                    selectedStyles={this.state.selectedStyles}
-                    onStyleKeyPress={this.onStyleKeyPress} />
-            </View>
+                    <CNToolbar
+                        size={28}
+                        bold={<MaterialCommunityIcons name="format-bold" />}
+                        italic={<MaterialCommunityIcons name="format-italic" />}
+                        underline={<MaterialCommunityIcons name="format-underline" />}
+                        lineThrough={<MaterialCommunityIcons name="format-strikethrough-variant" />}
+                        body={<MaterialCommunityIcons name="format-text" />}
+                        title={<MaterialCommunityIcons name="format-header-1" />}
+                        heading={<MaterialCommunityIcons name="format-header-3" />}
+                        ul={<MaterialCommunityIcons name="format-list-bulleted" />}
+                        ol={<MaterialCommunityIcons name="format-list-numbers" />}
+                        image={this.renderImageSelector()}
+                        foreColor={this.renderColorSelector()}
+                        highlight={this.renderHighlight()}
+                        selectedTag={this.state.selectedTag}
+                        selectedStyles={this.state.selectedStyles}
+                        onStyleKeyPress={this.onStyleKeyPress} />
+                </View>
             </MenuProvider>
-
         </KeyboardAvoidingView>
         );
     }
