@@ -1645,6 +1645,11 @@ detect-newline@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/detect-newline/-/detect-newline-2.1.0.tgz#f41f1c10be4b00e87b5f13da680759f2c5bfd3e2"
 
+diff-match-patch@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/diff-match-patch/-/diff-match-patch-1.0.4.tgz#6ac4b55237463761c4daf0dc603eb869124744b1"
+  integrity sha512-Uv3SW8bmH9nAtHKaKSanOQmj2DnlH65fUpcrMdfdaOxUG02QQ4YGZ8AE7kKOMisF7UqvOlGKVYWRvezdncW9lg==
+
 dom-walk@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/dom-walk/-/dom-walk-0.1.1.tgz#672226dc74c8f799ad35307df936aba11acd6018"
@@ -3725,11 +3730,12 @@ react-native-branch@2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-2.2.5.tgz#4074dd63b4973e6397d9ce50e97b57c77a518e9d"
 
-react-native-cn-richtext-editor@^1.0.27:
-  version "1.0.27"
-  resolved "https://registry.yarnpkg.com/react-native-cn-richtext-editor/-/react-native-cn-richtext-editor-1.0.27.tgz#7e322ee092708e9e93dfccf61ea1453a3b5254e7"
-  integrity sha512-tjETLCtQXMC46Dujwj967UsKzDUlb81yYkE4ttIqpCJwHI5W51HMRdjoXsd1P8XSnu98P5w3ZXfZkNhgsKicfQ==
+react-native-cn-richtext-editor@^1.0.28:
+  version "1.0.28"
+  resolved "https://registry.yarnpkg.com/react-native-cn-richtext-editor/-/react-native-cn-richtext-editor-1.0.28.tgz#6c076f0c1eba4183f222d06eeef77600f18bff62"
+  integrity sha512-PzIbwwj1qIwxW9mcatvXmb8uNamNOYj1mFI1B0Hn/vxaVxksjxQBHBK8DDawF4D28pxhvCp6QlYY7C61QuyJ4Q==
   dependencies:
+    diff-match-patch "^1.0.4"
     immutability-helper "^2.8.1"
     lodash "^4.17.11"
     shortid "^2.2.14"

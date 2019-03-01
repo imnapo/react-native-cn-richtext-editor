@@ -1,6 +1,6 @@
 {
   "name": "react-native-cn-richtext-editor",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "description": "RichText Editor for React-Native",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,8 @@
     "immutability-helper": "^2.8.1",
     "lodash": "^4.17.11",
     "shortid": "^2.2.14",
-    "xmldoc": "^1.1.2"
+    "xmldoc": "^1.1.2",
+    "diff-match-patch": "^1.0.4"
   },
   "peerDependencies": {
     "react": "16.6.1",
@@ -26,7 +27,11 @@
     "type": "git",
     "url": "git+https://github.com/imnapo/react-native-cn-richtext-editor.git"
   },
-  "author": "Narbe HS <imnapo@gmail.com>",
+  "author": "Narbe HS <imnapo@gmail.com> (http://learncode.net)",
+  "contributors": [
+    "Narbe HS <imnapo@gmail.com> (http://learncode.net)",
+    "Christ Kho <christ.khodabakhshi@gmail.com> (http://learncode.net)"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/imnapo/react-native-cn-richtext-editor/issues"
