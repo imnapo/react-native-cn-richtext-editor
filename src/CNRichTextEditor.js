@@ -236,16 +236,14 @@ class CNRichTextEditor extends Component {
         const { value } = this.props;
         let index = focusInputIndex + 1;
         
-        let myHeight = (this.layoutWidth - 4 < width) ? height * ((this.layoutWidth - 4) / width) : height; 
-
         const item = {
             id: shortid.generate(),
             imageId: id,
             component: 'image',
             url: url,
             size: {
-                height:  myHeight, 
-                width: (this.layoutWidth - 4 < width) ? this.layoutWidth - 4 : width
+                height:  height, 
+                width: width
             }
         };
 
@@ -314,9 +312,7 @@ class CNRichTextEditor extends Component {
 
 
 
-        if(height != null && width != null) {
-            
-            
+        if(height != null && width != null) {           
             this.addImageContent(url, id, height, width);
         }
         else {
@@ -456,6 +452,9 @@ class CNRichTextEditor extends Component {
     }
 
     renderImage(image, index) {
+        const { width, height } = image.size;
+        let myHeight = (this.layoutWidth - 4 < width) ? height * ((this.layoutWidth - 4) / width) : height; 
+        let myWidth = (this.layoutWidth - 4 < width) ? this.layoutWidth - 4 : width;
         
         return (
             <View key={`image${index}`}
@@ -467,7 +466,7 @@ class CNRichTextEditor extends Component {
                 paddingLeft: 2,
                 paddingRight: 2,
                 paddingTop: 2,
-                paddingBottom: 2,
+                paddingBottom: 2
             }}
             >
                 <TouchableWithoutFeedback
@@ -475,8 +474,7 @@ class CNRichTextEditor extends Component {
                 
                 >
                     <Image
-                        
-                        style={{width: image.size.width, height: image.size.height
+                        style={{width: myWidth, height: myHeight
                         , opacity: this.state.imageHighLightedInex === index ? .8  : 1
                         }}
                         source={{uri: image.url}}
@@ -488,7 +486,7 @@ class CNRichTextEditor extends Component {
                         //onSelectionChange={(event) =>this.onSelectionChange(event, index)} 
                         multiline={false}
                         style={{
-                            fontSize: image.size.height * .65,
+                            fontSize: myHeight * .65,
                             borderWidth: 0,
                             paddingBottom:1,
                             width: 1

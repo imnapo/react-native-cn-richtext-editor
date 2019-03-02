@@ -69,9 +69,11 @@ class CNRichTextView extends Component {
     renderImage(image, index) {
         const { width, height } = image.size;
         const { layoutWidth } = this.state;
-        let myHeight = height * (layoutWidth / width); 
-        let myWidth = layoutWidth
         
+        let myHeight = (layoutWidth - 4 < width) ? height * ((layoutWidth - 4) / width) : height; 
+        let myWidth = (layoutWidth - 4 < width) ? layoutWidth - 4 : width;
+
+
         return (
             <View key={`image${index}`}
                 style={{
