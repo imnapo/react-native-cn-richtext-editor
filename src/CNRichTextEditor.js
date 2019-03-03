@@ -13,15 +13,13 @@ const shortid = require('shortid');
 class CNRichTextEditor extends Component {
 
     state = {
-     
         imageHighLightedInex: -1,
- 
+        layoutWidth: 400,
         styles: [],
         selection:{ start : 0, end: 0},
         justToolAdded: false,
         avoidUpdateText: false,
         focusInputIndex: 0,
-   
     };
 
     constructor(props) {
@@ -35,7 +33,6 @@ class CNRichTextEditor extends Component {
         this.upComingStype = null;
         this.focusOnNextUpdate = -1;
         this.selectionOnFocus = null;
-        this.layoutWidth = 400;
     }
 
     componentDidMount() {
@@ -43,8 +40,6 @@ class CNRichTextEditor extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        
-        
         if(this.focusOnNextUpdate != -1 && this.textInputs.length > this.focusOnNextUpdate) {
             let ref = this.textInputs[this.focusOnNextUpdate];
             ref.focus(this.selectionOnFocus);
@@ -453,8 +448,8 @@ class CNRichTextEditor extends Component {
 
     renderImage(image, index) {
         const { width, height } = image.size;
-        let myHeight = (this.layoutWidth - 4 < width) ? height * ((this.layoutWidth - 4) / width) : height; 
-        let myWidth = (this.layoutWidth - 4 < width) ? this.layoutWidth - 4 : width;
+        let myHeight = (this.state.layoutWidth - 4 < width) ? height * ((this.state.layoutWidth - 4) / width) : height; 
+        let myWidth = (this.state.layoutWidth - 4 < width) ? this.state.layoutWidth - 4 : width;
         
         return (
             <View key={`image${index}`}
@@ -526,7 +521,10 @@ class CNRichTextEditor extends Component {
         width,
         height
         } = event.nativeEvent.layout;
-        this.layoutWidth = width;
+       
+        this.setState({
+            layoutWidth: width
+        });
     }
 
     render() {
