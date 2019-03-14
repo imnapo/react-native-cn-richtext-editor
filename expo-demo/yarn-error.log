@@ -29,7 +29,7 @@ npm manifest:
       "expo": "^31.0.2",
       "react": "16.5.0",
       "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
-      "react-native-cn-richtext-editor": "^1.0.24",
+      "react-native-cn-richtext-editor": "^1.0.30",
       "react-native-popup-menu": "^0.14.2"
     },
     "devDependencies": {
@@ -1688,6 +1688,11 @@ Lockfile:
   detect-newline@^2.1.0:
     version "2.1.0"
     resolved "https://registry.yarnpkg.com/detect-newline/-/detect-newline-2.1.0.tgz#f41f1c10be4b00e87b5f13da680759f2c5bfd3e2"
+  
+  diff-match-patch@^1.0.4:
+    version "1.0.4"
+    resolved "https://registry.yarnpkg.com/diff-match-patch/-/diff-match-patch-1.0.4.tgz#6ac4b55237463761c4daf0dc603eb869124744b1"
+    integrity sha512-Uv3SW8bmH9nAtHKaKSanOQmj2DnlH65fUpcrMdfdaOxUG02QQ4YGZ8AE7kKOMisF7UqvOlGKVYWRvezdncW9lg==
   
   dom-walk@^0.1.0:
     version "0.1.1"
@@ -3769,11 +3774,12 @@ Lockfile:
     version "2.2.5"
     resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-2.2.5.tgz#4074dd63b4973e6397d9ce50e97b57c77a518e9d"
   
-  react-native-cn-richtext-editor@^1.0.23:
-    version "1.0.23"
-    resolved "https://registry.yarnpkg.com/react-native-cn-richtext-editor/-/react-native-cn-richtext-editor-1.0.23.tgz#1cf478632ed75aec9455eba6fd1d1cad1b9a318a"
-    integrity sha512-BPskMeKO+QICB4tdPZL5T4reAGcOAf9SmCdUJedfq3gojBDUMym52FnLsiztJiM00CsgP7vftm6D0WUI1T9PZg==
+  react-native-cn-richtext-editor@^1.0.30:
+    version "1.0.30"
+    resolved "https://registry.yarnpkg.com/react-native-cn-richtext-editor/-/react-native-cn-richtext-editor-1.0.30.tgz#481b255a886aa71d7d2324704627805022bc3984"
+    integrity sha512-JTV8gXV6n3KK8IEPC6xMsq4rUOJGoABXYENfcEmKEmCl6JN79L+eilr4eZyNG17Uk2yW63BBBkgTZQfZeNgqbw==
     dependencies:
+      diff-match-patch "^1.0.4"
       immutability-helper "^2.8.1"
       lodash "^4.17.11"
       shortid "^2.2.14"
