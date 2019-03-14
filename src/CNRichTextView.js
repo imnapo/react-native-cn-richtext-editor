@@ -119,12 +119,20 @@ class CNRichTextView extends Component {
             onLayout={this.onLayout}
             style={[styles]}
                 onStartShouldSetResponder={(evt) => {
-                    this.setState({ isScrolled: false });
-                    setTimeout(this.flip, 100);
+                    this.setState({ isScrolled: false },
+                      () => {  setTimeout(this.flip, 100); });
+                    
                     return true;
                 }}
-                onResponderMove={(evt) => {
-                    this.setState({ isScrolled: true });
+                onResponderMove={(evt) => {    
+                    var touch = evt.touchHistory.touchBank.find((obj) => obj != undefined && obj != null);
+                    if((touch.startPageY - touch.currentPageY ) > 2  || 
+                    (touch.startPageY - touch.currentPageY ) < -2 ){
+                        this.setState({ isScrolled: true });
+                    } else
+                    {
+                        this.setState({ isScrolled: false });
+                    }         
                     return true;
                 }}
             >
