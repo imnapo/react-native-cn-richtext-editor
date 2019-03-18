@@ -69,10 +69,9 @@ class CNRichTextView extends Component {
     renderImage(image, index) {
         const { width, height } = image.size;
         const { layoutWidth } = this.state;
-        
+        const { ImageComponent = Image } = this.props
         let myHeight = (layoutWidth - 4 < width) ? height * ((layoutWidth - 4) / width) : height; 
         let myWidth = (layoutWidth - 4 < width) ? layoutWidth - 4 : width;
-
 
         return (
             <View key={`image${index}`}
@@ -82,8 +81,7 @@ class CNRichTextView extends Component {
                 }}
             >
                 <View>
-                    <Image
-
+                    <ImageComponent
                         style={{
                             width: myWidth, height: myHeight
                             , opacity: this.state.imageHighLightedInex === index ? .8 : 1

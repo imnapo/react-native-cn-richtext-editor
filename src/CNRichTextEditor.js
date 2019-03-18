@@ -450,7 +450,7 @@ class CNRichTextEditor extends Component {
         const { width, height } = image.size;
         let myHeight = (this.state.layoutWidth - 4 < width) ? height * ((this.state.layoutWidth - 4) / width) : height; 
         let myWidth = (this.state.layoutWidth - 4 < width) ? this.state.layoutWidth - 4 : width;
-        
+        const { ImageComponent = Image } = this.props
         return (
             <View key={`image${index}`}
             style={{
@@ -468,7 +468,7 @@ class CNRichTextEditor extends Component {
                 onPress={() => this.onImageClicked(index)}
                 
                 >
-                    <Image
+                    <ImageComponent
                         style={{width: myWidth, height: myHeight
                         , opacity: this.state.imageHighLightedInex === index ? .8  : 1
                         }}
@@ -476,7 +476,6 @@ class CNRichTextEditor extends Component {
                         />                
                 </TouchableWithoutFeedback>
                 <TextInput
-                    
                         onKeyPress={(event) => this.handleKeyDown(event, index)}
                         //onSelectionChange={(event) =>this.onSelectionChange(event, index)} 
                         multiline={false}
