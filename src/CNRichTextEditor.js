@@ -528,7 +528,7 @@ class CNRichTextEditor extends Component {
 
     render() {
 
-        const {value, style} = this.props;
+        const {value, style, contentContainerStyle} = this.props;
         
         return (      
                 <View
@@ -538,11 +538,11 @@ class CNRichTextEditor extends Component {
                 }, style]}>
 
                 
-                <ScrollView contentContainerStyle={{
+                <ScrollView contentContainerStyle={[{
                     flexGrow: 1,
                     alignContent: 'flex-start',
                     justifyContent: 'flex-start',
-                }} >
+                }, contentContainerStyle]} >
                     <View style={{
                          flex: 1,
                          alignContent: 'flex-start',
