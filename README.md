@@ -179,7 +179,7 @@ Also be noticed that this example is writen with expo and required 'react-native
 | onSelectedTagChanged   | this event triggers when selected tag of editor is changed. | No |
 | onSelectedStyleChanged | this event triggers when selected style of editor is changed. | No |
 | onValueChanged | this event triggers when value of editor is changed. | No |
-| onRemoveImage | this event triggers when an image is removed. Callback param in the form `{ uri, id }`. | No |
+| onRemoveImage | this event triggers when an image is removed. Callback param in the form `{ url, id }`. | No |
 | value    | an array object which keeps value of the editor | Yes |
 | styleList  | an object consist of styles name and values (use getDefaultStyles function) | Yes |
 | ImageComponent | a React component (class or functional) which will be used to render images. Will be passed `style` and `source` props. | No |
