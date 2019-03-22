@@ -159,6 +159,12 @@ class App extends Component {
         });
     }
 
+    onRemoveImage = ({url, id}) => {        
+        // do what you have to do after removing an image
+        console.log(`image removed (url : ${url})`);
+        
+    }
+
     renderImageSelector() {
         return (
             <Menu renderer={SlideInMenu} onSelect={this.onImageSelectorClicked}>
@@ -298,13 +304,7 @@ class App extends Component {
             behavior="padding" 
             enabled
             keyboardVerticalOffset={IS_IOS ? 0 : 0}
-            style={{
-                flex: 1,
-                paddingTop: 20,
-                backgroundColor:'#eee',
-                flexDirection: 'column', 
-                justifyContent: 'flex-end', 
-            }}
+            style={styles.root}
             >
             <MenuProvider style={{flex: 1}}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss} >             
@@ -314,18 +314,16 @@ class App extends Component {
                             onSelectedTagChanged={this.onSelectedTagChanged}
                             onSelectedStyleChanged={this.onSelectedStyleChanged}
                             value={this.state.value}
-                            style={{ backgroundColor : '#fff'}}
+                            style={styles.editor}
                             styleList={defaultStyles}
-                            //foreColor=''
+                            foreColor='dimgray' // optional (will override default fore-color)
                             onValueChanged={this.onValueChanged}
-                            //onRemoveImage={this.onRemoveImage}
+                            onRemoveImage={this.onRemoveImage}
                         />                        
                     </View>
                 </TouchableWithoutFeedback>
 
-                <View style={{
-                    minHeight: 35
-                }}>
+                <View style={styles.toolbarContainer}>
 
                     <CNToolbar
                         size={28}
@@ -343,7 +341,12 @@ class App extends Component {
                         highlight={this.renderHighlight()}
                         selectedTag={this.state.selectedTag}
                         selectedStyles={this.state.selectedStyles}
-                        onStyleKeyPress={this.onStyleKeyPress} />
+                        onStyleKeyPress={this.onStyleKeyPress} 
+                        backgroundColor="aliceblue" // optional (will override default backgroundColor)
+                        color="gray" // optional (will override default color)
+                        selectedColor='white' // optional (will override default selectedColor)
+                        selectedBackgroundColor='deepskyblue' // optional (will override default selectedBackgroundColor)
+                        /> 
                 </View>
             </MenuProvider>
         </KeyboardAvoidingView>
@@ -353,6 +356,13 @@ class App extends Component {
 }
 
 var styles = StyleSheet.create({
+    root: {
+        flex: 1,
+        paddingTop: 20,
+        backgroundColor:'#eee',
+        flexDirection: 'column', 
+        justifyContent: 'flex-end', 
+    },
     main: {
         flex: 1,
         marginTop: 10,
@@ -360,6 +370,12 @@ var styles = StyleSheet.create({
         paddingRight: 30,
         paddingBottom: 1,
         alignItems: 'stretch',
+    },
+    editor: { 
+        backgroundColor : '#fff'
+    },
+    toolbarContainer: {
+        minHeight: 35
     },
     menuOptionText: {
         textAlign: 'center',
