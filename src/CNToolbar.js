@@ -19,10 +19,11 @@ class CNToolbar extends Component {
     }
 
     renderStyleButtons(size, color, bgColor, selectedColor, selectedBgColor) {
-        const { selectedStyles, selectedTag, bold,
+        const { selectedStyles, selectedTag, bold, iconContainerStyle,
             italic,
             underline,
             lineThrough } = this.props;
+        const iconStyles = [styles.iconContainer, iconContainerStyle]
         return (
             <View style={[styles.iconSetContainer, { flexGrow: 4 }]}>
                 {
@@ -31,8 +32,7 @@ class CNToolbar extends Component {
                             onPress={() => {
                                 this.onStyleKeyPress('bold');
                             }}>
-                            <View style={[styles.iconContainer
-                                , {
+                            <View style={[iconStyles, {
                                 backgroundColor: selectedStyles.indexOf('bold') >= 0 ? selectedBgColor : bgColor
                             }]}>
                                 {
@@ -49,7 +49,7 @@ class CNToolbar extends Component {
                             onPress={() => {
                                 this.onStyleKeyPress('italic');
                             }}>
-                            <View style={[styles.iconContainer
+                            <View style={[iconStyles
                                 , {
                                 backgroundColor: selectedStyles.indexOf('italic') >= 0 ? selectedBgColor : bgColor
                             }]}>
@@ -66,7 +66,7 @@ class CNToolbar extends Component {
                             onPress={() => {
                                 this.onStyleKeyPress('underline');
                             }}>
-                            <View style={[styles.iconContainer
+                            <View style={[iconStyles
                                 , {
                                 backgroundColor: selectedStyles.indexOf('underline') >= 0 ? selectedBgColor : bgColor
                             }]}>
@@ -83,7 +83,7 @@ class CNToolbar extends Component {
                             onPress={() => {
                                 this.onStyleKeyPress('lineThrough');
                             }}>
-                            <View style={[styles.iconContainer
+                            <View style={[iconStyles
                                 , {
                                 backgroundColor: selectedStyles.indexOf('lineThrough') >= 0 ? selectedBgColor : bgColor
                             }]}>
@@ -100,10 +100,12 @@ class CNToolbar extends Component {
 
     renderTagButtons(size, color, bgColor, selectedColor, selectedBgColor) {
         const { selectedStyles, selectedTag, title,
-            heading,
+            heading, iconContainerStyle,
             ul,
             ol,
             body, } = this.props;
+        const iconStyles = [styles.iconContainer, iconContainerStyle]
+
         return (
             <View style={[styles.iconSetContainer, { flexGrow: 5 }]}>
                 {body ?
@@ -111,7 +113,7 @@ class CNToolbar extends Component {
                         onPress={() => {
                             this.onStyleKeyPress('body');
                         }}>
-                        <View style={[styles.iconContainer
+                        <View style={[iconStyles
                             , {
                             backgroundColor: selectedTag === 'body' ? selectedBgColor : bgColor
                         }]}>
@@ -129,7 +131,7 @@ class CNToolbar extends Component {
                             onPress={() => {
                                 this.onStyleKeyPress('title');
                             }}>
-                            <View style={[styles.iconContainer
+                            <View style={[iconStyles
                                 , {
                                 backgroundColor: selectedTag === 'title' ? selectedBgColor : bgColor
                             }]}>
@@ -146,7 +148,7 @@ class CNToolbar extends Component {
                             onPress={() => {
                                 this.onStyleKeyPress('heading');
                             }}>
-                            <View style={[styles.iconContainer
+                            <View style={[iconStyles
                                 , {
                                 backgroundColor: selectedTag === 'heading' ? selectedBgColor : bgColor
                             }]}>
@@ -163,7 +165,7 @@ class CNToolbar extends Component {
                             onPress={() => {
                                 this.onStyleKeyPress('ul');
                             }}>
-                            <View style={[styles.iconContainer
+                            <View style={[iconStyles
                                 , {
                                 backgroundColor: selectedTag === 'ul' ? selectedBgColor : bgColor
                             }]}>
@@ -180,7 +182,7 @@ class CNToolbar extends Component {
                             onPress={() => {
                                 this.onStyleKeyPress('ol');
                             }}>
-                            <View style={[styles.iconContainer
+                            <View style={[iconStyles
                                 , {
                                 backgroundColor: selectedTag === 'ol' ? selectedBgColor : bgColor
                             }]}>
@@ -197,10 +199,11 @@ class CNToolbar extends Component {
 
     renderExtras(size, color, bgColor, selectedColor, selectedBgColor) {
         const { selectedStyles, selectedTag, title,
-            image,
+            image, iconContainerStyle,
             highlight,
             foreColor,
         } = this.props;
+        const iconStyles = [styles.iconContainer, iconContainerStyle]
         return (
             <View style={[styles.iconSetContainer, { flexGrow: 2 }]}>
                 {
@@ -210,7 +213,7 @@ class CNToolbar extends Component {
                             onPress={() => {
                                 this.onStyleKeyPress('image');
                             }}>
-                            <View style={[styles.iconContainer
+                            <View style={[iconStyles
                                 , {
                                 backgroundColor: bgColor
                             }]}>
@@ -227,7 +230,7 @@ class CNToolbar extends Component {
                             onPress={() => {
                                 this.onStyleKeyPress('foreColor');
                             }}>
-                            <View style={[styles.iconContainer
+                            <View style={[iconStyles
                                 , {
                                 backgroundColor: selectedStyles.indexOf('foreColor') >= 0 ? selectedBgColor : bgColor
                             }]}>
@@ -243,7 +246,7 @@ class CNToolbar extends Component {
                         onPress={() => {
                             this.onStyleKeyPress('highlight');
                         }}>
-                        <View style={[styles.iconContainer
+                        <View style={[iconStyles
                             , {
                             backgroundColor: selectedStyles.indexOf('highlight') >= 0 ? selectedBgColor : bgColor
                         }]}>
@@ -263,7 +266,7 @@ class CNToolbar extends Component {
         const { selectedStyles, selectedTag,
             bold, italic, underline, lineThrough,
             title, heading, ul, ol, body,
-            image, foreColor, highlight
+            image, foreColor, highlight, style
         } = this.props;
 
         let styleButtons = !bold && !italic && !underline && !lineThrough;
@@ -277,7 +280,7 @@ class CNToolbar extends Component {
         let selectedBgColor = this.props.selectedBackgroundColor ? this.props.selectedBackgroundColor : defaultSelectedBgColor;
 
         return (
-            <View style={styles.toolbarContainer}>
+            <View style={[styles.toolbarContainer, style]}>
                 {styleButtons === false ? this.renderStyleButtons(size, color, bgColor, selectedColor, selectedBgColor) : null}
                 {(styleButtons === false && tagButtons === false) ? <View style={styles.separator}></View> : null}
                 {tagButtons === false ? this.renderTagButtons(size, color, bgColor, selectedColor, selectedBgColor) : null}
