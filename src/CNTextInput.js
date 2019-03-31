@@ -1288,13 +1288,9 @@ class CNTextInput extends Component {
                             if(fromTextChange === true && IS_IOS !== true) {
                                 this.androidSelectionJump += 2;
                             }
-<<<<<<< HEAD
-                        
-=======
 
                         //}
   
->>>>>>> master
                     }
                 }
                 else if(tag === 'ol') {
