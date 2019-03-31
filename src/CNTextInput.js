@@ -754,6 +754,8 @@ class CNTextInput extends Component {
             }
         }
 
+        const isPrevHeading = prevTag === 'heading' || prevTag === 'title';
+
             const foundElement = newContent[index];
             
             if(itemNo === 0) {
@@ -783,7 +785,7 @@ class CNTextInput extends Component {
                     beforeContent = {
                         id: shortid.generate(),
                         len: 1,
-                        stype: [],
+                        stype: isPrevHeading === true ? [] : newContent[index].stype,
                         styleList: [],
                         tag: 'body',
                         text: '\n',
@@ -1257,7 +1259,7 @@ class CNTextInput extends Component {
                         }
                     }
                     else {
-                        //if(i !== 0) {
+                                                   
                             if(content[i].len > (i === 0 ? 0 : 1)) {
                                 content[i].text = content[i].text.substring((i === 0 ? 0 : 1));
                                 content[i].len = content[i].len - (i === 0 ? 0 : 1);
@@ -1279,6 +1281,8 @@ class CNTextInput extends Component {
                                 content[i].len =  i === 0 ? 2 : 3;
                                 content[i].readOnly = true;
                                 content[i].stype = [];
+                                content[i].styleList = [];
+                                
                             }
                             this.textLength += 2;
                             if(fromTextChange === true && IS_IOS !== true) {
