@@ -242,4 +242,4 @@ view the implementation & run it locally.
 
 ## License
 
-ISC
+[MIT](https://github.com/imnapo/react-native-cn-richtext-editor/blob/master/LICENSE)
