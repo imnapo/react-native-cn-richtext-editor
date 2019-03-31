@@ -234,7 +234,7 @@ export function convertToHtmlString(contents, styleList = null) {
           };
         }
 
-        let firstLine = (i == 0) || (i > 0 && item.content.length > 0 && item.content[item.content.length - 1].tag == 'image');
+        let firstLine = (i == 0) || (i > 0 && contents.length > 0 && contents[contents.length - 1].component == 'image');
         
         
       if(tag == 'ul' || tag == 'ol') {
