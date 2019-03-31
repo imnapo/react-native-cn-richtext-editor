@@ -108,7 +108,12 @@ class CNTextInput extends Component {
     updateContent(content, item, index, itemNo = 0) {
         
         let newContent = content;
-        if(itemNo === 0) {
+        if(index >= 0 && newContent[index].len === 0) {
+            if(item !== null) {
+                newContent = update(newContent, { [index]: {$set : item}});
+            }
+        }
+        else if(itemNo === 0) {
             if(item !== null && index >= 0) {
                 newContent = update(newContent, { $splice: [[index, 0, item]] });
             }
