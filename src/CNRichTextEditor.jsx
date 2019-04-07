@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   TextInput, View, Image,
   ScrollView, Platform,
@@ -6,7 +7,7 @@ import {
 } from 'react-native';
 import _ from 'lodash';
 import update from 'immutability-helper';
-import { getInitialObject, defaultStyles } from './Convertors';
+import { getInitialObject, getDefaultStyles } from './Convertors';
 import CNTextInput from './CNTextInput';
 
 const shortid = require('shortid');
@@ -44,92 +45,22 @@ class CNRichTextEditor extends Component {
 
     }
 
-    componentDidUpdate(prevProps, prevState) {
-      if (this.focusOnNextUpdate != -1 && this.textInputs.length > this.focusOnNextUpdate) {
-        const ref = this.textInputs[this.focusOnNextUpdate];
-        ref.focus(this.selectionOnFocus);
-        this.focusOnNextUpdate = -1;
-        this.selectionOnFocus = null;
-      }
-    }
-
-    findContentIndex(content, cursorPosition) {
-      let indx = 0;
-      let findIndx = -1;
-      let checknext = true;
-      let itemNo = 0;
-
-      for (let index = 0; index < content.length; index++) {
-        const element = content[index];
-
-        const ending = indx + element.len;
-
-        if (checknext === false) {
-          if (element.len === 0) {
-            findIndx = index;
-            itemNo = 0;
-            break;
-          } else {
-            break;
-          }
+    componentDidUpdate(prevProps) {
+      const { value } = this.props;
+      if (prevProps.value !== value) {
+        if (this.focusOnNextUpdate !== -1 && this.textInputs.length > this.focusOnNextUpdate) {
+          const ref = this.textInputs[this.focusOnNextUpdate];
+          ref.focus(this.selectionOnFocus);
+          this.focusOnNextUpdate = -1;
+          this.selectionOnFocus = null;
         }
-        if (cursorPosition <= ending && cursorPosition >= indx) {
-          // element.len += 1;
-          findIndx = index;
-          itemNo = cursorPosition - indx;
-
-
-          checknext = false;
-        }
-
-        indx += element.len;
       }
-
-      if (findIndx == -1) {
-        findIndx = content.length - 1;
-      }
-
-      return { findIndx, itemNo };
-    }
-
-    updateContent(content, item, index, itemNo = 0) {
-      let newContent = content;
-      if (itemNo > 0 && itemNo != 0 && content[index - 1].len != itemNo) {
-        const foundElement = content[index - 1];
-        beforeContent = {
-          id: foundElement.id,
-          len: itemNo,
-          stype: foundElement.stype,
-          styleList: foundElement.styleList,
-          tag: foundElement.tag,
-          text: foundElement.text.substring(0, itemNo),
-        };
-
-        afterContent = {
-          id: shortid.generate(),
-          len: foundElement.len - itemNo,
-          stype: foundElement.stype,
-          styleList: foundElement.styleList,
-          tag: foundElement.tag,
-          text: foundElement.text.substring(itemNo),
-        };
-
-        newContent = update(newContent, { [index - 1]: { $set: beforeContent } });
-        newContent = update(newContent, { $splice: [[index, 0, afterContent]] });
-      }
-      if (item !== null) {
-        newContent = update(newContent, { $splice: [[index, 0, item]] });
-      }
-
-
-      return newContent;
     }
 
     onConnectToPrevClicked = (index) => {
       const { value } = this.props;
 
-      if (index > 0 && value[index - 1].component == 'image'
-      ) {
+      if (index > 0 && value[index - 1].component === 'image') {
         const ref = this.textInputs[index - 1];
         ref.focus();
       }
@@ -139,10 +70,11 @@ class CNRichTextEditor extends Component {
       this.avoidUpdateStyle = true;
 
       const { value } = this.props;
+      const { imageHighLightedInex } = this.state;
 
       const item = value[index];
       if (item.component === 'image' && e.nativeEvent.key === 'Backspace') {
-        if (this.state.imageHighLightedInex === index) {
+        if (imageHighLightedInex === index) {
           this.removeImage(index);
         } else {
           this.setState({
@@ -161,7 +93,8 @@ class CNRichTextEditor extends Component {
     }
 
     onFocus = (index) => {
-      if (this.state.focusInputIndex === index) {
+      const { focusInputIndex } = this.state;
+      if (focusInputIndex === index) {
         try {
           this.textInputs[index].avoidSelectionChangeOnFocus();
         } catch (error) {
@@ -183,26 +116,12 @@ class CNRichTextEditor extends Component {
       }
     }
 
-    focus() {
-      try {
-        if (this.textInputs.length > 0) {
-          const ref = this.textInputs[this.textInputs.length - 1];
-          ref.focus({
-            start: 0, // ref.textLength,
-            end: 0, // ref.textLength
-          });
-        }
-      } catch (error) {
-        // console.log(error);
-      }
-    }
-
     addImageContent = (url, id, height, width) => {
-      const { focusInputIndex } = this.state;
-      const { value } = this.props;
+      const { focusInputIndex, layoutWidth } = this.state;
+      const { value, onValueChanged } = this.props;
       let index = focusInputIndex + 1;
 
-      const myHeight = (this.state.layoutWidth - 4 < width) ? height * ((this.state.layoutWidth - 4) / width) : height;
+      const myHeight = (layoutWidth - 4 < width) ? height * ((layoutWidth - 4) / width) : height;
       this.contentHeights[index] = myHeight + 4;
 
       const item = {
@@ -265,23 +184,11 @@ class CNRichTextEditor extends Component {
 
       this.focusOnNextUpdate = index + 1;
 
-      this.props.onValueChanged(
-        newConents,
-      );
-    }
-
-    insertImage(url, id = null, height = null, width = null) {
-      if (height != null && width != null) {
-        this.addImageContent(url, id, height, width);
-      } else {
-        Image.getSize(url, (width, height) => {
-          this.addImageContent(url, id, height, width);
-        });
-      }
+      onValueChanged(newConents);
     }
 
     removeImage =(index) => {
-      const { value } = this.props;
+      const { value, onValueChanged, onRemoveImage } = this.props;
       const content = value[index];
 
 
@@ -355,31 +262,29 @@ class CNRichTextEditor extends Component {
         this.focusOnNextUpdate = index - 1;
         this.selectionOnFocus = { start: selectionStart, end: selectionStart };
 
-        if (this.props.onValueChanged) this.props.onValueChanged(newConents);
-
-        if (this.props.onRemoveImage) {
-          this.props.onRemoveImage(
-            { id: removedId, url: removedUrl },
-          );
-        }
+        onValueChanged(newConents);
+        onRemoveImage({ id: removedId, url: removedUrl });
       }
     }
 
     onContentChanged = (items, index) => {
-      const input = this.props.value[index];
+      const { value, onValueChanged } = this.props;
+      const input = value[index];
       input.content = items;
 
-      this.props.onValueChanged(
-        update(this.props.value, { [index]: { $set: input } }),
+      onValueChanged(
+        update(value, { [index]: { $set: input } }),
       );
     }
 
     onSelectedStyleChanged = (styles) => {
-      this.props.onSelectedStyleChanged(styles);
+      const { onSelectedStyleChanged } = this.props;
+      onSelectedStyleChanged(styles);
     }
 
     onSelectedTagChanged = (tag) => {
-      this.props.onSelectedTagChanged(tag);
+      const { onSelectedTagChanged } = this.props;
+      onSelectedTagChanged(tag);
     }
 
     handleMeasureContentChanged = (content) => {
@@ -388,55 +293,97 @@ class CNRichTextEditor extends Component {
       });
     }
 
-    onInputLayout = (event, index, isLast) => {
+    onInputLayout = (event, index) => {
       const { height } = event.nativeEvent.layout;
       this.contentHeights[index] = height;
     }
 
-    renderInput(input, index, isLast, measureScroll = true) {
-      const styles = this.props.styleList ? this.props.styleList : defaultStyles;
-      return (
-        <View
-          key={input.id}
-          onLayout={e => this.onInputLayout(e, index, isLast)}
-          style={{
-            flexGrow: isLast === true ? 1 : 0,
-          }}
-        >
-          <CNTextInput
-            ref={(input) => { this.textInputs[index] = input; }}
-            items={input.content}
-            onSelectedStyleChanged={this.onSelectedStyleChanged}
-            onSelectedTagChanged={this.onSelectedTagChanged}
-            onContentChanged={items => this.onContentChanged(items, index)}
-            onConnectToPrevClicked={() => this.onConnectToPrevClicked(index)}
-            onMeasureContentChanged={measureScroll ? this.handleMeasureContentChanged : undefined}
-            onFocus={() => this.onFocus(index)}
-            returnKeyType={this.props.returnKeyType}
-            foreColor={this.props.foreColor}
-            styleList={styles}
-            style={{
-              flexGrow: 1,
-            }
-                    }
-          />
-        </View>
-      );
+    onLayout = (event) => {
+      const { width } = event.nativeEvent.layout;
+
+      this.setState({
+        layoutWidth: width,
+      });
+    }
+
+    onRootLayout = (event) => {
+      const { height } = event.nativeEvent.layout;
+      const { style: { padding = 10, paddingTop, paddingBottom } } = this.props;
+      this.rootHei = height;
+      this.rootHei -= paddingTop || padding;
+      this.rootHei -= paddingBottom || padding;
+    }
+
+    onMeasureLayout = (event) => {
+      const { focusInputIndex } = this.props;
+      let measureRequiredHei = 0;
+      for (let i = 0; i < focusInputIndex; i += 1) {
+        measureRequiredHei += this.contentHeights[i];
+      }
+      measureRequiredHei += (event.nativeEvent.layout.height);
+
+      const measureOffset = Math.ceil(Math.max(0, measureRequiredHei - this.rootHei));
+
+      if (this.rootHei < measureRequiredHei
+            && this.scrollOffset < measureOffset
+      ) {
+        this.scrollview.scrollTo({ y: measureOffset, animated: false });
+      }
+    }
+
+    onScroll = (event) => {
+      this.scrollOffset = Math.ceil(event.nativeEvent.contentOffset.y);
+    }
+
+    insertImage(url, id = null, height = null, width = null) {
+      if (height != null && width != null) {
+        this.addImageContent(url, id, height, width);
+      } else {
+        Image.getSize(url, (_width, _height) => {
+          this.addImageContent(url, id, _height, _width);
+        });
+      }
+    }
+
+    focus() {
+      try {
+        if (this.textInputs.length > 0) {
+          const ref = this.textInputs[this.textInputs.length - 1];
+          ref.focus({
+            start: 0, // ref.textLength,
+            end: 0, // ref.textLength
+          });
+        }
+      } catch (error) {
+        // console.log(error);
+      }
+    }
+
+    applyToolbar(toolType) {
+      const { focusInputIndex } = this.state;
+
+      if (toolType === 'body' || toolType === 'title' || toolType === 'heading' || toolType === 'ul' || toolType === 'ol') {
+        this.textInputs[focusInputIndex].applyTag(toolType);
+      } else if (toolType === 'image') {
+        this.setState({ showAddImageModal: true });
+      } else {
+        this.textInputs[focusInputIndex].applyStyle(toolType);
+      }
     }
 
     renderImage(image, index) {
+      const { layoutWidth, imageHighLightedInex } = this.state;
       const { width, height } = image.size;
-      const myHeight = (this.state.layoutWidth - 4 < width) ? height * ((this.state.layoutWidth - 4) / width) : height;
-      const myWidth = (this.state.layoutWidth - 4 < width) ? this.state.layoutWidth - 4 : width;
-      const { ImageComponent = Image } = this.props;
+      const myHeight = (layoutWidth - 4 < width) ? height * ((layoutWidth - 4) / width) : height;
+      const myWidth = (layoutWidth - 4 < width) ? layoutWidth - 4 : width;
+      const { ImageComponent } = this.props;
       return (
         <View
           key={`image${index}`}
           style={{
-
             flexDirection: 'row',
             alignItems: 'flex-start',
-            backgroundColor: this.state.imageHighLightedInex === index ? 'yellow' : 'transparent',
+            backgroundColor: imageHighLightedInex === index ? 'yellow' : 'transparent',
             paddingLeft: 2,
             paddingRight: 2,
             paddingTop: 2,
@@ -450,7 +397,7 @@ class CNRichTextEditor extends Component {
               style={{
                 width: myWidth,
                 height: myHeight,
-                opacity: this.state.imageHighLightedInex === index ? 0.8 : 1,
+                opacity: imageHighLightedInex === index ? 0.8 : 1,
               }}
               source={{ uri: image.url }}
             />
@@ -465,71 +412,48 @@ class CNRichTextEditor extends Component {
               paddingBottom: 1,
               width: 1,
             }}
-            ref={component => this.textInputs[index] = component}
+            ref={(inputRef) => { this.textInputs[index] = inputRef; }}
           />
         </View>
-
       );
     }
 
-    applyToolbar(toolType) {
-      const { focusInputIndex } = this.state;
-
-      if (toolType === 'body' || toolType === 'title' || toolType === 'heading' || toolType === 'ul' || toolType === 'ol') {
-        this.textInputs[focusInputIndex].applyTag(toolType);
-      } else if (toolType == 'image') {
-        // convertToHtmlStringconvertToHtmlString(this.state.contents);
-
-        this.setState({ showAddImageModal: true });
-      } else
-      // if(toolType === 'bold' || toolType === 'italic' || toolType === 'underline' || toolType === 'lineThrough')
-      { this.textInputs[focusInputIndex].applyStyle(toolType); }
-    }
-
-    onLayout = (event) => {
-      const { width } = event.nativeEvent.layout;
-
-      this.setState({
-        layoutWidth: width,
-      });
-    }
-
-    onRootLayout = (event) => {
-      const { height } = event.nativeEvent.layout;
-      const { style } = this.props;
-      const paddingTop = (style && style.padding) ? style.padding
-        : (style && style.paddingTop) ? style.paddingTop : 10;
-      const paddingBottom = (style && style.padding) ? style.padding
-        : (style && style.paddingBottom) ? style.paddingBottom : 10;
-
-      this._rootHei = height - paddingTop - paddingBottom;
-    }
-
-    onMeasureLayout = (event) => {
-      let measureRequiredHei = 0;
-      for (let i = 0; i < this.state.focusInputIndex; i++) {
-        measureRequiredHei += this.contentHeights[i];
-      }
-      measureRequiredHei += (event.nativeEvent.layout.height);
-
-      const measureOffset = Math.ceil(Math.max(0, measureRequiredHei - this._rootHei));
-
-      if (this._rootHei < measureRequiredHei
-            && this.scrollOffset < measureOffset
-      ) {
-        this.scrollview.scrollTo({ y: measureOffset, animated: false });
-      }
-    }
-
-    onScroll = (event) => {
-      this.scrollOffset = Math.ceil(event.nativeEvent.contentOffset.y);
+    renderInput(input, index, isLast, measureScroll = true) {
+      const { styleList, returnKeyType, foreColor } = this.props;
+      return (
+        <View
+          key={input.id}
+          onLayout={e => this.onInputLayout(e, index)}
+          style={{
+            flexGrow: isLast === true ? 1 : 0,
+          }}
+        >
+          <CNTextInput
+            ref={(inputRef) => { this.textInputs[index] = inputRef; }}
+            items={input.content}
+            onSelectedStyleChanged={this.onSelectedStyleChanged}
+            onSelectedTagChanged={this.onSelectedTagChanged}
+            onContentChanged={items => this.onContentChanged(items, index)}
+            onConnectToPrevClicked={() => this.onConnectToPrevClicked(index)}
+            onMeasureContentChanged={measureScroll ? this.handleMeasureContentChanged : undefined}
+            onFocus={() => this.onFocus(index)}
+            returnKeyType={returnKeyType}
+            foreColor={foreColor}
+            styleList={styleList}
+            style={{
+              flexGrow: 1,
+            }}
+          />
+        </View>
+      );
     }
 
     render() {
       const {
-        value, style, contentContainerStyle, measureInputScroll = true,
+        value, style, styleList, contentContainerStyle, measureInputScroll,
       } = this.props;
-      const styleList = this.props.styleList ? this.props.styleList : defaultStyles;
+
+      const { measureContent, layoutWidth } = this.state;
 
       return (
         <View
@@ -540,7 +464,7 @@ class CNRichTextEditor extends Component {
           onLayout={this.onRootLayout}
         >
           <ScrollView
-            ref={view => this.scrollview = view}
+            ref={(view) => { this.scrollview = view; }}
             onScroll={measureInputScroll && IS_IOS ? this.onScroll : undefined}
             scrollEventThrottle={16}
             contentContainerStyle={[{
@@ -558,49 +482,81 @@ class CNRichTextEditor extends Component {
               onLayout={this.onLayout}
             >
               {
-                        _.map(value, (item, index) => {
-                          if (item.component === 'text') {
-                            return (
-                              this.renderInput(item, index, index === value.length - 1, measureInputScroll && IS_IOS)
-                            );
-                          }
-                          if (item.component === 'image') {
-                            return (
-                              this.renderImage(item, index)
-                            );
-                          }
-                        })
-                    }
+                _.map(value, (item, index) => {
+                  if (item.component === 'text') {
+                    return (
+                      this.renderInput(item, index, index === value.length - 1,
+                        measureInputScroll && IS_IOS)
+                    );
+                  }
+                  if (item.component === 'image') {
+                    return (
+                      this.renderImage(item, index)
+                    );
+                  }
+                  return null;
+                })
+              }
               {
-                    // Invisible Input to measure scroll in Ios
-                    measureInputScroll
-                    && (
-                    <View
-                      onLayout={this.onMeasureLayout}
-                      pointerEvents="none"
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        opacity: 0,
-                      }}
-                    >
-                      <CNTextInput
-                        ref={(input) => { this.measureInput = input; }}
-                        items={this.state.measureContent}
-                        styleList={styleList}
-                        style={{
-                          width: this.state.layoutWidth,
-                        }}
-                      />
-                    </View>
-                    )
-                    }
+                // Invisible Input to measure scroll in Ios
+                measureInputScroll
+                && (
+                <View
+                  onLayout={this.onMeasureLayout}
+                  pointerEvents="none"
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    opacity: 0,
+                  }}
+                >
+                  <CNTextInput
+                    ref={(input) => { this.measureInput = input; }}
+                    items={measureContent}
+                    styleList={styleList}
+                    style={{
+                      width: layoutWidth,
+                    }}
+                  />
+                </View>
+                )
+              }
             </View>
           </ScrollView>
         </View>
       );
     }
 }
+
+CNRichTextEditor.propTypes = {
+  value: PropTypes.arrayOf(PropTypes.shape).isRequired,
+  onValueChanged: PropTypes.func.isRequired,
+  onSelectedStyleChanged: PropTypes.func,
+  onRemoveImage: PropTypes.func,
+  onSelectedTagChanged: PropTypes.func,
+  style: PropTypes.shape,
+  focusInputIndex: PropTypes.number,
+  styleList: PropTypes.arrayOf(PropTypes.shape),
+  returnKeyType: PropTypes.string,
+  foreColor: PropTypes.string,
+  contentContainerStyle: PropTypes.shape,
+  measureInputScroll: PropTypes.bool,
+  ImageComponent: PropTypes.elementType,
+};
+
+CNRichTextEditor.defaultProps = {
+  onSelectedStyleChanged: () => {},
+  onSelectedTagChanged: () => {},
+  onRemoveImage: () => {},
+  style: {},
+  focusInputIndex: 0,
+  styleList: getDefaultStyles(),
+  returnKeyType: 'next',
+  foreColor: '#000',
+  contentContainerStyle: {},
+  measureInputScroll: true,
+  ImageComponent: Image,
+};
 
 export default CNRichTextEditor;

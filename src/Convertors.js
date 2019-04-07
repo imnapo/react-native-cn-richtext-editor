@@ -5,6 +5,68 @@ const { DOMParser } = require('xmldom');
 const { XMLSerializer } = require('xmldom');
 const shortid = require('shortid');
 
+const defaultStyles = StyleSheet.create(
+  {
+    bold: {
+      fontWeight: 'bold',
+    },
+    italic: {
+      fontStyle: 'italic',
+    },
+    underline: { textDecorationLine: 'underline' },
+    lineThrough: { textDecorationLine: 'line-through' },
+    heading: {
+      fontSize: 25,
+    },
+    body: {
+      fontSize: 20,
+    },
+    title: {
+      fontSize: 30,
+    },
+    ul: {
+      fontSize: 20,
+    },
+    ol: {
+      fontSize: 20,
+    },
+    red: {
+      color: '#d23431',
+    },
+    green: {
+      color: '#4a924d',
+    },
+    blue: {
+      color: '#0560ab',
+    },
+    black: {
+      color: '#33363d',
+    },
+    blue_hl: {
+      backgroundColor: '#34f3f4',
+    },
+    green_hl: {
+      backgroundColor: '#2df149',
+    },
+    pink_hl: {
+      backgroundColor: '#f53ba7',
+    },
+    yellow_hl: {
+      backgroundColor: '#f6e408',
+    },
+    orange_hl: {
+      backgroundColor: '#f07725',
+    },
+    purple_hl: {
+      backgroundColor: '#c925f2',
+    },
+  },
+);
+
+export function getDefaultStyles() {
+  return defaultStyles;
+}
+
 export function convertToHtmlString(contents, styleList = null) {
   const availableStyles = styleList == null ? defaultStyles : styleList;
 
@@ -13,15 +75,14 @@ export function convertToHtmlString(contents, styleList = null) {
     '<div></div>', 'text/xml',
   );
 
-  for (let i = 0; i < contents.length; i++) {
+  for (let i = 0; i < contents.length; i += 1) {
     const input = contents[i];
-
+    let element = null;
     if (input.component === 'text') {
-      var element = null;
       let parent = null;
       let olStarted = false;
       let ulStarted = false;
-      for (let j = 0; j < input.content.length; j++) {
+      for (let j = 0; j < input.content.length; j += 1) {
         const item = input.content[j];
         const isBold = item.stype.indexOf('bold') > -1;
         const isItalic = item.stype.indexOf('italic') > -1;
@@ -75,7 +136,7 @@ export function convertToHtmlString(contents, styleList = null) {
         styles += isYellowMarker ? `background-color: ${availableStyles.yellow_hl.backgroundColor};` : '';
         styles += isOrangeMarker ? `background-color: ${availableStyles.orange_hl.backgroundColor};` : '';
 
-        if (item.NewLine == true || j == 0) {
+        if (item.NewLine === true || j === 0) {
           element = myDoc.createElement(tag);
 
           if (tag === 'ol') {
@@ -104,11 +165,9 @@ export function convertToHtmlString(contents, styleList = null) {
             myDoc.documentElement.appendChild(element);
           }
         }
-        if (item.readOnly === true) {
-
-        } else {
+        if (item.readOnly !== true) {
           const child = myDoc.createElement('span');
-          if (item.NewLine === true && j != 0) {
+          if (item.NewLine === true && j !== 0) {
             child.appendChild(myDoc.createTextNode(item.text.substring(1)));
           } else {
             child.appendChild(myDoc.createTextNode(item.text));
@@ -136,136 +195,19 @@ export function convertToHtmlString(contents, styleList = null) {
   return new XMLSerializer().serializeToString(myDoc);
 }
 
-export function convertToObject(htmlString) {
-  const doc = new DOMParser().parseFromString(htmlString, 'text/xml');
-  let contents = [];
-  let item = null;
+function txtToStyle(styleName, styleList = null) {
+  const styles = styleList == null ? defaultStyles : styleList;
+  return styles[styleName];
+}
 
-  for (let i = 0; i < doc.documentElement.childNodes.length; i++) {
-    const element = doc.documentElement.childNodes[i];
-    let tag = '';
-    switch (element.nodeName) {
-      case 'h1':
-        tag = 'title';
-        break;
-      case 'h3':
-        tag = 'heading';
-        break;
-      case 'p':
-        tag = 'body';
-        break;
-      case 'img':
-        tag = 'image';
-        break;
-      case 'ul':
-        tag = 'ul';
-        break;
-      case 'ol':
-        tag = 'ol';
-        break;
+function convertStyleList(stylesArr, styleList = null) {
+  const styls = [];
+  (stylesArr).forEach((element) => {
+    const styleObj = txtToStyle(element, styleList);
+    if (styleObj !== null) styls.push(styleObj);
+  });
 
-      default:
-        break;
-    }
-
-
-    if (tag === 'image') {
-      if (item != null) {
-        // contents.push(item);
-
-        contents = update(contents, { $push: [item] });
-        item = null;
-      }
-
-      let url = '';
-      let imageId = null;
-      const size = {};
-      if (element.hasAttribute('src') === true) {
-        url = element.getAttribute('src');
-      }
-      if (element.hasAttribute('data-id') === true) {
-        imageId = element.getAttribute('data-id');
-      }
-
-      if (element.hasAttribute('width') === true) {
-        try {
-          size.width = parseInt(element.getAttribute('width'));
-        } catch (error) {
-
-        }
-      }
-      if (element.hasAttribute('height') === true) {
-        try {
-          size.height = parseInt(element.getAttribute('height'));
-        } catch (error) {
-
-        }
-      }
-
-      contents.push({
-        component: 'image',
-        imageId,
-        url,
-        size,
-      });
-    } else {
-      if (item == null) {
-        item = {
-          component: 'text',
-          id: shortid.generate(),
-          content: [],
-        };
-      }
-
-      const firstLine = (i == 0) || (i > 0 && contents.length > 0 && contents[contents.length - 1].component == 'image');
-
-
-      if (tag == 'ul' || tag == 'ol') {
-        for (let k = 0; k < element.childNodes.length; k++) {
-          const ro = {
-            id: shortid.generate(),
-            text: tag == 'ol' ? (firstLine == true & k == 0 ? `${k + 1}- ` : `\n${k + 1}- `) : ((firstLine === true && k == 0) ? '\u2022 ' : '\n\u2022 '),
-            len: 2,
-            stype: [],
-            styleList: StyleSheet.flatten(convertStyleList(update([], { $push: [tag] }))),
-            tag,
-            NewLine: true,
-            readOnly: true,
-          };
-
-
-          ro.len = ro.text.length;
-          item.content.push(ro);
-
-          const node = element.childNodes[k];
-          for (let j = 0; j < node.childNodes.length; j++) {
-            const child = node.childNodes[j];
-
-            item.content.push(
-              xmlNodeToItem(child, tag, false),
-            );
-          }
-        }
-      } else {
-        for (let j = 0; j < element.childNodes.length; j++) {
-          const child = element.childNodes[j];
-          const childItem = xmlNodeToItem(child, tag, firstLine == false && j == 0);
-          if (firstLine) {
-            childItem.NewLine = j == 0;
-          }
-          item.content.push(
-            childItem,
-          );
-        }
-      }
-    }
-  }
-  if (item != null) {
-    contents = update(contents, { $push: [item] });
-    item = null;
-  }
-
-  return contents;
+  return styls;
 }
 
 function xmlNodeToItem(child, tag, newLine, styleList = null) {
@@ -306,7 +248,7 @@ function xmlNodeToItem(child, tag, newLine, styleList = null) {
     try {
       text = child.childNodes[0].nodeValue;
     } catch (error) {
-
+      // continue regardless of error
     }
   } else {
     text = child.nodeValue;
@@ -370,6 +312,151 @@ function xmlNodeToItem(child, tag, newLine, styleList = null) {
   };
 }
 
+export function convertToObject(htmlString) {
+  const doc = new DOMParser().parseFromString(htmlString, 'text/xml');
+  let contents = [];
+  let item = null;
+
+  for (let i = 0; i < doc.documentElement.childNodes.length; i += 1) {
+    const element = doc.documentElement.childNodes[i];
+    let tag = '';
+    switch (element.nodeName) {
+      case 'h1':
+        tag = 'title';
+        break;
+      case 'h3':
+        tag = 'heading';
+        break;
+      case 'p':
+        tag = 'body';
+        break;
+      case 'img':
+        tag = 'image';
+        break;
+      case 'ul':
+        tag = 'ul';
+        break;
+      case 'ol':
+        tag = 'ol';
+        break;
+
+      default:
+        break;
+    }
+
+
+    if (tag === 'image') {
+      if (item != null) {
+        // contents.push(item);
+
+        contents = update(contents, { $push: [item] });
+        item = null;
+      }
+
+      let url = '';
+      let imageId = null;
+      const size = {};
+      if (element.hasAttribute('src') === true) {
+        url = element.getAttribute('src');
+      }
+      if (element.hasAttribute('data-id') === true) {
+        imageId = element.getAttribute('data-id');
+      }
+
+      if (element.hasAttribute('width') === true) {
+        try {
+          size.width = parseInt(element.getAttribute('width'), 10);
+        } catch (error) {
+          // continue regardless of error
+        }
+      }
+      if (element.hasAttribute('height') === true) {
+        try {
+          size.height = parseInt(element.getAttribute('height'), 10);
+        } catch (error) {
+          // continue regardless of error
+        }
+      }
+
+      contents.push({
+        component: 'image',
+        imageId,
+        url,
+        size,
+      });
+    } else {
+      if (item == null) {
+        item = {
+          component: 'text',
+          id: shortid.generate(),
+          content: [],
+        };
+      }
+
+      const firstLine = (i === 0) || (i > 0 && contents.length > 0 && contents[contents.length - 1].component === 'image');
+
+
+      if (tag === 'ul' || tag === 'ol') {
+        for (let k = 0; k < element.childNodes.length; k += 1) {
+          let txt = '';
+          if (tag === 'ol') {
+            if (firstLine === true && k === 0) {
+              txt = `${k + 1}- `;
+            } else {
+              txt = `\n${k + 1}- `;
+            }
+          } else if (firstLine === true && k === 0) {
+            txt = '\u2022 ';
+          } else {
+            txt = '\n\u2022 ';
+          }
+
+          const ro = {
+            id: shortid.generate(),
+            text: txt,
+            len: 2,
+            stype: [],
+            styleList: StyleSheet.flatten(convertStyleList(update([], { $push: [tag] }))),
+            tag,
+            NewLine: true,
+            readOnly: true,
+          };
+
+
+          ro.len = ro.text.length;
+          item.content.push(ro);
+
+          const node = element.childNodes[k];
+          for (let j = 0; j < node.childNodes.length; j += 1) {
+            const child = node.childNodes[j];
+
+            item.content.push(
+              xmlNodeToItem(child, tag, false),
+            );
+          }
+        }
+      } else {
+        for (let j = 0; j < element.childNodes.length; j += 1) {
+          const child = element.childNodes[j];
+          const childItem = xmlNodeToItem(child, tag, firstLine === false && j === 0);
+          if (firstLine) {
+            childItem.NewLine = j === 0;
+          }
+          item.content.push(
+            childItem,
+          );
+        }
+      }
+    }
+  }
+  if (item != null) {
+    contents = update(contents, { $push: [item] });
+    item = null;
+  }
+
+  return contents;
+}
+
 export function getInitialObject() {
   return {
     id: shortid.generate(),
@@ -388,84 +475,3 @@ export function getInitialObject() {
     ],
   };
 }
-
-
-function convertStyleList(stylesArr, styleList = null) {
-  const styls = [];
-  (stylesArr).forEach((element) => {
-    const styleObj = txtToStyle(element, styleList);
-    if (styleObj !== null) styls.push(styleObj);
-  });
-
-
-  return styls;
-}
-
-function txtToStyle(styleName, styleList = null) {
-  const styles = styleList == null ? defaultStyles : styleList;
-
-  return styles[styleName];
-}
-
-export function getDefaultStyles() {
-  return defaultStyles;
-}
-
-
-const defaultStyles = StyleSheet.create(
-  {
-    bold: {
-      fontWeight: 'bold',
-    },
-    italic: {
-      fontStyle: 'italic',
-    },
-    underline: { textDecorationLine: 'underline' },
-    lineThrough: { textDecorationLine: 'line-through' },
-    heading: {
-      fontSize: 25,
-    },
-    body: {
-      fontSize: 20,
-    },
-    title: {
-      fontSize: 30,
-    },
-    ul: {
-      fontSize: 20,
-    },
-    ol: {
-      fontSize: 20,
-    },
-    red: {
-      color: '#d23431',
-    },
-    green: {
-      color: '#4a924d',
-    },
-    blue: {
-      color: '#0560ab',
-    },
-    black: {
-      color: '#33363d',
-    },
-    blue_hl: {
-      backgroundColor: '#34f3f4',
-    },
-    green_hl: {
-      backgroundColor: '#2df149',
-    },
-    pink_hl: {
-      backgroundColor: '#f53ba7',
-    },
-    yellow_hl: {
-      backgroundColor: '#f6e408',
-    },
-    orange_hl: {
-      backgroundColor: '#f07725',
-    },
-    purple_hl: {
-      backgroundColor: '#c925f2',
-    },
-  },
-);
