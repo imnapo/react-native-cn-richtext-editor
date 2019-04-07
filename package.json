@@ -4,7 +4,8 @@
   "description": "RichText Editor for React-Native",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src"
   },
   "dependencies": {
     "immutability-helper": "^2.8.1",
@@ -36,5 +37,18 @@
   "bugs": {
     "url": "https://github.com/imnapo/react-native-cn-richtext-editor/issues"
   },
-  "homepage": "https://github.com/imnapo/react-native-cn-richtext-editor#readme"
+  "homepage": "https://github.com/imnapo/react-native-cn-richtext-editor#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.15.3",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.12.4",
+    "react": "^16.8.4",
+    "react-native": "^0.59.1"
+  }
 }
