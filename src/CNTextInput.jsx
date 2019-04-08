@@ -185,7 +185,7 @@ class CNTextInput extends Component {
       } else {
         const content = items;
 
-        const res = this.findContentIndex(content, end);
+        const res = CNTextInput.findContentIndex(content, end);
 
         styles = content[res.findIndx].stype;
         selectedTag = content[res.findIndx].tag;
@@ -393,7 +393,7 @@ class CNTextInput extends Component {
     let styles = [];
     let tagg = 'body';
     if (upComingObject === null) {
-      const res = this.findContentIndex(contentArray, selection.end);
+      const res = CNTextInput.findContentIndex(contentArray, selection.end);
       styles = contentArray[res.findIndx].stype;
       tagg = contentArray[res.findIndx].tag;
     } else {
@@ -642,7 +642,7 @@ class CNTextInput extends Component {
     if (onMeasureContentChanged) {
       try {
         setTimeout(() => {
-          const res = this.findContentIndex(content, selection.end);
+          const res = CNTextInput.findContentIndex(content, selection.end);
 
           const measureArray = content.slice(0, res.findIndx);
           measureArray.push({
@@ -667,7 +667,7 @@ class CNTextInput extends Component {
     const { items, onContentChanged, onSelectedTagChanged } = this.props;
     const { selection } = this.state;
 
-    const res = this.findContentIndex(items, selection.end);
+    const res = CNTextInput.findContentIndex(items, selection.end);
     const { content, recalcText } = this.changeToTagIn(items, tagType, res.findIndx);
 
     if (recalcText === true) {
@@ -911,7 +911,7 @@ class CNTextInput extends Component {
       }
     }
 
-    const res = this.findContentIndex(newCollection, end);
+    const res = CNTextInput.findContentIndex(newCollection, end);
 
     let styles = [];
     if (this.upComingStype != null) {
@@ -1053,7 +1053,7 @@ class CNTextInput extends Component {
     const removeIndexes = [];
     let upComing = null;
     let content = contentArray;
-    const result = this.findContentIndex(content, cursorPosition);
+    const result = CNTextInput.findContentIndex(content, cursorPosition);
     const foundIndex = result.findIndx;
     const foundItemNo = result.itemNo;
 
@@ -1205,7 +1205,7 @@ class CNTextInput extends Component {
     let avoidStopSelectionForIOS = false;
     let recalcText = false;
     let content = contentArray;
-    const result = this.findContentIndex(content, cursorPosition);
+    const result = CNTextInput.findContentIndex(content, cursorPosition);
 
     let foundIndex = result.findIndx;
     let foundItemNo = result.itemNo;
@@ -1242,7 +1242,7 @@ class CNTextInput extends Component {
 
     if (this.upComingStype !== null && startWithReadonly === false
               && this.upComingStype.sel.end === cursorPosition) {
-      content = this.updateContent(content, {
+      content = CNTextInput.updateContent(content, {
         id: shortid.generate(),
         text: '',
         len: 0,
@@ -1251,7 +1251,7 @@ class CNTextInput extends Component {
         styleList: this.upComingStype.styleList,
       }, foundIndex, foundItemNo);
 
-      const { findIndx, itemNo } = this.findContentIndex(content, cursorPosition);
+      const { findIndx, itemNo } = CNTextInput.findContentIndex(content, cursorPosition);
       foundIndex = findIndx;
       foundItemNo = itemNo;
 
@@ -1298,7 +1298,7 @@ class CNTextInput extends Component {
     const { selection } = this.state;
     const { items: content, onSelectedStyleChanged, onSelectedTagChanged } = this.props;
 
-    const { findIndx } = this.findContentIndex(content, selection.end);
+    const { findIndx } = CNTextInput.findContentIndex(content, selection.end);
     const styles = content[findIndx].stype;
     const selectedTag = content[findIndx].tag;
 
@@ -1314,7 +1314,7 @@ class CNTextInput extends Component {
     const { selection } = this.state;
     const { items } = this.props;
     const content = items;
-    const result = this.findContentIndex(content, selection.end);
+    const result = CNTextInput.findContentIndex(content, selection.end);
     let beforeContent = [];
     let afterContent = [];
 
