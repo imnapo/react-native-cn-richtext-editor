@@ -4,6 +4,7 @@ import {
   TextInput, View, Image,
   ScrollView, Platform,
   TouchableWithoutFeedback,
+  ViewPropTypes,
 } from 'react-native';
 import _ from 'lodash';
 import update from 'immutability-helper';
@@ -537,7 +538,7 @@ CNRichTextEditor.propTypes = {
   onSelectedTagChanged: PropTypes.func,
   style: PropTypes.shape,
   focusInputIndex: PropTypes.number,
-  styleList: PropTypes.arrayOf(PropTypes.shape),
+  styleList: ViewPropTypes.style,
   returnKeyType: PropTypes.string,
   foreColor: PropTypes.string,
   contentContainerStyle: PropTypes.shape,
