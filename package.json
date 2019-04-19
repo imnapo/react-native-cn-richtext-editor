@@ -1,6 +1,6 @@
 {
   "name": "react-native-cn-richtext-editor",
-  "version": "1.0.34",
+  "version": "1.0.35",
   "description": "RichText Editor for React-Native",
   "main": "index.js",
   "scripts": {
@@ -11,12 +11,12 @@
     "immutability-helper": "^2.8.1",
     "lodash": "^4.17.11",
     "shortid": "^2.2.14",
-    "xmldoc": "^1.1.2",
+    "xmldom": "^0.1.27",
     "diff-match-patch": "^1.0.4"
   },
   "peerDependencies": {
-    "react": "16.6.1",
-    "react-native": "0.57.5"
+    "react": "^16.6.1",
+    "react-native": "^0.57.5"
   },
   "keywords": [
     "react",
@@ -47,8 +47,6 @@
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
-    "eslint-plugin-react": "^7.12.4",
-    "react": "^16.8.4",
-    "react-native": "^0.59.1"
+    "eslint-plugin-react": "^7.12.4"
   }
 }

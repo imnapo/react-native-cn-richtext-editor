@@ -19,16 +19,22 @@ class CNRichTextView extends Component {
   }
 
   componentDidMount() {
-    const items = convertToObject(this.props.text);
+    const { text, styleList} = this.props;
+    const styles = styleList ? styleList : null;
+
+    const items = convertToObject(text, styles);
 
     this.setState({
       contents: items,
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.text != this.props.text) {
-      const items = convertToObject(nextProps.text);
+  componentDidUpdate(prevProps, prevState) {
+    const { text, styleList} = this.props;
+
+    if (prevProps.text != text) {
+      const styles = styleList ? styleList : null;
+      const items = convertToObject(text, styles);
 
       this.setState({
         contents: items,
@@ -50,7 +56,6 @@ class CNRichTextView extends Component {
         key={input.id}
         style={{
           borderWidth: 0,
-          flex: 1,
           color,
         }}
       >

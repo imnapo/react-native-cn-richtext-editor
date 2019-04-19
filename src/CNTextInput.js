@@ -1267,8 +1267,12 @@ class CNTextInput extends Component {
       }
     }
 
-    onFocus = () => {
-      if (this.props.onFocus) this.props.onFocus();
+    onFocus = (e) => {
+      if (this.props.onFocus) this.props.onFocus(e);
+    }
+
+    onBlur = (e) => {
+      if (this.props.onBlur) this.props.onBlur(e);
     }
 
     avoidSelectionChangeOnFocus() {
@@ -1316,6 +1320,7 @@ class CNTextInput extends Component {
           onKeyPress={this.handleKeyDown}
           selection={selection}
           onFocus={this.onFocus}
+          onBlur={this.onBlur}
           onContentSizeChange={this.handleContentSizeChange}
         >
           {

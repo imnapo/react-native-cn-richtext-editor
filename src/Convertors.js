@@ -136,7 +136,10 @@ export function convertToHtmlString(contents, styleList = null) {
   return new XMLSerializer().serializeToString(myDoc);
 }
 
-export function convertToObject(htmlString) {
+export function convertToObject(htmlString, styleList = null) {
+
+  const availableStyles = styleList == null ? defaultStyles : styleList;
+  
   const doc = new DOMParser().parseFromString(htmlString, 'text/xml');
   let contents = [];
   let item = null;
@@ -222,12 +225,13 @@ export function convertToObject(htmlString) {
 
       if (tag == 'ul' || tag == 'ol') {
         for (let k = 0; k < element.childNodes.length; k++) {
+          
           const ro = {
             id: shortid.generate(),
             text: tag == 'ol' ? (firstLine == true & k == 0 ? `${k + 1}- ` : `\n${k + 1}- `) : ((firstLine === true && k == 0) ? '\u2022 ' : '\n\u2022 '),
             len: 2,
             stype: [],
-            styleList: StyleSheet.flatten(convertStyleList(update([], { $push: [tag] }))),
+            styleList: StyleSheet.flatten(convertStyleList(update([], { $push: [tag] }), availableStyles)),
             tag,
             NewLine: true,
             readOnly: true,
@@ -242,14 +246,14 @@ export function convertToObject(htmlString) {
             const child = node.childNodes[j];
 
             item.content.push(
-              xmlNodeToItem(child, tag, false),
+              xmlNodeToItem(child, tag, false, availableStyles),
             );
           }
         }
       } else {
         for (let j = 0; j < element.childNodes.length; j++) {
           const child = element.childNodes[j];
-          const childItem = xmlNodeToItem(child, tag, firstLine == false && j == 0);
+          const childItem = xmlNodeToItem(child, tag, firstLine == false && j == 0, availableStyles);
           if (firstLine) {
             childItem.NewLine = j == 0;
           }
@@ -264,7 +268,7 @@ export function convertToObject(htmlString) {
     contents = update(contents, { $push: [item] });
     item = null;
   }
-
+  
   return contents;
 }
 

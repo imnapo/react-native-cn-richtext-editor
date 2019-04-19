@@ -160,7 +160,12 @@ class CNRichTextEditor extends Component {
       //   })
     }
 
-    onFocus = (index) => {
+    handleOnBlur = (e, index) => {
+      if(this.props.onBlur)
+        this.props.onBlur(e,index);
+    }
+
+    handleOnFocus = (e, index) => {
       if (this.state.focusInputIndex === index) {
         try {
           this.textInputs[index].avoidSelectionChangeOnFocus();
@@ -181,6 +186,9 @@ class CNRichTextEditor extends Component {
         });
         this.avoidSelectionChangeOnFocus = false;
       }
+
+      if(this.props.onFocus)
+        this.props.onFocus(e, index);
     }
 
     focus() {
@@ -411,7 +419,8 @@ class CNRichTextEditor extends Component {
             onContentChanged={items => this.onContentChanged(items, index)}
             onConnectToPrevClicked={() => this.onConnectToPrevClicked(index)}
             onMeasureContentChanged={measureScroll ? this.handleMeasureContentChanged : undefined}
-            onFocus={() => this.onFocus(index)}
+            onFocus={(e) => this.handleOnFocus(e, index)}
+            onBlur={(e)=> this.handleOnBlur(e, index)}
             returnKeyType={this.props.returnKeyType}
             foreColor={this.props.foreColor}
             styleList={styles}
