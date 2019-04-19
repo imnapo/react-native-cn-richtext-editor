@@ -3730,16 +3730,16 @@ react-native-branch@2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-2.2.5.tgz#4074dd63b4973e6397d9ce50e97b57c77a518e9d"
 
-react-native-cn-richtext-editor@^1.0.34:
-  version "1.0.34"
-  resolved "https://registry.yarnpkg.com/react-native-cn-richtext-editor/-/react-native-cn-richtext-editor-1.0.34.tgz#77104fb7a23ac5c2d0323398480a6d1a84691b09"
-  integrity sha512-g46JhWDBllPJCufIH/8kkA3s1xdj9iKNnX72lJe2Wavh93hXYXm/Gf1daWmp9672iABWJpJpLnn2+1Q+ICkxPQ==
+react-native-cn-richtext-editor@^1.0.35:
+  version "1.0.35"
+  resolved "https://registry.yarnpkg.com/react-native-cn-richtext-editor/-/react-native-cn-richtext-editor-1.0.35.tgz#f3152eb80667c894b5249fd022e1f97acd7d648f"
+  integrity sha512-eSKQRTIy+qHciKP5nJ6mRh8/4mWbN57Q6OmvRnaspI+T0N1jsYAax2n+PLwojbQyuwrWmh0/VFySivn0D/zrzA==
   dependencies:
     diff-match-patch "^1.0.4"
     immutability-helper "^2.8.1"
     lodash "^4.17.11"
     shortid "^2.2.14"
-    xmldoc "^1.1.2"
+    xmldom "^0.1.27"
 
 react-native-gesture-handler@1.0.9:
   version "1.0.9"
@@ -4073,7 +4073,7 @@ sane@^2.0.0:
   optionalDependencies:
     fsevents "^1.2.3"
 
-sax@^1.2.1, sax@^1.2.4:
+sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
 
@@ -4676,14 +4676,7 @@ xmldoc@^0.4.0:
   dependencies:
     sax "~1.1.1"
 
-xmldoc@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/xmldoc/-/xmldoc-1.1.2.tgz#6666e029fe25470d599cd30e23ff0d1ed50466d7"
-  integrity sha512-ruPC/fyPNck2BD1dpz0AZZyrEwMOrWTO5lDdIXS91rs3wtm4j+T8Rp2o+zoOYkkAxJTZRPOSnOGei1egoRmKMQ==
-  dependencies:
-    sax "^1.2.1"
-
-xmldom@0.1.x:
+xmldom@0.1.x, xmldom@^0.1.27:
   version "0.1.27"
   resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.27.tgz#d501f97b3bdb403af8ef9ecc20573187aadac0e9"
 
