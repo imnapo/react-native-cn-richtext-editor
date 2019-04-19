@@ -185,6 +185,8 @@ Also be noticed that this example is writen with expo and required 'react-native
 | ImageComponent | a React component (class or functional) which will be used to render images. Will be passed `style` and `source` props. | No |
 | style | Styles applied to the outermost component. | No |
 | contentContainerStyle | Styles applied to the scrollview content. | No |
+| onFocus    | Callback that is called when one of text inputs are focused. | No |
+| onBlur    | Callback that is called when one of text inputs are blurred. | No |
 
 #### Instance methods
 
@@ -221,6 +223,16 @@ Also be noticed that this example is writen with expo and required 'react-native
 | selectedColor | No | color applied when icon is selected |
 | selectedBackgroundColor | No | background color applied when icon is selected |
 | iconContainerStyle | No | a style prop assigned to icon container |
+
+### CNRichTextView
+
+#### Props
+
+| Name | Required | Description |
+| ------ | ------ | ----------- |
+| text   | Yes | html string (created by convertToHtmlString functino |
+| style | No | style applied to container (req. {flex:1}) |
+| styleList  |  No | an object consist of styles name and values (use getDefaultStyles function) |
 
 ### Functions
 
