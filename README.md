@@ -230,7 +230,7 @@ Also be noticed that this example is writen with expo and required 'react-native
 
 | Name | Required | Description |
 | ------ | ------ | ----------- |
-| text   | Yes | html string (created by convertToHtmlString functino |
+| text   | Yes | html string (created by convertToHtmlString function |
 | style | No | style applied to container (req. {flex:1}) |
 | styleList  |  No | an object consist of styles name and values (use getDefaultStyles function) |
 
