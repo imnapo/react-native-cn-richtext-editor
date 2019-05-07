@@ -1303,7 +1303,7 @@ class CNTextInput extends Component {
           underlineColorAndroid="rgba(0,0,0,0)"
           onSelectionChange={this.onSelectionChange}
           multiline
-          style={[style || {}, {
+          style={[{
             color,
             fontSize: 20,
             paddingTop: 5,
@@ -1311,7 +1311,7 @@ class CNTextInput extends Component {
             paddingLeft: 2,
             paddingRight: 2,
             textAlignVertical: 'top',
-          }]}
+          }, style || {}]}
           scrollEnabled={false}
           returnKeyType={returnKeyType || 'next'}
           keyboardType="default"
