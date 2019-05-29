@@ -11,10 +11,10 @@ class CNRichTextView extends Component {
     super(props);
     this.state = {
       contents: [],
-      isScrolled: false,
       layoutWidth: 400,
     };
-
+    this.touchX = -1;
+    this.touchY = -1;
     this.flip = this.flip.bind(this);
   }
 
@@ -43,7 +43,7 @@ class CNRichTextView extends Component {
   }
 
   flip() {
-    if (!this.state.isScrolled && this.props.onTap) {
+    if (this.props.onTap) {
       this.props.onTap();
     }
   }
@@ -122,36 +122,36 @@ class CNRichTextView extends Component {
           onLayout={this.onLayout}
           style={[styles]}
           onStartShouldSetResponder={(evt) => {
-            this.setState({ isScrolled: false },
-              () => { setTimeout(this.flip, 100); });
-
+            this.touchX = evt.nativeEvent.pageX;
+            this.touchY = evt.nativeEvent.pageY;
             return true;
           }}
-          onResponderMove={(evt) => {
-            const touch = evt.touchHistory.touchBank.find(obj => obj != undefined && obj != null);
-            if ((touch.startPageY - touch.currentPageY) > 2
-                    || (touch.startPageY - touch.currentPageY) < -2) {
-              this.setState({ isScrolled: true });
-            } else {
-              this.setState({ isScrolled: false });
+          onResponderRelease={(evt) => {
+            if(Math.abs(evt.nativeEvent.pageX - this.touchX) < 25
+            && Math.abs(evt.nativeEvent.pageY - this.touchY) < 25
+            ) {
+               setTimeout(this.flip, 50);
             }
-            return true;
+
+            this.touchX = -1;
+            this.touchY = -1;
+            
           }}
         >
           {
-                    _.map(contents, (item, index) => {
-                      if (item.component === 'text') {
-                        return (
-                          this.renderText(item, index)
-                        );
-                      }
-                      if (item.component === 'image') {
-                        return (
-                          this.renderImage(item, index)
-                        );
-                      }
-                    })
-                }
+            _.map(contents, (item, index) => {
+              if (item.component === 'text') {
+                return (
+                  this.renderText(item, index)
+                );
+              }
+              if (item.component === 'image') {
+                return (
+                  this.renderImage(item, index)
+                );
+              }
+            })
+            }
         </View>
       );
     }
