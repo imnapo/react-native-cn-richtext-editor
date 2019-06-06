@@ -48,6 +48,7 @@ class CNRichTextEditor extends Component {
       if (this.focusOnNextUpdate != -1 && this.textInputs.length > this.focusOnNextUpdate) {
         const ref = this.textInputs[this.focusOnNextUpdate];
         ref.focus(this.selectionOnFocus);
+        this.setState({focusInputIndex: this.focusOnNextUpdate});
         this.focusOnNextUpdate = -1;
         this.selectionOnFocus = null;
       }
@@ -424,7 +425,7 @@ class CNRichTextEditor extends Component {
             returnKeyType={this.props.returnKeyType}
             foreColor={this.props.foreColor}
             styleList={styles}
-			placeholder={index === 0 ? this.props.placeholder : undefined}
+			      placeholder={index === 0 ? this.props.placeholder : undefined}
             style={[{
               flexGrow: 1,
             }, this.props.textInputStyle]
