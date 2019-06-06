@@ -424,9 +424,10 @@ class CNRichTextEditor extends Component {
             returnKeyType={this.props.returnKeyType}
             foreColor={this.props.foreColor}
             styleList={styles}
-            style={{
+			placeholder={index === 0 ? this.props.placeholder : undefined}
+            style={[{
               flexGrow: 1,
-            }
+            }, this.props.textInputStyle]
                     }
           />
         </View>
