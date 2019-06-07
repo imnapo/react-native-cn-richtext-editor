@@ -1,6 +1,5 @@
 export as namespace CNRichTextEditor;
 
-import { number } from "prop-types";
 import { Component, ReactNode } from "react";
 import { StyleProp, StyleSheet, TextStyle, ViewStyle } from "react-native";
 
