@@ -3730,10 +3730,10 @@ react-native-branch@2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-2.2.5.tgz#4074dd63b4973e6397d9ce50e97b57c77a518e9d"
 
-react-native-cn-richtext-editor@^1.0.37:
-  version "1.0.37"
-  resolved "https://registry.yarnpkg.com/react-native-cn-richtext-editor/-/react-native-cn-richtext-editor-1.0.37.tgz#dc1fe33b2a36e82aed3782a9523ef79c45f3bbcb"
-  integrity sha512-qdetqUf+9rhi2HRyd6881U57FUdMCRyNYIfuiIY98OhKVuu4F+JyUO2d55YAv7iCqBJ/vFLGOXg8Eo5x6WlzxA==
+react-native-cn-richtext-editor@^1.0.38:
+  version "1.0.38"
+  resolved "https://registry.yarnpkg.com/react-native-cn-richtext-editor/-/react-native-cn-richtext-editor-1.0.38.tgz#77c9da58e4391416a1ac795481177c5e39b313de"
+  integrity sha512-SJ7hBmscKR7Oj91wPD0dEAco0CvwnE4l6VeibJk4aUGbMqXiab/lmsTR6eE52fFg4ASemLGfEa6uCrD2/svAEA==
   dependencies:
     diff-match-patch "^1.0.4"
     immutability-helper "^2.8.1"

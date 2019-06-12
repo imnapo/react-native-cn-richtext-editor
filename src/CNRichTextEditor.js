@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import _ from 'lodash';
 import update from 'immutability-helper';
-import { getInitialObject, defaultStyles } from './Convertors';
+import { getInitialObject, getDefaultStyles } from './Convertors';
 import CNTextInput from './CNTextInput';
 
 const shortid = require('shortid');
@@ -38,10 +38,7 @@ class CNRichTextEditor extends Component {
       this.focusOnNextUpdate = -1;
       this.selectionOnFocus = null;
       this.scrollOffset = 0;
-    }
-
-    componentDidMount() {
-
+      this.defaultStyles = getDefaultStyles();
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -403,7 +400,7 @@ class CNRichTextEditor extends Component {
     }
 
     renderInput(input, index, isLast, measureScroll = true) {
-      const styles = this.props.styleList ? this.props.styleList : defaultStyles;
+      const styles = this.props.styleList ? this.props.styleList : this.defaultStyles;
       return (
         <View
           key={input.id}
@@ -540,7 +537,7 @@ class CNRichTextEditor extends Component {
       const {
         value, style, contentContainerStyle, measureInputScroll = true,
       } = this.props;
-      const styleList = this.props.styleList ? this.props.styleList : defaultStyles;
+      const styleList = this.props.styleList ? this.props.styleList : this.defaultStyles;
 
       return (
         <View

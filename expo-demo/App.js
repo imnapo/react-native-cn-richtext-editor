@@ -26,8 +26,7 @@ class App extends Component {
  
     constructor(props) {
         super(props);
-        
-
+                 
         this.state = {
             selectedTag : 'body',
             selectedColor : 'default',
@@ -35,10 +34,8 @@ class App extends Component {
             colors : ['red', 'green', 'blue'],
             highlights:['yellow_hl','pink_hl', 'orange_hl', 'green_hl','purple_hl','blue_hl'],
             selectedStyles : [],
-            value: [getInitialObject]
+            value: [getInitialObject()]
         };
-
-        this.state.value = [getInitialObject()];
 
         this.editor = null;
 
@@ -299,6 +296,8 @@ class App extends Component {
     }
 
     render() {
+        let customStyles = {...defaultStyles, body: {fontSize: 12}, heading : {fontSize: 16}, title : {fontSize: 20}};
+        
         return (
             <KeyboardAvoidingView 
             behavior="padding" 
@@ -315,7 +314,7 @@ class App extends Component {
                             onSelectedStyleChanged={this.onSelectedStyleChanged}
                             value={this.state.value}
                             style={styles.editor}
-                            styleList={defaultStyles}
+                            styleList={customStyles}
                             foreColor='dimgray' // optional (will override default fore-color)
                             onValueChanged={this.onValueChanged}
                             onRemoveImage={this.onRemoveImage}

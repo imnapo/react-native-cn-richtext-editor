@@ -42,6 +42,19 @@ class CNTextInput extends Component {
     DiffMatchPatch.DIFF_EQUAL = 0;
   }
 
+  componentWillMount() {
+    const { items } = this.props;
+    if(items && Array.isArray(items) === true) {
+      let content = items;
+      for (let i = 0; i < content.length; i++) {
+        content[i].styleList = StyleSheet.flatten(this.convertStyleList(content[i].stype));
+      }
+      if (this.props.onContentChanged) {
+        this.props.onContentChanged(content);
+      }
+    }   
+  }
+
   componentDidMount() {
     if (this.props.items) {
       this.textLength = 0;
@@ -1293,11 +1306,12 @@ class CNTextInput extends Component {
 
     render() {
       const {
-        items, foreColor, style, returnKeyType,
+        items, foreColor, style, returnKeyType, styleList
       } = this.props;
       const { selection } = this.state;
       const color = foreColor || '#000';
-
+      const fontSize =styleList && styleList.body && styleList.body.fontSize ? styleList.body.fontSize : 20;
+      
       return (
         <TextInput
           underlineColorAndroid="rgba(0,0,0,0)"
@@ -1305,7 +1319,7 @@ class CNTextInput extends Component {
           multiline
           style={[{
             color,
-            fontSize: 20,
+            fontSize: fontSize,
             paddingTop: 5,
             paddingBottom: 5,
             paddingLeft: 2,
@@ -1322,7 +1336,7 @@ class CNTextInput extends Component {
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onContentSizeChange={this.handleContentSizeChange}
-		  placeholder={this.props.placeholder}
+		      placeholder={this.props.placeholder}
         >
           {
               _.map(items, item => (
