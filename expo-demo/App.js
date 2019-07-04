@@ -296,8 +296,10 @@ class App extends Component {
     }
 
     render() {
-        let customStyles = {...defaultStyles, body: {fontSize: 12}, heading : {fontSize: 16}, title : {fontSize: 20}};
-        
+        let customStyles = {...defaultStyles, body: {fontSize: 12}, heading : {fontSize: 16}
+        , title : {fontSize: 20}, ol : {fontSize: 12 }, ul: {fontSize: 12}
+        }; 
+               
         return (
             <KeyboardAvoidingView 
             behavior="padding" 
