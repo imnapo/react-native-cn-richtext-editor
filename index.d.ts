@@ -5,7 +5,7 @@ import { StyleProp, StyleSheet, TextStyle, ViewStyle } from "react-native";
 
 export interface CNRichTextEditorProps {
   onSelectedTagChanged?: (tag: string) => void;
-  onSelectedStyleChanged?: (styles: TextStyle[]) => void;
+  onSelectedStyleChanged?: (styles: string[]) => void;
   onValueChanged?: (value: object[]) => void;
   onRemoveImage?: (url: string, id: string) => void;
   value: ReturnType<typeof getInitialObject>;
@@ -27,7 +27,7 @@ export default class CNRichTextEditor extends Component<CNRichTextEditorProps> {
 
 export interface CNToolbarProps {
   selectedTag: string;
-  selectedStyles: TextStyle[];
+  selectedStyles: string[];
   onStyleKeyPress: (toolType: any) => void;
   size?: number;
   bold?: React.ReactElement<any, any>;
