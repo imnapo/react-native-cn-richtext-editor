@@ -4,11 +4,11 @@ import { View, StyleSheet, Keyboard
 , KeyboardAvoidingView, Platform } from 'react-native';
 import { Permissions, ImagePicker } from 'expo';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import  CNRichTextEditor , { CNToolbar, getInitialObject , getDefaultStyles } from "react-native-cn-richtext-editor";
+import  CNRichTextEditor , { CNToolbar , getDefaultStyles, convertToObject } from "react-native-cn-richtext-editor";
 
 import {
     Menu,
-    MenuOptions,
+    MenuOptions, 
     MenuOption,
     MenuTrigger,
     MenuContext,
@@ -26,7 +26,9 @@ class App extends Component {
  
     constructor(props) {
         super(props);
-                 
+        this.customStyles = {...defaultStyles, body: {fontSize: 12}, heading : {fontSize: 16}
+        , title : {fontSize: 20}, ol : {fontSize: 12 }, ul: {fontSize: 12}, bold: {fontSize: 12, fontWeight: 'bold', color: ''}
+        };  
         this.state = {
             selectedTag : 'body',
             selectedColor : 'default',
@@ -34,15 +36,17 @@ class App extends Component {
             colors : ['red', 'green', 'blue'],
             highlights:['yellow_hl','pink_hl', 'orange_hl', 'green_hl','purple_hl','blue_hl'],
             selectedStyles : [],
-            value: [getInitialObject()]
+            // value: [getInitialObject()] get empty editor
+            value: convertToObject('<div><p><span>This is </span><span style="font-weight: bold;">bold</span><span> and </span><span style="font-style: italic;">italic </span><span>text</span></p></div>'
+            , this.customStyles)
         };
-
+        
         this.editor = null;
 
     }
 
     onStyleKeyPress = (toolType) => {
-
+        
         if (toolType == 'image') {
             return;
         }
@@ -296,9 +300,7 @@ class App extends Component {
     }
 
     render() {
-        let customStyles = {...defaultStyles, body: {fontSize: 12}, heading : {fontSize: 16}
-        , title : {fontSize: 20}, ol : {fontSize: 12 }, ul: {fontSize: 12}
-        }; 
+        
                
         return (
             <KeyboardAvoidingView 
@@ -316,7 +318,7 @@ class App extends Component {
                             onSelectedStyleChanged={this.onSelectedStyleChanged}
                             value={this.state.value}
                             style={styles.editor}
-                            styleList={customStyles}
+                            styleList={this.customStyles}
                             foreColor='dimgray' // optional (will override default fore-color)
                             onValueChanged={this.onValueChanged}
                             onRemoveImage={this.onRemoveImage}
