@@ -4440,14 +4440,14 @@ react-native-branch@2.2.5:
   resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-2.2.5.tgz#4074dd63b4973e6397d9ce50e97b57c77a518e9d"
   integrity sha1-QHTdY7SXPmOX2c5Q6XtXx3pRjp0=
 
-react-native-cn-richtext-editor@^1.0.39:
-  version "1.0.39"
-  resolved "https://registry.yarnpkg.com/react-native-cn-richtext-editor/-/react-native-cn-richtext-editor-1.0.39.tgz#3bc098f7334996c8d01d6d10b430cea9a87b69ae"
-  integrity sha512-5Xd1DvexChOgCEzIX8pGzNHaFJCTKsi+PXHT7xZPzjA7EFIzDVf6hrgNM3mDPzYZv1P3cPWqp9wBERf7Uv67dw==
+react-native-cn-richtext-editor@^1.0.40:
+  version "1.0.40"
+  resolved "https://registry.yarnpkg.com/react-native-cn-richtext-editor/-/react-native-cn-richtext-editor-1.0.40.tgz#148755b3b3c1a19509cac2470636cbb74a06fa96"
+  integrity sha512-GJSY2TqedCYSR3NUUO611i0sVwq4IfD9jQkefJWcZmNNvjVHtlGwjVu4dcu7f6YaaYHRQQWOry02LJcKiCG7ig==
   dependencies:
     diff-match-patch "^1.0.4"
     immutability-helper "^2.8.1"
-    lodash "^4.17.11"
+    lodash "^4.17.15"
     shortid "^2.2.14"
     xmldom "^0.1.27"
 
