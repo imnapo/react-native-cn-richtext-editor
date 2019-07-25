@@ -381,11 +381,15 @@ class CNRichTextEditor extends Component {
     }
 
     onSelectedStyleChanged = (styles) => {
-      this.props.onSelectedStyleChanged(styles);
+      if (this.props.onSelectedStyleChanged) {
+        this.props.onSelectedStyleChanged(styles);
+      }
     }
 
     onSelectedTagChanged = (tag) => {
-      this.props.onSelectedTagChanged(tag);
+      if (this.props.onSelectedTagChanged) {
+        this.props.onSelectedTagChanged(tag);
+      }
     }
 
     handleMeasureContentChanged = (content) => {
