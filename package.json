@@ -8,11 +8,11 @@
     "lint": "eslint src"
   },
   "dependencies": {
+    "diff-match-patch": "^1.0.4",
     "immutability-helper": "^2.8.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "shortid": "^2.2.14",
-    "xmldom": "^0.1.27",
-    "diff-match-patch": "^1.0.4"
+    "xmldom": "^0.1.27"
   },
   "peerDependencies": {
     "react": "^16.6.1",
