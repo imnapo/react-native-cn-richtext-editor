@@ -327,7 +327,7 @@ class App extends Component {
                 <View style={styles.toolbarContainer}>
 
                     <CNToolbar
-                        size={28}
+                        size={28} 
                         bold={<MaterialCommunityIcons name="format-bold" />}
                         italic={<MaterialCommunityIcons name="format-italic" />}
                         underline={<MaterialCommunityIcons name="format-underline" />}
@@ -336,7 +336,7 @@ class App extends Component {
                         title={<MaterialCommunityIcons name="format-header-1" />}
                         heading={<MaterialCommunityIcons name="format-header-3" />}
                         ul={<MaterialCommunityIcons name="format-list-bulleted" />}
-                        ol={<MaterialCommunityIcons name="format-list-numbered" />}
+                        ol={<MaterialCommunityIcons name="format-list-numbers" />}
                         image={this.renderImageSelector()}
                         foreColor={this.renderColorSelector()}
                         highlight={this.renderHighlight()}
