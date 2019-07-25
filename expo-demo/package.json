@@ -12,7 +12,7 @@
     "react": "16.8.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
     "react-native-cn-richtext-editor": "^1.0.39",
-    "react-native-popup-menu": "^0.14.2"
+    "react-native-popup-menu": "^0.15.6"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0"
