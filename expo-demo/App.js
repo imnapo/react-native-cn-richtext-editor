@@ -336,7 +336,7 @@ class App extends Component {
                         title={<MaterialCommunityIcons name="format-header-1" />}
                         heading={<MaterialCommunityIcons name="format-header-3" />}
                         ul={<MaterialCommunityIcons name="format-list-bulleted" />}
-                        ol={<MaterialCommunityIcons name="format-list-numbers" />}
+                        ol={<MaterialCommunityIcons name="format-list-numbered" />}
                         image={this.renderImageSelector()}
                         foreColor={this.renderColorSelector()}
                         highlight={this.renderHighlight()}
