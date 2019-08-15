@@ -234,7 +234,7 @@ class CNTextInput extends Component {
           }
         }
 
-        this.notifyMeasureContentChanged(this.props.items);
+        this.notifyMeasureContentChanged(this.props.items, this.state.selection);
       }
       this.avoidUpdateStyle = false;
     }
@@ -429,7 +429,7 @@ class CNTextInput extends Component {
         this.props.onSelectedTagChanged(tagg);
       }
 
-      this.notifyMeasureContentChanged(content);
+      this.notifyMeasureContentChanged(content, this.state.selection);
     }
 
 
@@ -778,9 +778,12 @@ class CNTextInput extends Component {
       }
     }
 
-    applyStyle(toolType) {
-      const { selection: { start, end } } = this.state;
+    applyStyle(toolType, customSelection) {
+      
+      const { selection: { start : selStart, end : selEnd } } = this.state;
       const { items } = this.props;
+      let start = (customSelection && Number.isInteger(customSelection.start) && Number.isInteger(customSelection.end) ) ? customSelection.start : selStart;
+      const end = (customSelection && Number.isInteger(customSelection.start) && Number.isInteger(customSelection.end) ) ? customSelection.end : selEnd;
 
       const newCollection = [];
 
@@ -1024,10 +1027,11 @@ class CNTextInput extends Component {
       return text;
     }
 
-    applyTag(tagType) {
+    applyTag(tagType, customSelection) {      
       const { items } = this.props;
-      const { selection } = this.state;
-
+      const { selection : sel } = this.state;
+      const selection = (customSelection && Number.isInteger(customSelection.start) && Number.isInteger(customSelection.end)) ? customSelection : sel;
+      
       const res = this.findContentIndex(items, selection.end);
       const { content, recalcText } = this.changeToTagIn(items, tagType, res.findIndx);
 
@@ -1043,14 +1047,14 @@ class CNTextInput extends Component {
         this.props.onSelectedTagChanged(tagType);
       }
 
-      this.notifyMeasureContentChanged(content);
+      this.notifyMeasureContentChanged(content, selection);
     }
 
-    notifyMeasureContentChanged(content) {
+    notifyMeasureContentChanged(content, selection) {
       if (this.props.onMeasureContentChanged) {
         try {
           setTimeout(() => {
-            const res = this.findContentIndex(content, this.state.selection.end);
+            const res = this.findContentIndex(content, selection.end);
 
             const measureArray = content.slice(0, res.findIndx);
             measureArray.push({
@@ -1400,13 +1404,15 @@ class CNTextInput extends Component {
       };
     }
 
-    focus(selection = null) {
+    focus(selection = null, callback = () => {}) {
       this.textInput.focus();
 
       if (selection != null && selection.start && selection.end) {
         setTimeout(() => {
           this.setState({
             selection,
+          }, () => {
+            callback();
           });
         }, 300);
       }

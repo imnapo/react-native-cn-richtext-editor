@@ -189,14 +189,14 @@ class CNRichTextEditor extends Component {
         this.props.onFocus(e, index);
     }
 
-    focus() {
+    focus(selection = {start:0, end: 0}, callback = () => {}) {
       try {
         if (this.textInputs.length > 0) {
           const ref = this.textInputs[this.textInputs.length - 1];
           ref.focus({
-            start: 0, // ref.textLength,
-            end: 0, // ref.textLength
-          });
+            start: selection.start,
+            end: selection.end
+          }, callback);        
         }
       } catch (error) {
         // console.log(error);
@@ -484,18 +484,26 @@ class CNRichTextEditor extends Component {
       );
     }
 
-    applyToolbar(toolType) {
+    applyToolbar(toolType, selection) {
       const { focusInputIndex } = this.state;
+      let inputIndex = focusInputIndex;
 
+      if(selection && selection.index ) {
+        if(Number.isInteger(selection.index) && this.textInputs.length > selection.index) {
+          inputIndex = selection.index;
+        }
+        else return;
+      }
       if (toolType === 'body' || toolType === 'title' || toolType === 'heading' || toolType === 'ul' || toolType === 'ol') {
-        this.textInputs[focusInputIndex].applyTag(toolType);
+        this.textInputs[inputIndex].applyTag(toolType, selection);
       } else if (toolType == 'image') {
         // convertToHtmlStringconvertToHtmlString(this.state.contents);
 
         this.setState({ showAddImageModal: true });
       } else
       // if(toolType === 'bold' || toolType === 'italic' || toolType === 'underline' || toolType === 'lineThrough')
-      { this.textInputs[focusInputIndex].applyStyle(toolType); }
+      {
+       this.textInputs[inputIndex].applyStyle(toolType, selection); }
     }
 
     onLayout = (event) => {
