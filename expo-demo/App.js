@@ -47,7 +47,8 @@ class App extends Component {
     }
 
     componentDidMount() {
-        // this.editor.applyToolbar('ul');
+        //Programatically apply toolbar to desired selction
+        this.editor.applyToolbar('bold', {start: 1, end: 4});
 
     }
 
