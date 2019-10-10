@@ -224,6 +224,7 @@ Also be noticed that this example is writen with expo and required 'react-native
 | selectedColor | No | color applied when icon is selected |
 | selectedBackgroundColor | No | background color applied when icon is selected |
 | iconContainerStyle | No | a style prop assigned to icon container |
+| iconSetContainer | No | a style props assigned to icon set container|
 
 ### CNRichTextView
 
