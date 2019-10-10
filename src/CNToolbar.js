@@ -20,14 +20,18 @@ class CNToolbar extends Component {
 
   renderStyleButtons(size, color, bgColor, selectedColor, selectedBgColor) {
     const {
-      selectedStyles, selectedTag, bold, iconContainerStyle,
+      selectedStyles, 
+      selectedTag, 
+      bold, 
+      iconContainerStyle,
+      iconSetContainer,
       italic,
       underline,
       lineThrough,
     } = this.props;
     const iconStyles = [styles.iconContainer, iconContainerStyle];
     return (
-      <View style={[styles.iconSetContainer, { flexGrow: 4 }]}>
+      <View style={[styles.iconSetContainer, { flexGrow: 4 }, iconSetContainer]}>
         {
                     bold
                       ? (
@@ -118,8 +122,12 @@ class CNToolbar extends Component {
 
   renderTagButtons(size, color, bgColor, selectedColor, selectedBgColor) {
     const {
-      selectedStyles, selectedTag, title,
-      heading, iconContainerStyle,
+      selectedStyles, 
+      selectedTag, 
+      title,
+      heading, 
+      iconContainerStyle,
+      iconSetContainer,
       ul,
       ol,
       body,
@@ -127,7 +135,7 @@ class CNToolbar extends Component {
     const iconStyles = [styles.iconContainer, iconContainerStyle];
 
     return (
-      <View style={[styles.iconSetContainer, { flexGrow: 5 }]}>
+      <View style={[styles.iconSetContainer, { flexGrow: 5 }, iconSetContainer]}>
         {body
           ? (
             <TouchableWithoutFeedback
@@ -239,14 +247,18 @@ class CNToolbar extends Component {
 
   renderExtras(size, color, bgColor, selectedColor, selectedBgColor) {
     const {
-      selectedStyles, selectedTag, title,
-      image, iconContainerStyle,
+      selectedStyles, 
+      selectedTag, 
+      title,
+      image, 
+      iconContainerStyle,
+      iconSetContainer,
       highlight,
       foreColor,
     } = this.props;
     const iconStyles = [styles.iconContainer, iconContainerStyle];
     return (
-      <View style={[styles.iconSetContainer, { flexGrow: 2 }]}>
+      <View style={[styles.iconSetContainer, { flexGrow: 2 }, iconSetContainer]}>
         {
                     image
                       ? (
@@ -317,10 +329,21 @@ class CNToolbar extends Component {
 
   render() {
     const {
-      selectedStyles, selectedTag,
-      bold, italic, underline, lineThrough,
-      title, heading, ul, ol, body,
-      image, foreColor, highlight, style,
+      selectedStyles, 
+      selectedTag,
+      bold, 
+      italic, 
+      underline, 
+      lineThrough,
+      title, 
+      heading, 
+      ul, 
+      ol, 
+      body,
+      image, 
+      foreColor, 
+      highlight, 
+      style,
     } = this.props;
 
     const styleButtons = !bold && !italic && !underline && !lineThrough;
