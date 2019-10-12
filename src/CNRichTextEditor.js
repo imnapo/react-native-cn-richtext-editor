@@ -44,7 +44,7 @@ class CNRichTextEditor extends Component {
     componentDidUpdate(prevProps, prevState) {
       if (this.focusOnNextUpdate != -1 && this.textInputs.length > this.focusOnNextUpdate) {
         const ref = this.textInputs[this.focusOnNextUpdate];
-        ref.focus(this.selectionOnFocus);
+         if(ref) ref.focus(this.selectionOnFocus);
         this.setState({focusInputIndex: this.focusOnNextUpdate});
         this.focusOnNextUpdate = -1;
         this.selectionOnFocus = null;
@@ -223,7 +223,7 @@ class CNRichTextEditor extends Component {
       };
 
       let newConents = value;
-      if (newConents[index - 1].component === 'text') {
+      if (ewConents[index - 1] && newConents[index - 1].component === 'text') {
         const { before, after } = this.textInputs[index - 1].splitItems();
 
         if (Array.isArray(before) && before.length > 0) {
