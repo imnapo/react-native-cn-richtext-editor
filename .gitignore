@@ -6,6 +6,7 @@ npm-debug.*
 *.key
 *.mobileprovision
 
+.jest
 
 # Android Studio
 **/.idea/libraries
