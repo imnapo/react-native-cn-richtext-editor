@@ -1,17 +1,22 @@
-import React, { Component } from 'react';
-import { Text, StyleSheet } from 'react-native';
-import _ from 'lodash';
+import * as React from 'react';
+import { Text } from 'react-native';
+import * as _ from 'lodash';
 
-class CNStyledText extends Component {
-  constructor(props) {
+export interface Props {
+  text: string;
+  style: any;
+}
+
+interface State {
+  enthusiasmLevel: number;
+}
+
+class CNStyledText extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
   }
 
-  componentWillReceiveProps(nextProps) {
-
-  }
-
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps: Props) {
     if (_.isEqual(this.props.text, nextProps.text)
             && _.isEqual(this.props.style, nextProps.style)
 

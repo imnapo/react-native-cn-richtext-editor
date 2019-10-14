@@ -6,6 +6,7 @@
   "module": "build/index.es.js",
   "jsnext:main": "build/index.es.js",
   "dependencies": {
+    "@types/lodash": "^4.14.144",
     "diff-match-patch": "^1.0.4",
     "immutability-helper": "^2.8.1",
     "lodash": "^4.17.15",
