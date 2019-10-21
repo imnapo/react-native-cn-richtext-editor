@@ -101,20 +101,84 @@ class App extends Component {
                 }}>
 
                     <CNToolbar
-                        size={28}
-                        bold={<Text style={[styles.toolbarButton, styles.boldButton]}>B</Text>}
-                        italic={<Text style={[styles.toolbarButton, styles.italicButton]}>I</Text>}
-                        underline={<Text style={[styles.toolbarButton, styles.underlineButton]}>U</Text>}
-                        lineThrough={<Text style={[styles.toolbarButton, styles.lineThroughButton]}>S</Text>}
-                        body={<Text style={styles.toolbarButton}>T</Text>}
-                        title={<Text style={styles.toolbarButton}>h1</Text>}
-                        heading={<Text style={styles.toolbarButton}>h3</Text>}
-                        ul={<Text style={styles.toolbarButton}>ul</Text>}
-                        ol={<Text style={styles.toolbarButton}>ol</Text>}
-                        
-                        selectedTag={this.state.selectedTag}
-                        selectedStyles={this.state.selectedStyles}
-                        onStyleKeyPress={this.onStyleKeyPress} />
+                                style={{
+                                    height: 35,
+                                }}
+                                iconSetContainer={{
+                                    flexGrow: 1,
+                                    justifyContent: 'space-evenly',
+                                    alignItems: 'center',
+                                }}
+                                size={30}
+                                iconSet={[
+                                    {
+                                        type: 'tool',
+                                        iconArray: [{
+                                            toolTypeText: 'image',
+                                            iconComponent:
+                                                <Text style={styles.toolbarButton}>
+                                                image
+                                                </Text>
+                                        }]
+                                    },
+                                    {
+                                        type: 'tool',
+                                        iconArray: [{
+                                            toolTypeText: 'bold',
+                                            buttonTypes: 'style',
+                                            iconComponent:
+                                                <Text style={styles.toolbarButton}>
+                                                bold
+                                                </Text>
+                                        }]
+                                    },
+                                    {
+                                        type: 'seperator'
+                                    },
+                                    {
+                                        type: 'tool',
+                                        iconArray: [
+                                            {
+                                                toolTypeText: 'body',
+                                                buttonTypes: 'tag',
+                                                iconComponent:
+                                                    <Text style={styles.toolbarButton}>
+                                                    body
+                                                    </Text>
+                                            },
+                                        ]
+                                    },
+                                    {
+                                        type: 'tool',
+                                        iconArray: [
+                                            {
+                                                toolTypeText: 'ul',
+                                                buttonTypes: 'tag',
+                                                iconComponent:
+                                                    <Text style={styles.toolbarButton}>
+                                                    ul
+                                                    </Text>
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        type: 'tool',
+                                        iconArray: [
+                                            {
+                                                toolTypeText: 'ol',
+                                                buttonTypes: 'tag',
+                                                iconComponent:
+                                                    <Text style={styles.toolbarButton}>
+                                                    ol
+                                                    </Text>
+                                            }
+                                        ]
+                                    },
+                                ]}
+                                selectedTag={this.state.selectedTag}
+                                selectedStyles={this.state.selectedStyles}
+                                onStyleKeyPress={this.onStyleKeyPress}
+                            />
                 </View>
         </KeyboardAvoidingView>
         );
