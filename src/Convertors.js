@@ -251,16 +251,18 @@ export function convertToObject(htmlString, styleList = null) {
           }
         }
       } else {
-        for (let j = 0; j < element.childNodes.length; j++) {
-          const child = element.childNodes[j];
-          const childItem = xmlNodeToItem(child, tag, firstLine == false && j == 0, availableStyles);
-          if (firstLine) {
-            childItem.NewLine = j == 0;
-          }
-          item.content.push(
-            childItem,
-          );
-        }
+        if(element.childNodes){
+                for (let j = 0; j < element.childNodes.length; j++) {
+                  const child = element.childNodes[j];
+                  const childItem = xmlNodeToItem(child, tag, firstLine == false && j == 0, availableStyles);
+                  if (firstLine) {
+                    childItem.NewLine = j == 0;
+                  }
+                  item.content.push(
+                    childItem,
+                  );
+                }
+            }
       }
     }
   }
@@ -313,7 +315,12 @@ function xmlNodeToItem(child, tag, newLine, styleList = null) {
 
     }
   } else {
-    text = child.nodeValue;
+    if(child.nodeValue){
+      text = child.nodeValue;
+    } else {
+      text = [];
+    }
+    
   }
 
   const stype = [];
@@ -362,7 +369,7 @@ function xmlNodeToItem(child, tag, newLine, styleList = null) {
   if (isPurpleMarker) {
     stype.push('purple_hl');
   }
-
+  
   return {
     id: shortid.generate(),
     text: newLine === true ? `\n${text}` : text,
