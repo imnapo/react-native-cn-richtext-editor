@@ -223,7 +223,7 @@ class CNRichTextEditor extends Component {
       };
 
       let newConents = value;
-      if (ewConents[index - 1] && newConents[index - 1].component === 'text') {
+      if (newConents[index - 1] && newConents[index - 1].component === 'text') {
         const { before, after } = this.textInputs[index - 1].splitItems();
 
         if (Array.isArray(before) && before.length > 0) {
