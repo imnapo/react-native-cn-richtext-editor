@@ -437,9 +437,23 @@ class CNRichTextEditor extends Component {
     }
 
     renderImage(image, index) {
-      const { width, height } = image.size;
-      const myHeight = (this.state.layoutWidth - 4 < width) ? height * ((this.state.layoutWidth - 4) / width) : height;
-      const myWidth = (this.state.layoutWidth - 4 < width) ? this.state.layoutWidth - 4 : width;
+      let { width, height } = image.size;
+      let myHeight, myWidth;
+
+      if(typeof width === 'undefined' && typeof height === 'undefined'){
+        width = 500;
+        height = 200;
+        Image.getSize(image.url, (width, height) => {
+          width = width;
+          height = height;
+          myHeight = (this.state.layoutWidth - 4 < width) ? height * ((this.state.layoutWidth - 4) / width) : height;
+          myWidth = (this.state.layoutWidth - 4 < width) ? this.state.layoutWidth - 4 : width;
+        });
+      }
+      
+      myHeight = (this.state.layoutWidth - 4 < width) ? height * ((this.state.layoutWidth - 4) / width) : height;
+      myWidth = (this.state.layoutWidth - 4 < width) ? this.state.layoutWidth - 4 : width;
+      
       const { ImageComponent = Image } = this.props;
       return (
         <View
