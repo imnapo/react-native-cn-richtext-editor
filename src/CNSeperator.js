@@ -11,7 +11,7 @@ const defaultColor = '#737373'
 
 export const CNSeperator = (props) => {
     return (
-        <View style={styles.separator} />
+        <View style={[styles.separator, { backgroundColor: props.color || defaultColor}]} />
     )
 }
 
