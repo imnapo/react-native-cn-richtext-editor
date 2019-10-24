@@ -7,7 +7,7 @@ import {
     StyleSheet
 } from 'react-native'
 
-const defaultSelectedBgColor = '#e4e4e4'
+const defaultColor = '#737373'
 
 export const CNSeperator = (props) => {
     return (
