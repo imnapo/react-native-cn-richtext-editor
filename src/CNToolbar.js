@@ -63,6 +63,7 @@ class CNToolbar extends Component {
                             /> :
                             <CNSeperator
                                 key={index}
+                            color={color || defaultColor}
                             />
                     )
                 })}
