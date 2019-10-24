@@ -30,6 +30,7 @@ let colorCondition = ''
     }
     else if (buttonTypes === 'tag') {
         backgroundColorCondition = selectedTag === toolTypeText ? selectedBackgroundColor : backgroundColor
+    colorCondition = selectedTag === toolTypeText ? selectedColor : color
     }
     return (
         <TouchableWithoutFeedback
