@@ -20,6 +20,6 @@ const styles = StyleSheet.create({
         width: 2,
         marginTop: 1,
         marginBottom: 1,
-        backgroundColor: defaultSelectedBgColor,
+        
     },
 });
