@@ -44,7 +44,7 @@ let colorCondition = ''
                 }]}
             >
                 {
-                    React.cloneElement(iconComponent, { size, color: selectedStyles.indexOf(toolTypeText) >= 0 ? selectedColor : color })
+                   React.cloneElement(iconComponent, { size, color: colorCondition})
                 }
             </View>
         </TouchableWithoutFeedback>
