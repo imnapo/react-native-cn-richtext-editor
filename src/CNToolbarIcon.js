@@ -26,6 +26,7 @@ export const CNToolbarIcon = (props) => {
 let colorCondition = ''
     if (buttonTypes === 'style') {
         backgroundColorCondition = selectedStyles.indexOf(toolTypeText) >= 0 ? selectedBackgroundColor : backgroundColor
+    colorCondition = selectedStyles.indexOf(toolTypeText) >= 0 ? selectedColor : color
     }
     else if (buttonTypes === 'tag') {
         backgroundColorCondition = selectedTag === toolTypeText ? selectedBackgroundColor : backgroundColor
