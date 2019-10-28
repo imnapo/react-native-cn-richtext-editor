@@ -318,7 +318,7 @@ function xmlNodeToItem(child, tag, newLine, styleList = null) {
     if(child.nodeValue){
       text = child.nodeValue;
     } else {
-      text = [];
+      text = '';
     }
     
   }
