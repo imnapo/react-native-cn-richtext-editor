@@ -18,12 +18,12 @@ export const CNToolbarSetIcon = (props) => {
         selectedStyles,
         selectedTag,
         iconArray,
-        iconSetContainerStyles,
+        iconSetContainerStyle,
         iconStyles,
         onStyleKeyPress
     } = props
     return (
-        <View style={iconSetContainerStyles}>
+        <View style={iconSetContainerStyle}>
             {iconArray.map((object, index) => {
                 const {
                     toolTypeText,

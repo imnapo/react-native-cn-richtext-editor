@@ -7,9 +7,6 @@ class CNStyledText extends Component {
     super(props);
   }
 
-  componentWillReceiveProps(nextProps) {
-
-  }
 
   shouldComponentUpdate(nextProps) {
     if (_.isEqual(this.props.text, nextProps.text)

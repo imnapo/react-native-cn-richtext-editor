@@ -329,19 +329,99 @@ class App extends Component {
                 <View style={styles.toolbarContainer}>
 
                     <CNToolbar
+                        style={{
+                            height: 35,
+                        }}
+                        iconSetContainerStyle={{
+                            flexGrow: 1,
+                            justifyContent: 'space-evenly',
+                            alignItems: 'center',
+                        }}
                         size={28} 
-                        bold={<MaterialCommunityIcons name="format-bold" />}
-                        italic={<MaterialCommunityIcons name="format-italic" />}
-                        underline={<MaterialCommunityIcons name="format-underline" />}
-                        lineThrough={<MaterialCommunityIcons name="format-strikethrough-variant" />}
-                        body={<MaterialCommunityIcons name="format-text" />}
-                        title={<MaterialCommunityIcons name="format-header-1" />}
-                        heading={<MaterialCommunityIcons name="format-header-3" />}
-                        ul={<MaterialCommunityIcons name="format-list-bulleted" />}
-                        ol={<MaterialCommunityIcons name="format-list-numbered" />}
-                        image={this.renderImageSelector()}
-                        foreColor={this.renderColorSelector()}
-                        highlight={this.renderHighlight()}
+                        iconSet={[
+                            {
+                                type: 'tool',
+                                iconArray: [{
+                                    toolTypeText: 'bold',
+                                    buttonTypes: 'style',
+                                    iconComponent: <MaterialCommunityIcons name="format-bold" />
+                                }, 
+                                {
+                                    toolTypeText: 'italic',
+                                    buttonTypes: 'style',
+                                    iconComponent: <MaterialCommunityIcons name="format-italic" />
+                                },
+                                {
+                                    toolTypeText: 'underline',
+                                    buttonTypes: 'style',
+                                    iconComponent: <MaterialCommunityIcons name="format-underline" />
+                                },
+                                {
+                                    toolTypeText: 'lineThrough',
+                                    buttonTypes: 'style',
+                                    iconComponent: <MaterialCommunityIcons name="format-strikethrough-variant" />
+                                }
+                            ]
+                            },
+                            {
+                                type: 'seperator'
+                            },
+                            {
+                                type: 'tool',
+                                iconArray: [
+                                    {
+                                        toolTypeText: 'body',
+                                        buttonTypes: 'tag',
+                                        iconComponent:
+                                        <MaterialCommunityIcons name="format-text" />
+                                    },
+                                    {
+                                        toolTypeText: 'title',
+                                        buttonTypes: 'tag',
+                                        iconComponent:
+                                        <MaterialCommunityIcons name="format-header-1" />
+                                    },
+                                    {
+                                        toolTypeText: 'heading',
+                                        buttonTypes: 'tag',
+                                        iconComponent:
+                                        <MaterialCommunityIcons name="format-header-3" />
+                                    },
+                                    {
+                                        toolTypeText: 'ul',
+                                        buttonTypes: 'tag',
+                                        iconComponent:
+                                        <MaterialCommunityIcons name="format-list-bulleted" />
+                                    },
+                                    {
+                                        toolTypeText: 'ol',
+                                        buttonTypes: 'tag',
+                                        iconComponent:
+                                        <MaterialCommunityIcons name="format-list-numbered" />
+                                    }
+                                ]
+                            },
+                            {
+                                type: 'seperator'
+                            },
+                            {
+                                type: 'tool',
+                                iconArray: [
+                                {
+                                    toolTypeText: 'image',
+                                    iconComponent: this.renderImageSelector()
+                                },
+                                {
+                                    toolTypeText: 'color',
+                                    iconComponent: this.renderColorSelector()
+                                },
+                                {
+                                    toolTypeText: 'highlight',
+                                    iconComponent: this.renderHighlight()
+                                }]
+                            },
+                            
+                        ]}
                         selectedTag={this.state.selectedTag}
                         selectedStyles={this.state.selectedStyles}
                         onStyleKeyPress={this.onStyleKeyPress} 

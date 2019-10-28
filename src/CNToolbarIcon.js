@@ -22,11 +22,14 @@ export const CNToolbarIcon = (props) => {
         buttonTypes,
         selectedBackgroundColor,
     } = props    
-    let colorCondition = ''
-    if (buttonTypes === 'style') {        
-        colorCondition = selectedStyles.indexOf(toolTypeText) >= 0 ? selectedColor : color
+    let colorCondition = '';
+    let backgroundColorCondition = '';
+    if (buttonTypes === 'style') {     
+        backgroundColorCondition = selectedStyles.indexOf(toolTypeText) >= 0 ? selectedBackgroundColor : backgroundColor;   
+        colorCondition = selectedStyles.indexOf(toolTypeText) >= 0 ? selectedColor : color;
     }
-    else if (buttonTypes === 'tag') {        
+    else if (buttonTypes === 'tag') {    
+        backgroundColorCondition = selectedTag === toolTypeText ? selectedBackgroundColor : backgroundColor;    
         colorCondition = selectedTag === toolTypeText ? selectedColor : color
     }
     return (
@@ -37,11 +40,14 @@ export const CNToolbarIcon = (props) => {
         >
             <View style={[iconStyles,
                 {
-                    backgroundColor: colorCondition
+                    backgroundColor: backgroundColorCondition
                 }]}
             >
                 {
-                   React.cloneElement(iconComponent, { size, color: colorCondition})
+                   React.cloneElement(iconComponent, { size , color: colorCondition , style: [{
+                    fontSize: size,
+                    color: colorCondition
+                   }, iconComponent.props.style || {}] })
                 }
             </View>
         </TouchableWithoutFeedback>

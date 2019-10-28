@@ -104,7 +104,7 @@ class App extends Component {
                                 style={{
                                     height: 35,
                                 }}
-                                iconSetContainer={{
+                                iconSetContainerStyle={{
                                     flexGrow: 1,
                                     justifyContent: 'space-evenly',
                                     alignItems: 'center',
@@ -272,24 +272,25 @@ Also be noticed that this example is writen with expo and required 'react-native
 | selectedStyles | Yes | selected style of the editor |
 | onStyleKeyPress    |  Yes | this event triggers when user press one of toolbar keys |
 |  size  | No  | font size of toolbar buttons  |
-| bold  |  No | a component which renders as bold button |
-|  italic | No  | a component which renders as italic button   |
-| underline  | No  | a component which renders as underline button  |
-| lineThrough  | No  | a component which renders as lineThrough button  |
-| body  | No  | a component which renders as body button |
-| title  | No  | a component which renders as title button   |
-| ul  | No  | a component which renders as ul button |
-| ol  | No  | a component which renders as ol button |
-| image  | No  | a component which renders as image button |
-| highlight  | No  | a component which renders as highlight button |
-| foreColor  | No  | a component which renders as foreColor button |
+| bold  |  No | a component which renders as bold button (as of 1.0.41, this prop is deprecated) |
+|  italic | No  | a component which renders as italic button (as of 1.0.41, this prop is deprecated)   |
+| underline  | No  | a component which renders as underline button (as of 1.0.41, this prop is deprecated)  |
+| lineThrough  | No  | a component which renders as lineThrough button (as of 1.0.41, this prop is deprecated)  |
+| body  | No  | a component which renders as body button (as of 1.0.41, this prop is deprecated) |
+| title  | No  | a component which renders as title button (as of 1.0.41, this prop is deprecated)   |
+| ul  | No  | a component which renders as ul button (as of 1.0.41, this prop is deprecated) |
+| ol  | No  | a component which renders as ol button (as of 1.0.41, this prop is deprecated) |
+| image  | No  | a component which renders as image button (as of 1.0.41, this prop is deprecated) |
+| highlight  | No  | a component which renders as highlight button (as of 1.0.41, this prop is deprecated) |
+| foreColor  | No  | a component which renders as foreColor button (as of 1.0.41, this prop is deprecated) |
 | style | No | style applied to container |
 | color | No | default color passed to icon |
 | backgroundColor | No | default background color passed to icon |
 | selectedColor | No | color applied when icon is selected |
 | selectedBackgroundColor | No | background color applied when icon is selected |
 | iconContainerStyle | No | a style prop assigned to icon container |
-| iconSetContainer | No | a style props assigned to icon set container|
+| iconSet | Yes | array of icons to display |
+| iconSetContainerStyle | No | a style props assigned to icon set container|
 
 ### CNRichTextView
 

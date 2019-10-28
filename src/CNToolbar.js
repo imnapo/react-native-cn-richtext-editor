@@ -21,6 +21,26 @@ class CNToolbar extends Component {
         super(props);
     }
 
+    componentDidMount() {
+        if(!this.props.iconSet)
+            console.warn('CNToolbar requires `iconSet` prop to display icons (>= 1.0.41). Please check documentation on github.')
+        if(this.props.bold 
+            || this.props.italic 
+            || this.props.underline
+            || this.props.lineThrough
+            || this.props.body
+            || this.props.title
+            || this.props.heading
+            || this.props.ul
+            || this.props.ol
+            || this.props.image
+            || this.props.highlight
+            || this.props.foreColor
+            ) {
+                console.warn('CNToolbar: using `bold`, `italic`, `underline`, `lineThrough`, `body`, `title`, `heading`, `ul`, `ol`, `image`, `highlight` or `foreColor` is deprecated. You may use `iconSet` prop instead (>= 1.0.41)')
+            }
+        }
+
     onStyleKeyPress = (toolItem) => {
         if (this.props.onStyleKeyPress) this.props.onStyleKeyPress(toolItem);
     }
@@ -35,9 +55,9 @@ class CNToolbar extends Component {
             backgroundColor,
             selectedColor,
             selectedBackgroundColor,
-            iconSet,
+            iconSet = [],
             iconContainerStyle,
-            iconSetContainer,
+            iconSetContainerStyle,
         } = this.props;
 
         return (
@@ -57,7 +77,7 @@ class CNToolbar extends Component {
                                 selectedColor={selectedColor ? selectedColor : defaultSelectedColor}
                                 selectedBackgroundColor={selectedBackgroundColor ? selectedBackgroundColor : defaultSelectedBgColor}
                                 iconArray={object.iconArray}
-                                iconSetContainerStyles={[styles.iconSetContainer, iconSetContainer]}
+                                iconSetContainerStyle={[styles.iconSetContainer, iconSetContainerStyle]}
                                 iconStyles={[styles.iconContainer, iconContainerStyle]}
                                 onStyleKeyPress={this.onStyleKeyPress}
                             /> :
