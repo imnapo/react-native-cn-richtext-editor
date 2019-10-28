@@ -101,20 +101,84 @@ class App extends Component {
                 }}>
 
                     <CNToolbar
-                        size={28}
-                        bold={<Text style={[styles.toolbarButton, styles.boldButton]}>B</Text>}
-                        italic={<Text style={[styles.toolbarButton, styles.italicButton]}>I</Text>}
-                        underline={<Text style={[styles.toolbarButton, styles.underlineButton]}>U</Text>}
-                        lineThrough={<Text style={[styles.toolbarButton, styles.lineThroughButton]}>S</Text>}
-                        body={<Text style={styles.toolbarButton}>T</Text>}
-                        title={<Text style={styles.toolbarButton}>h1</Text>}
-                        heading={<Text style={styles.toolbarButton}>h3</Text>}
-                        ul={<Text style={styles.toolbarButton}>ul</Text>}
-                        ol={<Text style={styles.toolbarButton}>ol</Text>}
-                        
-                        selectedTag={this.state.selectedTag}
-                        selectedStyles={this.state.selectedStyles}
-                        onStyleKeyPress={this.onStyleKeyPress} />
+                                style={{
+                                    height: 35,
+                                }}
+                                iconSetContainer={{
+                                    flexGrow: 1,
+                                    justifyContent: 'space-evenly',
+                                    alignItems: 'center',
+                                }}
+                                size={30}
+                                iconSet={[
+                                    {
+                                        type: 'tool',
+                                        iconArray: [{
+                                            toolTypeText: 'image',
+                                            iconComponent:
+                                                <Text style={styles.toolbarButton}>
+                                                image
+                                                </Text>
+                                        }]
+                                    },
+                                    {
+                                        type: 'tool',
+                                        iconArray: [{
+                                            toolTypeText: 'bold',
+                                            buttonTypes: 'style',
+                                            iconComponent:
+                                                <Text style={styles.toolbarButton}>
+                                                bold
+                                                </Text>
+                                        }]
+                                    },
+                                    {
+                                        type: 'seperator'
+                                    },
+                                    {
+                                        type: 'tool',
+                                        iconArray: [
+                                            {
+                                                toolTypeText: 'body',
+                                                buttonTypes: 'tag',
+                                                iconComponent:
+                                                    <Text style={styles.toolbarButton}>
+                                                    body
+                                                    </Text>
+                                            },
+                                        ]
+                                    },
+                                    {
+                                        type: 'tool',
+                                        iconArray: [
+                                            {
+                                                toolTypeText: 'ul',
+                                                buttonTypes: 'tag',
+                                                iconComponent:
+                                                    <Text style={styles.toolbarButton}>
+                                                    ul
+                                                    </Text>
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        type: 'tool',
+                                        iconArray: [
+                                            {
+                                                toolTypeText: 'ol',
+                                                buttonTypes: 'tag',
+                                                iconComponent:
+                                                    <Text style={styles.toolbarButton}>
+                                                    ol
+                                                    </Text>
+                                            }
+                                        ]
+                                    },
+                                ]}
+                                selectedTag={this.state.selectedTag}
+                                selectedStyles={this.state.selectedStyles}
+                                onStyleKeyPress={this.onStyleKeyPress}
+                            />
                 </View>
         </KeyboardAvoidingView>
         );
@@ -184,6 +248,7 @@ Also be noticed that this example is writen with expo and required 'react-native
 | styleList  | an object consist of styles name and values (use getDefaultStyles function) | Yes |
 | ImageComponent | a React component (class or functional) which will be used to render images. Will be passed `style` and `source` props. | No |
 | style | Styles applied to the outermost component. | No |
+| textInputStyle | TextInput style | No |
 | contentContainerStyle | Styles applied to the scrollview content. | No |
 | onFocus    | Callback that is called when one of text inputs are focused. | No |
 | onBlur    | Callback that is called when one of text inputs are blurred. | No |
@@ -224,6 +289,7 @@ Also be noticed that this example is writen with expo and required 'react-native
 | selectedColor | No | color applied when icon is selected |
 | selectedBackgroundColor | No | background color applied when icon is selected |
 | iconContainerStyle | No | a style prop assigned to icon container |
+| iconSetContainer | No | a style props assigned to icon set container|
 
 ### CNRichTextView
 
