@@ -4,7 +4,7 @@ import { View, StyleSheet, Keyboard
 , KeyboardAvoidingView, Platform } from 'react-native';
 import { Permissions, ImagePicker } from 'expo';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import  CNRichTextEditor , { CNToolbar , getDefaultStyles, convertToObject } from "react-native-cn-richtext-editor";
+import  CNEditor , { CNToolbar , getDefaultStyles, convertToObject } from "react-native-cn-richtext-editor";
 
 import {
     Menu,
@@ -310,9 +310,15 @@ class App extends Component {
             style={styles.root}
             >
             <MenuProvider style={{flex: 1}}>
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss} >             
-                    <View style={styles.main}>
-                        <CNRichTextEditor                   
+                <View
+                style={{flex: 1}} 
+                onTouchStart={() => {
+                   this.editor && this.editor.blur();
+                }}
+                >             
+                    <View style={styles.main}
+                    onTouchStart={(e) => e.stopPropagation()}>
+                        {/* <CNRichTextEditor                   
                             ref={input => this.editor = input}
                             onSelectedTagChanged={this.onSelectedTagChanged}
                             onSelectedStyleChanged={this.onSelectedStyleChanged}
@@ -322,9 +328,22 @@ class App extends Component {
                             foreColor='dimgray' // optional (will override default fore-color)
                             onValueChanged={this.onValueChanged}
                             onRemoveImage={this.onRemoveImage}
-                        />                        
+                        />                         */}
+                        <CNEditor                   
+                          ref={input => this.editor = input}
+                          onSelectedTagChanged={this.onSelectedTagChanged}
+                          onSelectedStyleChanged={this.onSelectedStyleChanged}
+                          style={styles.editor}
+                          styleList={this.customStyles}
+                          initialHtml={`   
+                          <h1>This HTML snippet is now rendered with native components !</h1>
+                          <h2>Enjoy a webview-free and blazing fast application</h2>
+                          <img src="https://i.imgur.com/dHLmxfO.jpg?2" />
+                          <em style="textAlign: center;">Look at how happy this native cat is</em>`}
+                          foreColor='dimgray' // optional (will override default fore-color)
+                        />         
                     </View>
-                </TouchableWithoutFeedback>
+                </View>
 
                 <View style={styles.toolbarContainer}>
 
