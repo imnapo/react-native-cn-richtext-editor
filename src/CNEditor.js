@@ -114,22 +114,33 @@ export default class CNEditor extends Component {
             Image.getSize(url, (width, height) => {
               width = width;
               height = height;
+              
               myHeight = (this.state.layoutWidth - 4 < width) ? height * ((this.state.layoutWidth - 4) / width) : height;
               myWidth = (this.state.layoutWidth - 4 < width) ? this.state.layoutWidth - 4 : width;
+            
+              const jsonString = JSON.stringify({ type: 'toolbar', command: 'image', value: {
+                url, id: id || shortid.generate(), height: myHeight, width: myWidth, alt, align
+                }
+            });
+    
+            if (this.webViewRef) {            
+                this.webViewRef.postMessage(jsonString);
+            } 
             });
         }
-          
-        myHeight = (this.state.layoutWidth - 4 < width) ? height * ((this.state.layoutWidth - 4) / width) : height;
-        myWidth = (this.state.layoutWidth - 4 < width) ? this.state.layoutWidth - 4 : width;
-          
-        const jsonString = JSON.stringify({ type: 'toolbar', command: 'image', value: {
-            url, id: id || shortid.generate(), height: myHeight, width: myWidth, alt, align
-            }
-        });
-
-        if (this.webViewRef) {            
-            this.webViewRef.postMessage(jsonString);
-        } 
+        else {
+            myHeight = (this.state.layoutWidth - 4 < width) ? height * ((this.state.layoutWidth - 4) / width) : height;
+            myWidth = (this.state.layoutWidth - 4 < width) ? this.state.layoutWidth - 4 : width;
+            const jsonString = JSON.stringify({ type: 'toolbar', command: 'image', value: {
+                url, id: id || shortid.generate(), height: myHeight, width: myWidth, alt, align
+                }
+            });
+    
+            if (this.webViewRef) {            
+                this.webViewRef.postMessage(jsonString);
+            } 
+        }  
+        
         
       }
 
@@ -153,7 +164,7 @@ export default class CNEditor extends Component {
 
     onLayout = (event) => {
         const { width } = event.nativeEvent.layout;
-  
+        
         this.setState({
           layoutWidth: width,
         });
@@ -223,8 +234,14 @@ export default class CNEditor extends Component {
         <View style={styles.container}
         onLayout={this.onLayout}>
             <WebView 
+            style={styles.webView}
             ref={webView=> this.webViewRef = webView}
             onLoad={this.onLoad}
+            allowFileAccess={true}
+            domStorageEnabled={true}
+            allowUniversalAccessFromFileURLs={true}
+            allowFileAccessFromFileURLs={true}
+            
             javaScriptEnabled={true}
             source={{ html: htmlEditor}} 
             domStorageEnabled={true}
@@ -239,7 +256,7 @@ export default class CNEditor extends Component {
 
 let styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
     },
     webView: {
         flexGrow: 1

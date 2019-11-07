@@ -26,11 +26,11 @@ const editorHTML = `
           outline: 0px solid transparent;
         }
     </style>
-    <title>CN Editor</title>
+    <title>CN-Editor</title>
 </head>
 <body>
     <div id="editor">
-           
+       
     </div>
     <script>
         (function(doc) {
@@ -150,6 +150,8 @@ const editorHTML = `
                     default:
                         break;
                 }
+                getSelectedStyles();
+                getSelectedTag();
             }
 
             var getRequest = (event) => {
