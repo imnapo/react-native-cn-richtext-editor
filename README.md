@@ -10,13 +10,15 @@ Richtext editor for react native
 #### Install using npm:
 
 ```
-npm i react-native-cn-richtext-editor
+npm i react-native-cn-richtext-editor@next
 ```
 #### Install using yarn:
 
 ```
-yarn add react-native-cn-richtext-editor
+yarn add react-native-cn-richtext-editor@next
 ```
+
+This package is using `react-native-webview`. Please follow [this document](https://github.com/react-native-community/react-native-webview/blob/master/docs/Getting-Started.md) to install it.
 ### Usage
 
 Here is a simple overview of our components usage.
@@ -231,7 +233,7 @@ You need to put more effort :) to use more advanced features of CNRichTextEditor
 
 Actually we did not implement 'Toolbar buttons and menus' and 'Image Uploading Process' because it totally depends on using expo or pure react-native and also what other packages you prefer to use.
 
-To see an example of how to implement more advanced feature of this editor please check this [Link](https://github.com/imnapo/react-native-cn-richtext-editor/blob/master/expo-demo/App.js).
+To see an example of how to implement more advanced feature of this editor please check this [Link](https://github.com/imnapo/react-native-cn-richtext-editor/blob/next/expo-demo/App.js).
 
 Also be noticed that this example is writen with expo and required 'react-native-popup-menu' package.
 
@@ -313,7 +315,7 @@ Checkout the
 [expo-demo App](https://expo.io/@imnapo/expo-demo)
 on Expo which uses react-native-cn-richtext-editor components.
 If you are looking to test and run expo-demo App locally, click
-[here](https://github.com/imnapo/react-native-cn-richtext-editor/tree/master/expo-demo) to
+[here](https://github.com/imnapo/react-native-cn-richtext-editor/tree/next/expo-demo) to
 view the implementation & run it locally.
 
 ## License
