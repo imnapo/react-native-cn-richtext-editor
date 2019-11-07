@@ -10,15 +10,13 @@ Richtext editor for react native
 #### Install using npm:
 
 ```
-npm i react-native-cn-richtext-editor@next
+npm i react-native-cn-richtext-editor
 ```
 #### Install using yarn:
 
 ```
-yarn add react-native-cn-richtext-editor@next
+yarn add react-native-cn-richtext-editor
 ```
-
-This package is using `react-native-webview`. Please follow [this document](https://github.com/react-native-community/react-native-webview/blob/master/docs/Getting-Started.md) to install it.
 ### Usage
 
 Here is a simple overview of our components usage.
@@ -29,9 +27,7 @@ import { View, StyleSheet, Keyboard
 , TouchableWithoutFeedback, Text
 , KeyboardAvoidingView } from 'react-native';
 
-import  CNEditor , { CNToolbar, 
-// getInitialObject , CNRichTextEditor, // old editor
-getDefaultStyles } from "react-native-cn-richtext-editor";
+import  CNRichTextEditor , { CNToolbar, getInitialObject , getDefaultStyles } from "react-native-cn-richtext-editor";
 
 const defaultStyles = getDefaultStyles();
 
@@ -43,6 +39,7 @@ class App extends Component {
         this.state = {
             selectedTag : 'body',
             selectedStyles : [],
+            value: [getInitialObject()]
         };
 
         this.editor = null;
@@ -64,6 +61,13 @@ class App extends Component {
         })
     }
 
+    onValueChanged = (value) => {
+        this.setState({
+            value: value
+        });
+    }
+
+
     render() {
         return (
             <KeyboardAvoidingView 
@@ -78,28 +82,19 @@ class App extends Component {
                 justifyContent: 'flex-end', 
             }}
             >
-                <View
-                style={{flex: 1}} 
-                onTouchStart={() => {
-                   this.editor && this.editor.blur();
-                }}
-                >              
-                   <View style={styles.main}
-                    onTouchStart={(e) => e.stopPropagation()}>
-                    
-                        <CNEditor                   
-                          ref={input => this.editor = input}
-                          onSelectedTagChanged={this.onSelectedTagChanged}
-                          onSelectedStyleChanged={this.onSelectedStyleChanged}
-                          style={{ backgroundColor : '#fff'}}
-                          styleList={defaultStyles}
-                          initialHtml={`   
-                          <h1>HTML Ipsum Presents</h1>
-                            <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
-                            `}                         
-                        />                          
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} >             
+                    <View style={styles.main}>
+                        <CNRichTextEditor                   
+                            ref={input => this.editor = input}
+                            onSelectedTagChanged={this.onSelectedTagChanged}
+                            onSelectedStyleChanged={this.onSelectedStyleChanged}
+                            value={this.state.value}
+                            style={{ backgroundColor : '#fff'}}
+                            styleList={defaultStyles}
+                            onValueChanged={this.onValueChanged}
+                        />                        
                     </View>
-                </View>
+                </TouchableWithoutFeedback>
 
                 <View style={{
                     minHeight: 35
@@ -233,13 +228,13 @@ You need to put more effort :) to use more advanced features of CNRichTextEditor
 
 Actually we did not implement 'Toolbar buttons and menus' and 'Image Uploading Process' because it totally depends on using expo or pure react-native and also what other packages you prefer to use.
 
-To see an example of how to implement more advanced feature of this editor please check this [Link](https://github.com/imnapo/react-native-cn-richtext-editor/blob/next/expo-demo/App.js).
+To see an example of how to implement more advanced feature of this editor please check this [Link](https://github.com/imnapo/react-native-cn-richtext-editor/blob/master/expo-demo/App.js).
 
 Also be noticed that this example is writen with expo and required 'react-native-popup-menu' package.
 
 ## API
 
-### CNEditor
+### CNRichTextEditor
 
 #### Props
 
@@ -247,10 +242,17 @@ Also be noticed that this example is writen with expo and required 'react-native
 | ------ | ----------- | ---- |
 | onSelectedTagChanged   | this event triggers when selected tag of editor is changed. | No |
 | onSelectedStyleChanged | this event triggers when selected style of editor is changed. | No |
-| initialHtml    | initial html string to display in editor | No |
+| onValueChanged | this event triggers when value of editor is changed. | No |
+| onRemoveImage | this event triggers when an image is removed. Callback param in the form `{ url, id }`. | No |
+| value    | an array object which keeps value of the editor | Yes |
 | styleList  | an object consist of styles name and values (use getDefaultStyles function) | Yes |
+| ImageComponent | a React component (class or functional) which will be used to render images. Will be passed `style` and `source` props. | No |
 | style | Styles applied to the outermost component. | No |
-
+| textInputStyle | TextInput style | No |
+| contentContainerStyle | Styles applied to the scrollview content. | No |
+| onFocus    | Callback that is called when one of text inputs are focused. | No |
+| onBlur    | Callback that is called when one of text inputs are blurred. | No |
+| placeholder    | The string that will be rendered before text input has been entered. | No |
 
 #### Instance methods
 
@@ -258,8 +260,8 @@ Also be noticed that this example is writen with expo and required 'react-native
 | ------ | ---- | ----------- |
 | applyToolbar | `toolType` | Apply the given transformation to selected text. |
 | insertImage | `uri, id?, height?, width?` | Insert the provided image where cursor is positionned. |
-| focus |  | Focus editor |
-| blur |  | Blure editor |
+| focus |  | Focus to the last `TextInput` |
+
 ### CNToolbar
 
 #### Props
@@ -290,7 +292,7 @@ Also be noticed that this example is writen with expo and required 'react-native
 | iconSet | Yes | array of icons to display |
 | iconSetContainerStyle | No | a style props assigned to icon set container|
 
-### CNRichTextView 
+### CNRichTextView
 
 #### Props
 
@@ -315,7 +317,7 @@ Checkout the
 [expo-demo App](https://expo.io/@imnapo/expo-demo)
 on Expo which uses react-native-cn-richtext-editor components.
 If you are looking to test and run expo-demo App locally, click
-[here](https://github.com/imnapo/react-native-cn-richtext-editor/tree/next/expo-demo) to
+[here](https://github.com/imnapo/react-native-cn-richtext-editor/tree/master/expo-demo) to
 view the implementation & run it locally.
 
 ## License

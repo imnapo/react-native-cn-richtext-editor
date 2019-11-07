@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Keyboard
-, TouchableWithoutFeedback, Text, Dimensions
+import { View, StyleSheet
+, Text, Dimensions
 , KeyboardAvoidingView, Platform } from 'react-native';
 import { Permissions, ImagePicker } from 'expo';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import  CNRichTextEditor , { CNToolbar , getDefaultStyles, convertToObject } from "react-native-cn-richtext-editor";
+import  CNEditor , { CNToolbar , getDefaultStyles, convertToObject } from "react-native-cn-richtext-editor";
 
 import {
     Menu,
@@ -35,10 +35,8 @@ class App extends Component {
             selectedHighlight: 'default',
             colors : ['red', 'green', 'blue'],
             highlights:['yellow_hl','pink_hl', 'orange_hl', 'green_hl','purple_hl','blue_hl'],
-            selectedStyles : [],
-            // value: [getInitialObject()] get empty editor
-            value: convertToObject('<div><p><span>This is </span><span style="font-weight: bold;">bold</span><span> and </span><span style="font-style: italic;">italic </span><span>text</span></p></div>'
-            , this.customStyles)
+            selectedStyles : []
+            
         };
         
         this.editor = null;
@@ -84,7 +82,6 @@ class App extends Component {
     }
 
     insertImage(url) {
-        
         this.editor.insertImage(url);
     }
 
@@ -103,10 +100,19 @@ class App extends Component {
         let result = await ImagePicker.launchImageLibraryAsync({
         allowsEditing: true,
         aspect: [4, 4],
-        base64: false,
+        base64: true,
+        exif : true
         });
         
-        this.insertImage(result.uri);
+        
+        var srcArr = result.uri.split(".");
+        if(srcArr.length > 0) {
+            var ext = srcArr[srcArr.length - 1];
+            var base64Icon = 'data:image/'+ ext +';base64,' + result.base64;
+            this.insertImage(base64Icon);
+        }
+
+        
     };
 
     useCameraHandler = async () => {
@@ -114,11 +120,16 @@ class App extends Component {
         let result = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
         aspect: [4, 4],
-        base64: false,
+        base64: true,
+        exif : true
         });
-        console.log(result);
-        
-        this.insertImage(result.uri);
+        var srcArr = result.uri.split(".");
+        if(srcArr.length > 0) {
+            var ext = srcArr[srcArr.length - 1];
+            var base64Icon = 'data:image/'+ ext +';base64,' + result.base64;
+            this.insertImage(base64Icon);
+        }
+
     };
 
     onImageSelectorClicked = (value) => {
@@ -310,21 +321,58 @@ class App extends Component {
             style={styles.root}
             >
             <MenuProvider style={{flex: 1}}>
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss} >             
-                    <View style={styles.main}>
-                        <CNRichTextEditor                   
-                            ref={input => this.editor = input}
-                            onSelectedTagChanged={this.onSelectedTagChanged}
-                            onSelectedStyleChanged={this.onSelectedStyleChanged}
-                            value={this.state.value}
-                            style={styles.editor}
-                            styleList={this.customStyles}
-                            foreColor='dimgray' // optional (will override default fore-color)
-                            onValueChanged={this.onValueChanged}
-                            onRemoveImage={this.onRemoveImage}
-                        />                        
+            <View
+                style={{flex: 1}} 
+                onTouchStart={() => {
+                   this.editor && this.editor.blur();
+                }}
+                >             
+                    <View style={styles.main}
+                    onTouchStart={(e) => e.stopPropagation()}>
+                                          
+                        <CNEditor                   
+                          ref={input => this.editor = input}
+                          onSelectedTagChanged={this.onSelectedTagChanged}
+                          onSelectedStyleChanged={this.onSelectedStyleChanged}
+                          style={styles.editor}
+                          styleList={this.customStyles}
+                          initialHtml={`   
+                          <h1>This Text Editor is awesome !</h1>
+                          <h3>Enjoy a fast and full featured editor </h3>
+                          <p><b>this editor is designed with <code>Webview</code> and html</b></p>
+                          <img src="https://i.imgur.com/dHLmxfO.jpg?2"  width="200" height="150" />
+                          <p><em style="textAlign: center;">Look at how happy this native cat is</em></p>
+                          <h1>HTML Ipsum Presents</h1>
+
+                            <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
+
+                            <h2>Header Level 2</h2>
+
+                            <ol>
+                            <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+                            <li>Aliquam tincidunt mauris eu risus.</li>
+                            </ol>
+
+                            <blockquote><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p></blockquote>
+
+                            <h3>Header Level 3</h3>
+
+                            <ul>
+                            <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+                            <li>Aliquam tincidunt mauris eu risus.</li>
+                            </ul>
+                            <ul>
+   <li>Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu. Cras consequat.</li>
+   <li>Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.</li>
+   <li>Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. Nam nulla quam, gravida non, commodo a, sodales sit amet, nisi.</li>
+   <li>Pellentesque fermentum dolor. Aliquam quam lectus, facilisis auctor, ultrices ut, elementum vulputate, nunc.</li>
+</ul>
+
+                            `}
+                          foreColor='dimgray' // optional (will override default fore-color)
+                        />          
                     </View>
-                </TouchableWithoutFeedback>
+                </View>
 
                 <View style={styles.toolbarContainer}>
 

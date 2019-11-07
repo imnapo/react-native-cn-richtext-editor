@@ -19,10 +19,25 @@ export interface CNRichTextEditorProps {
   textInputStyle: StyleProp<TextStyle>;
 }
 
+export interface CNEditorProps {
+  onSelectedTagChanged?: (tag: string) => void;
+  onSelectedStyleChanged?: (styles: string[]) => void;
+  onRemoveImage?: (url: string, id: string) => void;
+  value: ReturnType<typeof getInitialObject>;
+  styleList: any;
+  style?: StyleProp<ViewStyle>;
+  contentContainerStyle?: StyleProp<ViewStyle>;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  placeholder: string;
+  textInputStyle: StyleProp<TextStyle>;
+}
+
 export default class CNRichTextEditor extends Component<CNRichTextEditorProps> {
   applyToolbar(toolType: any): void;
-  insertImage(uri: any, id?: any, height?: number, width?: number): void;
+  insertImage(uri: any, id?: any, height?: number, width?: number, alt?: string, align?: string): void;
   focus(): void;
+  blur(): void;
 }
 
 export interface CNToolbarProps {
