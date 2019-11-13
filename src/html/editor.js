@@ -92,6 +92,13 @@ const editorHTML = `
                 getSelectedTag();
             });
 
+            document.getElementById("editor").addEventListener("input", function() {
+                let contentChanged = JSON.stringify({
+                    type: 'onChange',
+                    data: document.getElementById("editor").innerHTML });
+                sendMessage(contentChanged);
+            }, false);
+
             var applyToolbar = (toolType, value = '') => {
                 switch (toolType) {
                     case 'bold':
