@@ -260,6 +260,8 @@ Also be noticed that this example is writen with expo and required 'react-native
 | insertImage | `uri, id?, height?, width?` | Insert the provided image where cursor is positionned. |
 | focus |  | Focus editor |
 | blur |  | Blure editor |
+| getHtml |  | get html string from the editor |
+| setHtml |  | set html string to display in editor |
 ### CNToolbar
 
 #### Props
