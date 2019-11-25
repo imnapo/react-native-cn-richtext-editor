@@ -5,6 +5,7 @@ npm-debug.*
 *.p12
 *.key
 *.mobileprovision
+yarn-error.log
 
 
 # Android Studio
