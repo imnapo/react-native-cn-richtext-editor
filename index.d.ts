@@ -8,15 +8,15 @@ export interface CNRichTextEditorProps {
   onSelectedStyleChanged?: (styles: string[]) => void;
   onValueChanged?: (value: object[]) => void;
   onRemoveImage?: (url: string, id: string) => void;
-  value: ReturnType<typeof getInitialObject>;
+  value?: ReturnType<typeof getInitialObject>;
   styleList: any;
   ImageComponent?: React.ReactElement<any, any>;
   style?: StyleProp<ViewStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
   onFocus?: () => void;
   onBlur?: () => void;
-  placeholder: string;
-  textInputStyle: StyleProp<TextStyle>;
+  placeholder?: string;
+  textInputStyle?: StyleProp<TextStyle>;
 }
 
 export interface CNEditorProps {
@@ -24,14 +24,14 @@ export interface CNEditorProps {
   onSelectedStyleChanged?: (styles: string[]) => void;
   onRemoveImage?: (url: string, id: string) => void;
   onValueChanged?: (value: string) => void;
-  value: ReturnType<typeof getInitialObject>;
+  initialHtml?: ReturnType<typeof getInitialObject>;
   styleList: any;
   style?: StyleProp<ViewStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
   onFocus?: () => void;
   onBlur?: () => void;
-  placeholder: string;
-  textInputStyle: StyleProp<TextStyle>;
+  placeholder?: string;
+  textInputStyle?: StyleProp<TextStyle>;
 }
 
 export default class CNRichTextEditor extends Component<CNRichTextEditorProps> {
