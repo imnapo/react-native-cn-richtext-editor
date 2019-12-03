@@ -93,6 +93,10 @@ export default class CNEditor extends Component {
                         this.onSelectedTagChanged(message.data);
                     break;
                     
+		    case 'onChange':                        
+                        this.onValueChanged(message.data);
+                    break;
+			    
                     break;
                 default:
                     break;
@@ -205,7 +209,14 @@ export default class CNEditor extends Component {
             this.webViewRef.postMessage(jsonString);
         } 
     }
-
+    
+    onValueChanged = (data) => {
+        if(this.props.onValueChanged) {
+            this.props.onValueChanged(data);
+        }
+    }
+    
+    
     blur = () => {
         const jsonString = JSON.stringify({ type: 'editor', command: 'blur'  }); 
 
