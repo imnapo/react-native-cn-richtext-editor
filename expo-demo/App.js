@@ -336,6 +336,7 @@ class App extends Component {
                           onSelectedStyleChanged={this.onSelectedStyleChanged}
                           style={styles.editor}
                           styleList={this.customStyles}
+                          //onValueChanged={(value)=> console.log(value)}
                           initialHtml={`   
                           <h1>This Text Editor is awesome !</h1>
                           <h3>Enjoy a fast and full featured editor </h3>
