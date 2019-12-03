@@ -23,6 +23,7 @@ export interface CNEditorProps {
   onSelectedTagChanged?: (tag: string) => void;
   onSelectedStyleChanged?: (styles: string[]) => void;
   onRemoveImage?: (url: string, id: string) => void;
+  onValueChanged?: (value: string) => void;
   value: ReturnType<typeof getInitialObject>;
   styleList: any;
   style?: StyleProp<ViewStyle>;

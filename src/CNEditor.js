@@ -211,8 +211,9 @@ export default class CNEditor extends Component {
     }
     
     onValueChanged = (data) => {
-        this.props.initialHtml = data;
-        this.props.onValueChanged(data);
+        if(this.props.onValueChanged) {
+            this.props.onValueChanged(data);
+        }
     }
     
     
