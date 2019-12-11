@@ -20,7 +20,7 @@ yarn add react-native-cn-richtext-editor
 
 ### Pre-Release
 
-Please check out our new `CNEditor` editor designed with `react-native-webview` in pre-relase version [2.0.0-rc1](https://github.com/imnapo/react-native-cn-richtext-editor/releases/tag/2.0.0-rc1).
+Please check out our new `CNEditor` editor designed with `react-native-webview` in pre-relase version [2.0.0-rc1](https://github.com/imnapo/react-native-cn-richtext-editor/releases/tag/2.0.0-rc1). You may install it using `npm i react-native-cn-richtext-editor@next`.
 For more information about how to use this pre-release you may read [README](https://github.com/imnapo/react-native-cn-richtext-editor/blob/next/README.md#installation) and check [expo-demo](https://github.com/imnapo/react-native-cn-richtext-editor/blob/next/expo-demo/App.js) project in the `next` branch.
 
 ### Usage
