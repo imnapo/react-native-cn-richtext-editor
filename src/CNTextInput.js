@@ -1306,10 +1306,11 @@ class CNTextInput extends Component {
 
     render() {
       const {
-        items, foreColor, style, returnKeyType, styleList
+        items, foreColor, style, returnKeyType, styleList, placeholderTextColor
       } = this.props;
       const { selection } = this.state;
       const color = foreColor || '#000';
+      const placeholderColor = placeholderTextColor || '#000';
       const fontSize =styleList && styleList.body && styleList.body.fontSize ? styleList.body.fontSize : 20;
       
       return (
@@ -1336,7 +1337,8 @@ class CNTextInput extends Component {
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onContentSizeChange={this.handleContentSizeChange}
-		      placeholder={this.props.placeholder}
+          placeholder={placeholderColor}
+          placeholderTextColor={}
         >
           {
               _.map(items, item => (
