@@ -425,8 +425,9 @@ class CNRichTextEditor extends Component {
             onBlur={(e)=> this.handleOnBlur(e, index)}
             returnKeyType={this.props.returnKeyType}
             foreColor={this.props.foreColor}
+            placeholderTextColor={this.props.placeholderTextColor}
             styleList={styles}
-			      placeholder={index === 0 ? this.props.placeholder : undefined}
+            placeholder={index === 0 ? this.props.placeholder : undefined}
             style={[{
               flexGrow: 1,
             }, this.props.textInputStyle]
