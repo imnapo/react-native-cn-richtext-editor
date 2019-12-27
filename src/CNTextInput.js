@@ -1306,7 +1306,7 @@ class CNTextInput extends Component {
 
     render() {
       const {
-        items, foreColor, style, returnKeyType, styleList
+        items, foreColor, style, returnKeyType, styleList, autoCorrect
       } = this.props;
       const { selection } = this.state;
       const color = foreColor || '#000';
@@ -1336,7 +1336,8 @@ class CNTextInput extends Component {
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onContentSizeChange={this.handleContentSizeChange}
-		      placeholder={this.props.placeholder}
+          placeholder={this.props.placeholder}
+          autoCorrect={autoCorrect}
         >
           {
               _.map(items, item => (
