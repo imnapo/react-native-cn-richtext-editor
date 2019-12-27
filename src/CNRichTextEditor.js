@@ -427,7 +427,7 @@ class CNRichTextEditor extends Component {
             foreColor={this.props.foreColor}
             styleList={styles}
             placeholder={index === 0 ? this.props.placeholder : undefined}
-            autoCorrect={this.props.autoCorrect}
+            textInputProps={this.props.textInputProps}
             style={[{
               flexGrow: 1,
             }, this.props.textInputStyle]

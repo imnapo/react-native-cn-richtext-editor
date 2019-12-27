@@ -259,6 +259,7 @@ Also be noticed that this example is writen with expo and required 'react-native
 | onFocus    | Callback that is called when one of text inputs are focused. | No |
 | onBlur    | Callback that is called when one of text inputs are blurred. | No |
 | placeholder    | The string that will be rendered before text input has been entered. | No |
+| textInputProps   | An object containing additional props to be passed to the TextInput component| No |
 
 #### Instance methods
 
