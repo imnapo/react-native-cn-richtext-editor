@@ -1255,7 +1255,7 @@ class CNTextInput extends Component {
     convertStyleList(stylesArr) {
       const styls = [];
       (stylesArr).forEach((element) => {
-        const styleObj = this.txtToStyle(element);
+        const styleObj = this.txtToStyle(element, this.props.styleList);
         if (styleObj !== null) styls.push(styleObj);
       });
       return styls;
