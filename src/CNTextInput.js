@@ -1345,7 +1345,7 @@ class CNTextInput extends Component {
             let customStyles = item.stype.map(key => styleList[key] || null).filter(item => !!item);
 
             if (item.stype.includes('bold') && item.stype.includes('italic') && styleList.boldItalic) {
-              customStyles = { ...customStyles, ...boldItalic };
+              customStyles = { ...customStyles, ...styleList.boldItalic };
             }
 
             return(
