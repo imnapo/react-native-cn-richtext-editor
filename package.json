@@ -1,6 +1,6 @@
 {
   "name": "react-native-cn-richtext-editor",
-  "version": "1.0.42",
+  "version": "1.0.43",
   "description": "RichText Editor for React-Native",
   "main": "index.js",
   "scripts": {
