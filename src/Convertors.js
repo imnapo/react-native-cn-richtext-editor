@@ -381,7 +381,9 @@ function xmlNodeToItem(child, tag, newLine, styleList = null) {
   };
 }
 
-export function getInitialObject() {
+export function getInitialObject(styleList = null) {
+  const availableStyles = styleList === null ? defaultStyles : styleList;
+
   return {
     id: shortid.generate(),
     component: 'text',
@@ -390,9 +392,7 @@ export function getInitialObject() {
       text: '',
       len: 0,
       stype: [],
-      styleList: [{
-        fontSize: 20,
-      }],
+      styleList: StyleSheet.flatten(convertStyleList(update([], { $push: ['body'] }), availableStyles)),
       tag: 'body',
       NewLine: true,
     },

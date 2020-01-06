@@ -7,8 +7,7 @@ import CNStyledText from './CNStyledText';
 
 const shortid = require('shortid');
 
-const IS_IOS = Platform.OS == 'ios';
-
+const IS_IOS = Platform.OS === 'ios';
 
 class CNTextInput extends Component {
   constructor(props) {
@@ -44,10 +43,13 @@ class CNTextInput extends Component {
 
   componentWillMount() {
     const { items } = this.props;
-    if(items && Array.isArray(items) === true) {
+    if(Array.isArray(items) === true) {
       let content = items;
       for (let i = 0; i < content.length; i++) {
-        content[i].styleList = StyleSheet.flatten(this.convertStyleList(content[i].stype));
+        content[i].styleList = {
+          ...(content[i].styleList || {}),
+          ...StyleSheet.flatten(this.convertStyleList(content[i].stype)),
+        };
       }
       if (this.props.onContentChanged) {
         this.props.onContentChanged(content);
