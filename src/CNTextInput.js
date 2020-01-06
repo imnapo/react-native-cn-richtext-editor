@@ -1344,6 +1344,10 @@ class CNTextInput extends Component {
           {_.map(items, item => {
             const customStyles = item.stype.map(key => styleList[key] || null).filter(item => !!item);
 
+            if (item.stype.includes('bold') && item.stype.includes('italic') && styleList.boldItalic) {
+              customStyles = { ...customStyles, ...boldItalic };
+            }
+
             return(
               <CNStyledText key={item.id} style={[item.styleList, customStyles]} text={item.text} />
             );
