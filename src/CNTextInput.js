@@ -1255,7 +1255,7 @@ class CNTextInput extends Component {
     convertStyleList(stylesArr) {
       const styls = [];
       (stylesArr).forEach((element) => {
-        const styleObj = this.txtToStyle(element, this.props.styleList);
+        const styleObj = this.txtToStyle(element);
         if (styleObj !== null) styls.push(styleObj);
       });
       return styls;
@@ -1341,11 +1341,13 @@ class CNTextInput extends Component {
           onContentSizeChange={this.handleContentSizeChange}
           placeholder={this.props.placeholder}
         >
-          {
-              _.map(items, item => (
-                <CNStyledText key={item.id} style={item.styleList} text={item.text} />
-              ))
-            }
+          {_.map(items, item => {
+            const customStyles = item.stype.map(key => styleList[key] || null).filter(item => !!item);
+
+            return(
+              <CNStyledText key={item.id} style={[item.styleList, customStyles]} text={item.text} />
+            );
+          })}
         </TextInput>
       );
     }
