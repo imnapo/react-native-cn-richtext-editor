@@ -1342,7 +1342,7 @@ class CNTextInput extends Component {
           placeholder={this.props.placeholder}
         >
           {_.map(items, item => {
-            const customStyles = item.stype.map(key => styleList[key] || null).filter(item => !!item);
+            let customStyles = item.stype.map(key => styleList[key] || null).filter(item => !!item);
 
             if (item.stype.includes('bold') && item.stype.includes('italic') && styleList.boldItalic) {
               customStyles = { ...customStyles, ...boldItalic };
