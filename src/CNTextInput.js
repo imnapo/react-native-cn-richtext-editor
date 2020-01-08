@@ -1300,6 +1300,10 @@ class CNTextInput extends Component {
         && this.state.selection.end === 0) {
         if (this.props.onConnectToPrevClicked) this.props.onConnectToPrevClicked();
       }
+
+      if (typeof this.props.onKeyPressHandler === 'function') {
+        this.props.onKeyPressHandler();
+      }
     }
 
     handleContentSizeChange = (event) => {
