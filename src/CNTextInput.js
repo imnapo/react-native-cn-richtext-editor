@@ -1302,7 +1302,7 @@ class CNTextInput extends Component {
       }
 
       if (typeof this.props.onKeyPressHandler === 'function') {
-        this.props.onKeyPressHandler();
+        this.props.onKeyPressHandler(e);
       }
     }
 
