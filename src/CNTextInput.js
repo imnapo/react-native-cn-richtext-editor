@@ -130,7 +130,7 @@ class CNTextInput extends Component {
       }
     } else if (itemNo > 0) {
       const foundElement = content[index];
-      beforeContent = {
+      const beforeContent = {
         id: foundElement.id,
         len: itemNo,
         stype: foundElement.stype,
@@ -139,7 +139,7 @@ class CNTextInput extends Component {
         text: foundElement.text.substring(0, itemNo),
       };
 
-      afterContent = {
+      const afterContent = {
         id: shortid.generate(),
         len: foundElement.len - itemNo,
         stype: foundElement.stype,
@@ -617,7 +617,7 @@ class CNTextInput extends Component {
         if (newLineIndex < 0) {
           if (index > 0) {
             content[index].NewLine = false;
-            beforeTag = content[index - 1].tag;
+             const beforeTag = content[index - 1].tag;
             const res = this.changeToTagIn(content, content[index - 1].tag, index, false);
             content = res.content;
             if (!recalcText) recalcText = res.recalcText;
@@ -638,7 +638,7 @@ class CNTextInput extends Component {
           content[index].NewLine = false;
           content[index].readOnly = false;
           if (index > 0) {
-            beforeTag = content[index - 1].tag;
+             const beforeTag = content[index - 1].tag;
 
             const res = this.changeToTagIn(content, content[index - 1].tag, index, false);
             content = res.content;
@@ -710,7 +710,7 @@ class CNTextInput extends Component {
           newContent = res.content;
           if (!recalcText) recalcText = res.recalcText;
         } else {
-          beforeContent = {
+          const beforeContent = {
             id: shortid.generate(),
             len: 1,
             stype: isPrevHeading === true ? [] : newContent[index].stype,
@@ -729,7 +729,7 @@ class CNTextInput extends Component {
           }
         }
       } else {
-        beforeContent = {
+        const beforeContent = {
           id: foundElement.id,
           len: itemNo,
           stype: foundElement.stype,
@@ -739,7 +739,7 @@ class CNTextInput extends Component {
           NewLine: foundElement.text.substring(0, itemNo).indexOf('\n') === 0 || index === 0,
         };
 
-        afterContent = {
+        const afterContent = {
           id: shortid.generate(),
           len: foundElement.len - itemNo,
           text: foundElement.text.substring(itemNo, foundElement.len),
@@ -1112,8 +1112,10 @@ class CNTextInput extends Component {
 
         content[i].tag = tag;
         content[i].styleList = StyleSheet.flatten(this.convertStyleList(update(content[i].stype, { $push: [content[i].tag] })));
+        const clearStyleList = StyleSheet.flatten(this.convertStyleList(update([], { $push: [content[i].tag] })));
 
-        if (content[i].NewLine === true) {
+        // if (content[i].NewLine === true) {
+        if (true) {
           recalcText = true;
           if (tag === 'ul') {
             if (content[i].readOnly === true) {
@@ -1135,10 +1137,11 @@ class CNTextInput extends Component {
                 content[i].text = content[i].text.substring((i === 0 ? 0 : 1));
                 content[i].len = content[i].len - (i === 0 ? 0 : 1);
                 content[i].NewLine = false;
-                listContent = {
+                const listContent = {
                   id: shortid.generate(),
                   len: i === 0 ? 2 : 3,
                   stype: [],
+                  styleList: clearStyleList,
                   text: i === 0 ? '\u2022 ' : '\n\u2022 ',
                   tag: 'ul',
                   NewLine: true,
@@ -1150,7 +1153,7 @@ class CNTextInput extends Component {
                 content[i].len = i === 0 ? 2 : 3;
                 content[i].readOnly = true;
                 content[i].stype = [];
-                content[i].styleList = [];
+                content[i].styleList = clearStyleList;
               }
               this.textLength += 2;
               if (fromTextChange === true && IS_IOS !== true) {
@@ -1179,7 +1182,7 @@ class CNTextInput extends Component {
                 content[i].text = content[i].text.substring((i === 0 ? 0 : 1));
                 content[i].len = content[i].len - (i === 0 ? 0 : 1);
                 content[i].NewLine = false;
-                listContent = {
+                const listContent = {
                   id: shortid.generate(),
                   len: i === 0 ? 3 : 4,
                   stype: [],
