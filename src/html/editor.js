@@ -19,15 +19,13 @@ const editorHTML = `
             padding: 2px;
         }
         code { 
-            font-family: monospace;
             background-color: #eee;
-            background: hsl(220, 80%, 90%); 
-           
+            background: hsl(220, 80%, 90%);         
         }
         pre {
             white-space: pre-wrap;
             background: #eee;
-            margin: 5px;
+            margin: 15px;
             padding: 5px;      
             word-wrap: break-word;
         }

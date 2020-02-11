@@ -313,11 +313,6 @@ class App extends Component {
 
     render() {
         
-      const customStyles = `
-      h1 {
-        font-size: 30px;
-      }
-      `;
                
         return (
             <KeyboardAvoidingView 
@@ -341,10 +336,23 @@ class App extends Component {
                           onSelectedTagChanged={this.onSelectedTagChanged}
                           onSelectedStyleChanged={this.onSelectedStyleChanged}
                           style={styles.editor}
-                          customStyles={customStyles}
-                          editorStyle='font-size:20px; color: blue'
-                          placeholder='Start you story'
-                          onValueChanged={(value)=> console.log(value)}
+                          customStyles={`
+                          h1 {
+                            font-size: 30px;
+                            color: green;
+                          }
+                          h3 {
+                            font-size: 25px;
+                            color: purple;
+                          }
+                          `}
+                          editorStyle={`
+                            font-size:20px; 
+                            color: blue; 
+                            font-family:Roboto,Avenir-Light;
+                            `}
+                          placeholder='Your placehoder text here'
+                          //onValueChanged={(value)=> console.log(value)}
                           initialHtml={`   
                           <h1>This Text Editor is awesome !</h1>
                           <h3>Enjoy a fast and full featured editor </h3>
@@ -383,7 +391,6 @@ body { background-color: #eee; }
                           </pre>
 
                             `}
-                          foreColor='dimgray' // optional (will override default fore-color)
                         />          
                     </View>
                 </View>

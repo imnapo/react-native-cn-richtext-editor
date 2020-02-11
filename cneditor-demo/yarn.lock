@@ -4124,10 +4124,10 @@ react-is@^16.8.1, react-is@^16.8.4:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
   integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
 
-react-native-cn-richtext-editor@^2.0.0-rc2:
-  version "2.0.0-rc2"
-  resolved "https://registry.yarnpkg.com/react-native-cn-richtext-editor/-/react-native-cn-richtext-editor-2.0.0-rc2.tgz#96b0bb37a21143381a39fe0433bc3b510b3604a1"
-  integrity sha512-wJ+usMrzpkkPhbs+XJuGaDmdbgH2snm88KCQuAOAECDB+oKrds9YWGgfXFtfgxo3426fJtsNhalZP/OIZgxpQA==
+react-native-cn-richtext-editor@2.0.0-rc3:
+  version "2.0.0-rc3"
+  resolved "https://registry.yarnpkg.com/react-native-cn-richtext-editor/-/react-native-cn-richtext-editor-2.0.0-rc3.tgz#e92412fed0d60e283904e73b23d96dbea1b6ec59"
+  integrity sha512-dsikJrVHwo9JJUIYXLWYfTuOKHMLQY4nibinijd0TqYmxe63u4ZrtPDB6fg5G04NFOEn6TgzpvGkCIh1VYjUoA==
   dependencies:
     diff-match-patch "^1.0.4"
     immutability-helper "^2.8.1"

@@ -250,6 +250,8 @@ Also be noticed that this example is writen with expo and required 'react-native
 | initialHtml    | initial html string to display in editor | No |
 | styleList  | an object consist of styles name and values (use getDefaultStyles function) | Yes |
 | style | Styles applied to the outermost component. | No |
+| editorStyle | Styles applied to the outermost div element of html editor. | No |
+| customStyles | CSS added to html editor. | No |
 | onValueChanged | this event triggers when value of editor is changed. | No |
 
 #### Instance methods
