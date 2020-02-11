@@ -18,6 +18,20 @@ const editorHTML = `
             margin: 0;
             padding: 2px;
         }
+        code { 
+            font-family: monospace;
+            background-color: #eee;
+            background: hsl(220, 80%, 90%); 
+           
+        }
+        pre {
+            white-space: pre-wrap;
+            background: #eee;
+            margin: 5px;
+            padding: 5px;      
+            word-wrap: break-word;
+        }
+        
         #editor {
            flex-grow: 1;
         }
@@ -25,32 +39,40 @@ const editorHTML = `
         #editor:focus {
           outline: 0px solid transparent;
         }
+        
+      [contenteditable][placeholder]:empty:before {
+        content: attr(placeholder);
+        position: absolute;
+        opacity: .4;
+        background-color: transparent;
+      }
+    </style>
+    <style>
+    /* PUT YOUR STYLE HERE */
     </style>
     <title>CN-Editor</title>
 </head>
 <body>
-    <div id="editor">
-       
-    </div>
+  <div id="editor" contenteditable placeholder="Div placeholder..." oninput="if(this.innerHTML.trim()==='<br>')this.innerHTML=''" ></div>
     <script>
         (function(doc) {
             var editor = document.getElementById('editor');
             editor.contentEditable = true;
 
-            var getSelectedStyles = () => {
+            var getSelectedStyles = function() {
                 let styles = [];
                 document.queryCommandState('bold') && styles.push('bold');
                 document.queryCommandState('italic') && styles.push('italic');
                 document.queryCommandState('underline') && styles.push('underline');
                 document.queryCommandState('strikeThrough') && styles.push('lineThrough');
 
-                const fColor = document.queryCommandValue('foreColor');
-                const bgColor = document.queryCommandValue('backColor');
-                const colors = {
+                var fColor = document.queryCommandValue('foreColor');
+                var bgColor = document.queryCommandValue('backColor');
+                var colors = {
                         color: fColor,
                         highlight: bgColor
                     };
-                const stylesJson = JSON.stringify({
+                var stylesJson = JSON.stringify({
                     type: 'selectedStyles',
                     data: {styles, colors}});
                     sendMessage(stylesJson);
@@ -58,11 +80,12 @@ const editorHTML = `
 
             }
 
-            var sendMessage = (message) => {
-              window.ReactNativeWebView.postMessage(message);
+            var sendMessage = function(message) {
+              if(window.ReactNativeWebView)
+                window.ReactNativeWebView.postMessage(message);
             }
 
-            var getSelectedTag = () => {
+            var getSelectedTag = function() {
                 let tag = document.queryCommandValue('formatBlock');
                 if(document.queryCommandState('insertUnorderedList'))
                     tag = 'ul';
@@ -75,19 +98,22 @@ const editorHTML = `
                         case 'h3':
                         tag = 'heading';
                         break;
+                        case 'pre':
+                        tag = 'codeblock';
+                        break;
                         case 'p':
                         tag = 'body';
                         break;
                     default:
                         break;
                 }
-                const stylesJson = JSON.stringify({
+                var stylesJson = JSON.stringify({
                     type: 'selectedTag',
                     data: tag});
                 sendMessage(stylesJson);
             }
 
-            document.addEventListener('selectionchange', () => {
+            document.addEventListener('selectionchange', function() {
                 getSelectedStyles();
                 getSelectedTag();
             });
@@ -99,7 +125,7 @@ const editorHTML = `
                 sendMessage(contentChanged);
             }, false);
 
-            var applyToolbar = (toolType, value = '') => {
+            var applyToolbar = function(toolType, value = '') {
                 switch (toolType) {
                     case 'bold':
                         document.execCommand('bold', false, '');
@@ -123,6 +149,13 @@ const editorHTML = `
                         document.queryCommandState('insertorderedlist') && document.execCommand('insertorderedlist');
 
                         document.execCommand('formatBlock', false, 'h1');
+                        
+                        break;
+                        case 'codeblock':
+                            document.queryCommandState('insertUnorderedList') && document.execCommand('insertUnorderedList');
+                            document.queryCommandState('insertorderedlist') && document.execCommand('insertorderedlist');
+                        // document.execCommand("insertHTML", false, "<pre><code>"+ document.getSelection()+"</code></pre>");
+                        document.execCommand('formatBlock', false, 'pre');
                         break;
                         case 'heading':
                         document.queryCommandState('insertUnorderedList') && document.execCommand('insertUnorderedList');
@@ -154,6 +187,7 @@ const editorHTML = `
                              doc.execCommand("insertHTML", false, img);
                            }
                         break;
+                       
                     default:
                         break;
                 }
@@ -161,7 +195,7 @@ const editorHTML = `
                 getSelectedTag();
             }
 
-            var getRequest = (event) => {
+            var getRequest = function(event) {
                  
               var msgData = JSON.parse(event.data);
               if(msgData.type === 'toolbar') {
@@ -185,6 +219,12 @@ const editorHTML = `
                 case 'setHtml':
                   editor.innerHTML = msgData.value;
                   break;
+                  case 'style':
+                    editor.style.cssText = msgData.value;
+                    break;
+                    case 'placeholder':
+                      editor.setAttribute("placeholder", msgData.value);
+                    break;
                 default: break;
               }
             }

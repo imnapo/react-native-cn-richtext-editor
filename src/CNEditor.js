@@ -161,9 +161,15 @@ export default class CNEditor extends Component {
     }
 
     onLoad = () => {
-        if(this.props.initialHtml) {
-            this.setHtml(this.props.initialHtml);
-        }
+      if(this.props.initialHtml) {
+          this.setHtml(this.props.initialHtml);
+      }
+    
+      if(this.props.editorStyle)
+          this.applyEditorStyle(this.props.editorStyle);
+
+      if(this.props.placeholder)
+      this.setPlaceholder(this.props.placeholder);
     }
 
     onLayout = (event) => {
@@ -209,11 +215,27 @@ export default class CNEditor extends Component {
             this.webViewRef.postMessage(jsonString);
         } 
     }
+
+    setPlaceholder = (placeholder) => {
+        const jsonString = JSON.stringify({ type: 'editor', command: 'placeholder', 
+        value: placeholder  }); 
+
+        if (this.webViewRef) {            
+            this.webViewRef.postMessage(jsonString);
+        } 
+    }
     
     onValueChanged = (data) => {
         if(this.props.onValueChanged) {
             this.props.onValueChanged(data);
         }
+    }
+
+    applyEditorStyle = (styleString) => {
+        const jsonString = JSON.stringify({ type: 'editor', command: 'style', value: styleString  });         
+        if (this.webViewRef) {            
+            this.webViewRef.postMessage(jsonString);
+        } 
     }
     
     
@@ -240,7 +262,8 @@ export default class CNEditor extends Component {
     }
 
     render() {
-    
+    const { keyboardDisplayRequiresUserAction = false, customStyles = ''} = this.props;
+    const htmlEditorString = htmlEditor.replace('/* PUT YOUR STYLE HERE */', customStyles);
     return (
         <View style={styles.container}
         onLayout={this.onLayout}>
@@ -252,9 +275,9 @@ export default class CNEditor extends Component {
             domStorageEnabled={true}
             allowUniversalAccessFromFileURLs={true}
             allowFileAccessFromFileURLs={true}
-            
+            keyboardDisplayRequiresUserAction={keyboardDisplayRequiresUserAction}
             javaScriptEnabled={true}
-            source={{ html: htmlEditor}} 
+            source={{ html: htmlEditorString}} 
             domStorageEnabled={true}
             mixedContentMode='always'
             onMessage={this.onMessage}
