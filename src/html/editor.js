@@ -58,7 +58,7 @@ const editorHTML = `
             editor.contentEditable = true;
 
             var getSelectedStyles = function() {
-                let styles = [];
+                var styles = [];
                 document.queryCommandState('bold') && styles.push('bold');
                 document.queryCommandState('italic') && styles.push('italic');
                 document.queryCommandState('underline') && styles.push('underline');
@@ -72,7 +72,7 @@ const editorHTML = `
                     };
                 var stylesJson = JSON.stringify({
                     type: 'selectedStyles',
-                    data: {styles, colors}});
+                    data: {styles: styles, colors: colors}});
                     sendMessage(stylesJson);
                 
 
@@ -84,7 +84,7 @@ const editorHTML = `
             }
 
             var getSelectedTag = function() {
-                let tag = document.queryCommandValue('formatBlock');
+                var tag = document.queryCommandValue('formatBlock');
                 if(document.queryCommandState('insertUnorderedList'))
                     tag = 'ul';
                 else if(document.queryCommandState('insertorderedlist'))
@@ -117,13 +117,14 @@ const editorHTML = `
             });
 
             document.getElementById("editor").addEventListener("input", function() {
-                let contentChanged = JSON.stringify({
+                var contentChanged = JSON.stringify({
                     type: 'onChange',
                     data: document.getElementById("editor").innerHTML });
                 sendMessage(contentChanged);
             }, false);
 
-            var applyToolbar = function(toolType, value = '') {
+            var applyToolbar = function(toolType, value) {
+              if(!value) value = '';
                 switch (toolType) {
                     case 'bold':
                         document.execCommand('bold', false, '');
