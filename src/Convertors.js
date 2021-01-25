@@ -456,19 +456,19 @@ const defaultStyles = StyleSheet.create(
       fontSize: 20,
     },
     red: {
-      color: '#d23431',
+      color: '#F57474',
     },
     green: {
-      color: '#4a924d',
+      color: '#29CC75',
     },
     blue: {
-      color: '#0560ab',
+      color: '#67B6FF',
     },
     pink: {
       color: '#F58F99',
     },
     black: {
-      color: '#33363d',
+      color: '#676767',
     },
     blue_hl: {
       backgroundColor: '#34f3f4',
