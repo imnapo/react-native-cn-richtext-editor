@@ -30,7 +30,6 @@ export function convertToHtmlString(contents, styleList = null) {
         const isBlue = item.stype.indexOf('blue') > -1;
         const isRed = item.stype.indexOf('red') > -1;
         const isGreen = item.stype.indexOf('green') > -1;
-        const isPink = item.stype.indexOf('pink') > -1;
         const isBlueMarker = item.stype.indexOf('blue_hl') > -1;
         const isGreenMarker = item.stype.indexOf('green_hl') > -1;
         const isPinkMarker = item.stype.indexOf('pink_hl') > -1;
@@ -69,7 +68,6 @@ export function convertToHtmlString(contents, styleList = null) {
         styles += isBlue ? `color: ${availableStyles.blue.color};` : '';
         styles += isRed ? `color: ${availableStyles.red.color};` : '';
         styles += isGreen ? `color: ${availableStyles.green.color};` : '';
-        styles += isPink ? `color: ${availableStyles.pink.color};` : '';
         styles += isBlueMarker ? `background-color: ${availableStyles.blue_hl.backgroundColor};` : '';
         styles += isGreenMarker ? `background-color: ${availableStyles.green_hl.backgroundColor};` : '';
         styles += isPinkMarker ? `background-color: ${availableStyles.pink_hl.backgroundColor};` : '';
@@ -285,7 +283,6 @@ function xmlNodeToItem(child, tag, newLine, styleList = null) {
   let isGreen = false;
   let isBlue = false;
   let isRed = false;
-  let isPink = false;
 
   let isBlueMarker = false;
   let isOrangeMarker = false;
@@ -305,7 +302,6 @@ function xmlNodeToItem(child, tag, newLine, styleList = null) {
       isBlue = styles.indexOf(`color: ${availableStyles.blue.color};`) > -1;
       isRed = styles.indexOf(`color: ${availableStyles.red.color};`) > -1;
       isGreen = styles.indexOf(`color: ${availableStyles.green.color};`) > -1;
-      isPink = styles.indexOf(`color: ${availableStyles.pink.color};`) > -1;
       isBlueMarker = styles.indexOf(`background-color: ${availableStyles.blue_hl.backgroundColor};`) > -1;
       isGreenMarker = styles.indexOf(`background-color: ${availableStyles.green_hl.backgroundColor};`) > -1;
       isPinkMarker = styles.indexOf(`background-color: ${availableStyles.pink_hl.backgroundColor};`) > -1;
@@ -348,9 +344,6 @@ function xmlNodeToItem(child, tag, newLine, styleList = null) {
   }
   if (isRed) {
     stype.push('red');
-  }
-  if (isPink) {
-    stype.push('pink');
   }
 
   if (isBlueMarker) {
@@ -463,9 +456,6 @@ const defaultStyles = StyleSheet.create(
     },
     blue: {
       color: '#67B6FF',
-    },
-    pink: {
-      color: '#F58F99',
     },
     black: {
       color: '#676767',
