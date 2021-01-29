@@ -4,7 +4,6 @@
     "description": "Demo Application for react-native-cn-richtext-editor",
     "slug": "expo-demo",
     "privacy": "public",
-    "sdkVersion": "33.0.0",
     "platforms": [
       "ios",
       "android"
