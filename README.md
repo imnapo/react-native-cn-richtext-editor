@@ -1,6 +1,6 @@
 # react-native-cn-richtext-editor
 
-> Deprecated. Use [react-native-cn-quill](https://github.com/imnapo/react-native-cn-quill#readme) instead.
+> ## Deprecated. Use [react-native-cn-quill](https://github.com/imnapo/react-native-cn-quill#readme) instead.
 
 Richtext editor for react native
 
