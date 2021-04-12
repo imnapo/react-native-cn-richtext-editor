@@ -13,7 +13,7 @@ const IS_IOS = Platform.OS == 'ios';
 class CNTextInput extends Component {
   constructor(props) {
     super(props);
-    this.textInput = null;
+    this.textInput = React.createRef();
     this.prevSelection = { start: 0, end: 0 };
     this.beforePrevSelection = { start: 0, end: 0 };
     this.avoidSelectionChangeOnFocus = false;
@@ -42,7 +42,7 @@ class CNTextInput extends Component {
     DiffMatchPatch.DIFF_EQUAL = 0;
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { items } = this.props;
     if(items && Array.isArray(items) === true) {
       let content = items;
@@ -52,7 +52,7 @@ class CNTextInput extends Component {
       if (this.props.onContentChanged) {
         this.props.onContentChanged(content);
       }
-    }   
+    }
   }
 
   componentDidMount() {
@@ -128,7 +128,7 @@ class CNTextInput extends Component {
       }
     } else if (itemNo > 0) {
       const foundElement = content[index];
-      beforeContent = {
+      let beforeContent = {
         id: foundElement.id,
         len: itemNo,
         stype: foundElement.stype,
@@ -137,7 +137,7 @@ class CNTextInput extends Component {
         text: foundElement.text.substring(0, itemNo),
       };
 
-      afterContent = {
+      let afterContent = {
         id: shortid.generate(),
         len: foundElement.len - itemNo,
         stype: foundElement.stype,
@@ -216,10 +216,14 @@ class CNTextInput extends Component {
         this.avoidAndroidJump = false;
 
         if (selection.end >= selection.start) {
+          this.textInput.current.setNativeProps({ selection });
           this.setState({
             selection,
           });
         } else {
+          this.textInput.current.setNativeProps({
+            selection: { start: selection.end, end: selection.start },
+          });
           this.setState({
             selection: { start: selection.end, end: selection.start },
           });
@@ -727,7 +731,7 @@ class CNTextInput extends Component {
           }
         }
       } else {
-        beforeContent = {
+        let beforeContent = {
           id: foundElement.id,
           len: itemNo,
           stype: foundElement.stype,
@@ -737,7 +741,7 @@ class CNTextInput extends Component {
           NewLine: foundElement.text.substring(0, itemNo).indexOf('\n') === 0 || index === 0,
         };
 
-        afterContent = {
+        let afterContent = {
           id: shortid.generate(),
           len: foundElement.len - itemNo,
           text: foundElement.text.substring(itemNo, foundElement.len),
@@ -1311,7 +1315,7 @@ class CNTextInput extends Component {
       const { selection } = this.state;
       const color = foreColor || '#000';
       const fontSize =styleList && styleList.body && styleList.body.fontSize ? styleList.body.fontSize : 20;
-      
+
       return (
         <TextInput
           {...textInputProps}
@@ -1330,10 +1334,9 @@ class CNTextInput extends Component {
           scrollEnabled={false}
           returnKeyType={returnKeyType || 'next'}
           keyboardType="default"
-          ref={component => this.textInput = component}
+          ref={this.textInput}
           onChangeText={this.handleChangeText}
           onKeyPress={this.handleKeyDown}
-          selection={selection}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onContentSizeChange={this.handleContentSizeChange}
@@ -1405,6 +1408,7 @@ class CNTextInput extends Component {
       this.textInput.focus();
 
       if (selection != null && selection.start && selection.end) {
+        this.textInput.current.setNativeProps({ selection });
         setTimeout(() => {
           this.setState({
             selection,
