@@ -772,15 +772,61 @@ class CNTextInput extends Component {
       };
     }
 
+    manageColorToolType(arrayOfToolTypes, toolType) {
+      const colors = ['red', 'green', 'blue', 'default'];
+        const isColor = colors.indexOf(toolType) > -1;
+        if (isColor)
+        {
+          
+          const indexOfUpToolType = arrayOfToolTypes.indexOf(toolType);
+          if (indexOfUpToolType != -1) { 
+            //Selected color already in list. do nothing.
+            
+          }
+          else {
+            
+            // first check if other colors are in the list, if so remove them
+            const otherColors = colors.filter(x => toolType != x);
+            for (let c = 0; c < otherColors.length; c++) {
+              const indexOfUpToolType = arrayOfToolTypes.indexOf(otherColors[c]);
+              if (indexOfUpToolType != -1) 
+              { 
+                arrayOfToolTypes = update(arrayOfToolTypes, { $splice: [[indexOfUpToolType, 1]] });
+              }
+            }
+            // then add the selected color in...
+            arrayOfToolTypes = update(arrayOfToolTypes, { $push: [toolType] });
+            
+          }
+          
+        }
+        return arrayOfToolTypes;
+    }
+
     addToUpComming(toolType) {
       if (this.upComingStype) {
-        const indexOfUpToolType = this.upComingStype.stype.indexOf(toolType);
-        const newUpStype = this.upComingStype ? (indexOfUpToolType != -1 ? update(this.upComingStype.stype, { $splice: [[indexOfUpToolType, 1]] })
-          : update(this.upComingStype.stype, { $push: [toolType] })) : [toolType];
-        this.upComingStype.stype = newUpStype;
-        this.upComingStype.styleList = StyleSheet.flatten(this.convertStyleList(update(newUpStype, { $push: [this.upComingStype.tag] })));
+        // Need to treat colors as having the same toolType and even selecting existing color is ok - doesn't turnoff
+        const colors = ['red', 'green', 'blue', 'default'];
+        const isColor = colors.indexOf(toolType) > -1;
+        if (isColor)
+        {
+          this.upComingStype.stype = this.manageColorToolType(this.upComingStype.stype, toolType);
+          this.upComingStype.styleList = StyleSheet.flatten(this.convertStyleList(update(this.upComingStype.stype, { $push: [this.upComingStype.tag] })));
+       
+          
+        }
+        else //not color 
+        {
+          const indexOfUpToolType = this.upComingStype.stype.indexOf(toolType);
+          const newUpStype = this.upComingStype ? (indexOfUpToolType != -1 ? update(this.upComingStype.stype, { $splice: [[indexOfUpToolType, 1]] })
+            : update(this.upComingStype.stype, { $push: [toolType] })) : [toolType];
+          this.upComingStype.stype = newUpStype;
+          this.upComingStype.styleList = StyleSheet.flatten(this.convertStyleList(update(newUpStype, { $push: [this.upComingStype.tag] })));
+        }
       }
     }
+
+
 
     applyStyle(toolType) {
       const { selection: { start, end } } = this.state;
@@ -796,15 +842,30 @@ class CNTextInput extends Component {
         const {
           id, len, stype, tag, text, styleList,
         } = content[i];
+
+        console.log('applyStyle:', id, len, stype, tag, text, styleList);
+
         const NewLine = content[i].NewLine ? content[i].NewLine : false;
         const readOnly = content[i].readOnly ? content[i].readOnly : false;
 
-        const indexOfToolType = stype.indexOf(toolType);
-        const newStype = (indexOfToolType != -1)
-          ? update(stype, { $splice: [[indexOfToolType, 1]] })
-          : update(stype, { $push: [toolType] });
+        const colors = ['red', 'green', 'blue', 'default'];
+        const isColor = colors.indexOf(toolType) > -1;
+        let newStype = [];
+        if (isColor)
+        {
+          newStype = this.manageColorToolType(stype, toolType);
+        }
+        else {
+          const indexOfToolType = stype.indexOf(toolType);
+          newStype = (indexOfToolType != -1)
+            ? update(stype, { $splice: [[indexOfToolType, 1]] })
+            : update(stype, { $push: [toolType] });
+        }
+        console.log('applyStyle:newStype:', newStype);
 
         const newStyles = StyleSheet.flatten(this.convertStyleList(update(newStype, { $push: [tag] })));
+
+        console.log('applyStyle:newStyles:', newStyles);
 
         const from = indx;
         indx += len;
@@ -1014,6 +1075,8 @@ class CNTextInput extends Component {
       } else {
         styles = newCollection[res.findIndx].stype;
       }
+
+      console.log('applyStyle:aboutToCallOnSelectedStyleChanged:', newCollection, styles);
 
       this.justToolAdded = start !== end;
       this.props.onContentChanged(newCollection);
@@ -1310,7 +1373,7 @@ class CNTextInput extends Component {
 
     render() {
       const {
-        items, foreColor, style, returnKeyType, styleList, textInputProps
+        items, foreColor, style, returnKeyType, styleList
       } = this.props;
       const { selection } = this.state;
       const color = foreColor || '#000';
@@ -1341,6 +1404,7 @@ class CNTextInput extends Component {
           onBlur={this.onBlur}
           onContentSizeChange={this.handleContentSizeChange}
           placeholder={this.props.placeholder}
+          selection={undefined}
         >
           {
               _.map(items, item => (
