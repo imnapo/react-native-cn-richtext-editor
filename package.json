@@ -12,7 +12,7 @@
     "immutability-helper": "^2.8.1",
     "lodash": "^4.17.15",
     "shortid": "^2.2.14",
-    "xmldom": "^0.1.27"
+    "xmldom": "^0.6.0"
   },
   "peerDependencies": {
     "react": "^16.6.1",
